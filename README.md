@@ -15,4 +15,4 @@ More duties will be decided on the way, e.g. after the decision about the back-e
 ## Let's party!
 
 The frontend of the app will be developed in Java.
-We still have to decide what to use for the backend.
+For the backend we will use Google Firebase, and you can find the repository [here](https://github.com/AEEooTo/pindery-backend)
