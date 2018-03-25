@@ -1,0 +1,13 @@
+PART 1
+- CSR (about two pages, ca 1000)
+- glossary of terms
+- user stories
+
+PART 2
+-functional requirements specs
+-tree structure	
+-user interface specs
+
+PART 3
+-math stuff 
+-work division
