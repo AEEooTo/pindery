@@ -13,5 +13,5 @@ To promote the creation of new events, ‘party-organisers’ will be **awarded 
 
 ## Let's party!
 
-The frontend of the app will be developed with Flutter, in Dart language.
-For the backend we will use Google Firebase, using Node.js and you can find the repository [here](https://github.com/AEEooTo/pindery-backend)
+The frontend of the app will be developed with [Flutter](flutter.io), in [Dart language](dartlang.org).
+For the backend we will use [Google Firebase](firebase.google.com), using [Node.js](nodejs.org) and you can find the repository [here](https://github.com/AEEooTo/pindery-backend)
