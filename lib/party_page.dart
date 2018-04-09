@@ -17,14 +17,10 @@ class PartyPage extends StatelessWidget {
       drawer: new Drawer(
         child: new PinderyDrawer(),
       ),
-      body: new Center(
-        child: new RaisedButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: new Text('Go back!'),
-        ),
-      ),
+      body: new Image.asset(
+        'assets/img/demo_falsa.png',
+        fit: BoxFit.scaleDown,
+      )
     );
   }
 }
