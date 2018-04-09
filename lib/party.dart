@@ -5,11 +5,11 @@ class Party {
   final imagePath;
 
   static List<Party> partyGenerator() {
-    List<Party> partyList = new List(4);
+    List<Party> partyList = new List(5);
     partyList[0] = new Party(
-      name: 'Bagna Caoda Party',
-      day: 'Today',
-      imagePath: 'assets/img/proseccoParty.jpg',
+      name: 'Cats Party',
+      day: 'Every day',
+      imagePath: 'assets/img/kittens.jpeg',
     );
     partyList[1] = new Party(
       name: 'Pasta Party',
@@ -17,11 +17,16 @@ class Party {
       imagePath: 'assets/img/classicalParty.jpeg',
     );
     partyList[2] = new Party(
+      name: 'Great Party',
+      day: 'Today',
+      imagePath: 'assets/img/proseccoParty.jpg',
+    );
+    partyList[3] = new Party(
       name: 'Pizza Party',
       day: '4/4/2018',
       imagePath: 'assets/img/pasta.jpeg',
     );
-    partyList[3] = new Party(
+    partyList[4] = new Party(
       name: 'Jiaozi Party',
       day: 'Today',
       imagePath: 'assets/img/movingParty.jpeg',
