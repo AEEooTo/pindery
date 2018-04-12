@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'theme.dart';
 import 'party_card.dart';
 import 'drawer.dart' show PinderyDrawer;
+import 'create_party.dart';
 
 const loggedIn = true;
 
@@ -55,7 +56,11 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
           ),
         ),
         floatingActionButton: new FloatingActionButton(
-          onPressed: () => print("pressed"),
+          onPressed: () {
+            Navigator.push(context, 
+            new MaterialPageRoute(builder: (context) => new CreatePartyPage()),
+            );
+          },
           child: new Icon(Icons.add),
         ),
       ),
