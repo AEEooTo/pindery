@@ -1,5 +1,5 @@
 ﻿# Pindery
-**Pindery** is an Android based social network designed to join and organise **parties**, mainly geared towards low-level student events.
+**Pindery** is an Android and iOS based social network designed to join and organise **parties**, mainly geared towards low-level student events.
 Each user will have the possibility to generate a ‘new party’ or join already existing ones nearby.
 The exchange of money will be replaced by a **point-based** system which will fairly divide the expenses for each party between the guests, who bring the necessary stuff. So **don't worry** about spending money and never getting payed back or buying everything!
 A review system will also be implemented both towards the party organisers and the guests, in order to give reliability to the users.
