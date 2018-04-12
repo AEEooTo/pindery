@@ -10,9 +10,13 @@ Color secondary = const Color(0xFFE52059);
 Color secondaryLight = const Color(0xFFED2467);
 Color secondaryDark = const Color(0xFFB70449);
 
+// Functional colors
+Color divider= const Color(0x2F000000);
+
 ThemeData pinderyTheme = new ThemeData(
   primaryColor: primary,
   accentColor: secondary,
   buttonColor: secondaryLight,
+  dividerColor: divider,
   buttonTheme: new ButtonThemeData(textTheme: ButtonTextTheme.accent),
 );
