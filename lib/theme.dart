@@ -26,6 +26,7 @@ ThemeData pinderyTheme = new ThemeData(
   accentColor: secondary,
   buttonColor: secondaryLight,
   buttonTheme: new ButtonThemeData(textTheme: ButtonTextTheme.accent),
+  brightness: Brightness.dark,
 );
 
 TextStyle pinderyTextStyle = new TextStyle(
@@ -35,13 +36,9 @@ TextStyle pinderyTextStyle = new TextStyle(
 
 );
 
-const TextStyle bigLabelStyle = const TextStyle(
-  fontSize: 30.0,
-  fontWeight: FontWeight.bold,
-  color: inputFieldColor,
-);
-
 const TextStyle labelStyle = const TextStyle(
+  fontWeight: FontWeight.normal,
+  fontStyle: FontStyle.normal,
   fontSize: 17.0,
   color: inputFieldColor,
 );
