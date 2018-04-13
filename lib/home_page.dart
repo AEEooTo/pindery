@@ -1,6 +1,5 @@
-/***
- * This file contains the code for Pindery's homepage's structure.
- */
+/// This file contains the code for Pindery's homepage's structure.
+/// 
 import 'package:flutter/material.dart';
 
 import 'theme.dart';

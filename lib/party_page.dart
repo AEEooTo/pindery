@@ -1,6 +1,5 @@
-/**
- * This page contains the code for the specific page of every party.
- */
+/// This page contains the code for the specific page of every party.
+///
 
 import 'package:flutter/material.dart';
 
