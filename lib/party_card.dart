@@ -67,7 +67,7 @@ class PartyCard extends StatelessWidget {
                         Navigator.push(
                           context,
                           new MaterialPageRoute(
-                              builder: (context) => new PartyPageState(
+                              builder: (context) => new PartyPage(
                                     party: party,
                                   )),
                         );

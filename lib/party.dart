@@ -1,7 +1,7 @@
 /// Class that defines every Party object in the app.
 class Party {
   Party({this.name, this.day, this.imagePath,this.organiser, this.place, this.rating,
-  this.ratingNumber,this.privacy, this.pinderPoints, this.description});
+  this.ratingNumber,this.privacy, this.pinderPoints, this.description, this.id});
   final String name;
   final String day;
   final String imagePath;
@@ -12,6 +12,7 @@ class Party {
   final String privacy;
   final int pinderPoints;
   final String description;
+  final String id;
 
 
   static List<Party> partyGenerator() {
@@ -26,7 +27,8 @@ class Party {
       ratingNumber: 23,
       privacy: 'Public',
       pinderPoints: 5,
-      description: 'Sounds like a nice party!'
+      description: 'Sounds like a nice party!',
+      id: '1'
     );
     partyList[1] = new Party(
       name: 'Pasta Party',
@@ -38,7 +40,8 @@ class Party {
         ratingNumber: 24,
         privacy: 'Public',
         pinderPoints: 7,
-        description: 'Sounds like a nice party!\n\n\n\n\n\n\ngatto'
+        description: 'Sounds like a nice party!\n\n\n\n\n\n\ngatto',
+        id: '2'
     );
     partyList[2] = new Party(
       name: 'Great Party',
@@ -50,7 +53,8 @@ class Party {
         ratingNumber: 23,
         privacy: 'Public',
         pinderPoints: 5,
-        description: 'Sounds like a nice party!'
+        description: 'Sounds like a nice party!',
+        id: '3',
     );
     partyList[3] = new Party(
       name: 'Pizza Party',
@@ -62,7 +66,8 @@ class Party {
         ratingNumber: 27,
         privacy: 'Public',
         pinderPoints: 5,
-        description: 'Sounds like a nice party!'
+        description: 'Sounds like a nice party!',
+        id: '42'
     );
     partyList[4] = new Party(
       name: 'Jiaozi Party',
@@ -74,7 +79,8 @@ class Party {
         ratingNumber: 23,
         privacy: 'Public',
         pinderPoints: 5,
-        description: 'Sounds like a nice party!'
+        description: 'Sounds like a nice party!',
+        id: '5'
     );
     return partyList;
   }

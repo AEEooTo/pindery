@@ -16,7 +16,7 @@ class CreatePartyPage extends StatefulWidget {
 
 class _CreatePartyPageState extends State<CreatePartyPage> {
   bool _chosenImage = false;
-  @override
+
   Party party = new Party();
   Widget build(BuildContext context) {
     return new Scaffold(

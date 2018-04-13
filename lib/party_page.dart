@@ -9,13 +9,22 @@ import 'theme.dart';
 
 enum AppBarBehavior { normal, pinned, floating, snapping }
 
-class PartyPageState extends StatelessWidget {
+class PartyPage extends StatefulWidget {
+  PartyPage({this.party});
+
+  static const String routeName = '/party-page';
+  final Party party;
+
+  @override
+  _PartyPageState createState() => new _PartyPageState(party: party);
+}
+
+class _PartyPageState extends State<PartyPage> {
+  _PartyPageState({this.party});
   final Party party;
 
   AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
   final double _appBarHeight = 256.0;
-
-  PartyPageState({this.party});
 
   @override
   Widget build(BuildContext context) {
@@ -85,21 +94,21 @@ class PartyPageState extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 26.0, top: 13.0, right: 54.0, bottom: 13.0),
                       child: new Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              new Padding(
-                                padding: const EdgeInsets.only(bottom: 8.0),
-                                child: new Text(
-                                    'Description',
-                                  style: new TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold
-                                  ),
-                                ),
+                        children: <Widget>[
+                          new Padding(
+                            padding: const EdgeInsets.only(bottom: 8.0),
+                            child: new Text(
+                              'Description',
+                              style: new TextStyle(
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.bold
                               ),
-                              new Text (
-                                  party.description
-                              )
-                            ],
+                            ),
+                          ),
+                          new Text (
+                              party.description
+                          )
+                        ],
                       ),
                     )
 
@@ -112,7 +121,6 @@ class PartyPageState extends StatelessWidget {
     );
   }
 }
-
 class BlackPartyHeader extends StatelessWidget {
   BlackPartyHeader({this.organiser, this.rating, this.ratingNumber});
 
@@ -214,7 +222,7 @@ class WhitePartyHeader extends StatelessWidget {
               ),
               new Expanded(
                   child: new Text(
-                      data,
+                    data,
                     style: new TextStyle(
                       fontSize: 17.0,
                     ),
