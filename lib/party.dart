@@ -1,3 +1,4 @@
+/// Class that defines every Party object in the app.
 class Party {
   Party({this.name, this.day, this.imagePath,this.organiser, this.place, this.rating,
   this.ratingNumber,this.privacy, this.pinderPoints, this.description});

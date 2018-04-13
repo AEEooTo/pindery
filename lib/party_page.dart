@@ -1,3 +1,7 @@
+/**
+ * This page contains the code for the specific page of every party.
+ */
+
 import 'package:flutter/material.dart';
 
 import 'party.dart';
@@ -194,7 +198,7 @@ class WhitePartyHeader extends StatelessWidget {
       height: 48.0,
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       decoration: new BoxDecoration(
-          border: new Border(bottom: new BorderSide(color: divider))
+          border: new Border(bottom: new BorderSide(color: dividerColor))
       ),
       child: new DefaultTextStyle(
         style: Theme.of(context).textTheme.subhead,

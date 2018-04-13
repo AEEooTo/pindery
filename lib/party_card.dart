@@ -1,3 +1,7 @@
+/// party_card.dart
+/// This file contains the code for every party's basic infos card in Pindery's homepage
+///
+
 import 'package:flutter/material.dart';
 
 import 'party.dart';

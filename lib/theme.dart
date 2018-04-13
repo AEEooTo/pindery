@@ -1,3 +1,7 @@
+/// theme.dart
+/// This file contains all the data for Flutter's theming
+///
+
 import 'package:flutter/material.dart';
 
 // Primary colors
@@ -11,8 +15,9 @@ Color secondaryLight = const Color(0xFFED2467);
 Color secondaryDark = const Color(0xFFB70449);
 
 // Functional colors 
-Color divider = const Color(0x2F000000);
+Color dividerColor = const Color(0x2F000000);
 Color inputFieldColor = const Color(0x99FFFFFF);
+
 
 ThemeData pinderyTheme = new ThemeData(
   primaryColor: primary,

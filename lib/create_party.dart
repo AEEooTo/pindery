@@ -1,8 +1,12 @@
+/// create_party.dart
+/// contains the code for the first step of creating a party
+
 import 'package:flutter/material.dart';
 
 import 'theme.dart';
 import 'party.dart';
 
+/// Page used to create a new party
 class CreatePartyPage extends StatefulWidget {
   static const String routeName = '/create-party';
 
@@ -38,22 +42,26 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                   child: Form(
-                    child: new TextFormField(
-                      enabled: true,
-                      decoration: const InputDecoration(
-                        labelText: 'Party name',
-                        labelStyle: TextStyle(
-                          fontSize: 38.0,
-                          fontWeight: FontWeight.bold,
-                          color: const Color(0x99FFFFFF),
-                        ),
-                      ),
-                      style: Theme.of(context).textTheme.headline.copyWith(
-                            fontSize: 38.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                    child: Column(
+                      children: <Widget>[
+                        new TextFormField(
+                          enabled: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Party name',
+                            labelStyle: TextStyle(
+                              fontSize: 38.0,
+                              fontWeight: FontWeight.bold,
+                              color: const Color(0x99FFFFFF),
+                            ),
                           ),
-                      maxLength: 20,
+                          style: Theme.of(context).textTheme.headline.copyWith(
+                                fontSize: 38.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                          maxLength: 20,
+                        ),
+                      ],
                     ),
                   ),
                 ),
