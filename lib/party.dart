@@ -28,7 +28,7 @@ class Party {
       privacy: 'Public',
 
 
-      id: '1'
+        id: '1',
       pinderPoints: 6,
       description: 'Sounds like a nice party!\nEspecially if you like cats..'
     );
@@ -42,7 +42,7 @@ class Party {
         ratingNumber: 24,
         privacy: 'Public',
         pinderPoints: 7,
-        description: 'lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit, qui in ea voluptate velit esse, quam nihil molestiae consequatur, vel illum, qui dolorem eum fugiat, quo voluptas nulla pariatur? [33] At vero eos et accusamus et iusto odio dignissimos ducimus, qui blanditiis praesentium voluptatum deleniti atque corrupti, quos dolores et quas molestias excepturi sint, obcaecati cupiditate non provident, similique '
+        description: 'lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit, qui in ea voluptate velit esse, quam nihil molestiae consequatur, vel illum, qui dolorem eum fugiat, quo voluptas nulla pariatur? [33] At vero eos et accusamus et iusto odio dignissimos ducimus, qui blanditiis praesentium voluptatum deleniti atque corrupti, quos dolores et quas molestias excepturi sint, obcaecati cupiditate non provident, similique ',
         id: '2'
     );
     partyList[2] = new Party(
@@ -81,7 +81,7 @@ class Party {
         ratingNumber: 267,
         privacy: 'Public',
         pinderPoints: 5,
-        id: '5'
+        id: '5',
         description: 'If you like Caserma Monte Grappa, you should totally join!'
     );
     return partyList;
