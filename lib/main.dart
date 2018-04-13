@@ -30,7 +30,6 @@ class Pindery extends StatelessWidget {
 
 List<Locale> pinderySupportedLocales = [
   const Locale('en', ''), // English
-  const Locale('it', ''), // Italian
 ];
 
 

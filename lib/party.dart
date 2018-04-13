@@ -2,16 +2,16 @@
 class Party {
   Party({this.name, this.day, this.imagePath,this.organiser, this.place, this.rating,
   this.ratingNumber,this.privacy, this.pinderPoints, this.description, this.id});
-  final String name;
+  String name;
   final String day;
   final String imagePath;
   final String organiser;
-  final String place;
+  String place;
   final num rating;
   final int ratingNumber;
   final String privacy;
   final int pinderPoints;
-  final String description;
+  String description;
   final String id;
 
 

@@ -15,9 +15,13 @@ class CreatePartyPage extends StatefulWidget {
 }
 
 class _CreatePartyPageState extends State<CreatePartyPage> {
-  bool _chosenImage = false;
+  bool _chosenImage = true;
 
   Party party = new Party();
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController locationController = new TextEditingController();
+  TextEditingController descriptionController = new TextEditingController();
+
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
@@ -28,9 +32,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
           top: false,
           bottom: false,
           child: Container(
-            decoration: new BoxDecoration(
-              color: primaryLight,
-            ),
+            color: primaryLight,
             child: new ListView(
               children: <Widget>[
                 new Container(
@@ -45,14 +47,11 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                     child: Column(
                       children: <Widget>[
                         new TextFormField(
+                          controller: nameController,
                           enabled: true,
                           decoration: const InputDecoration(
                             labelText: 'Party name',
-                            labelStyle: TextStyle(
-                              fontSize: 38.0,
-                              fontWeight: FontWeight.bold,
-                              color: const Color(0x99FFFFFF),
-                            ),
+                            labelStyle: bigLabelStyle,
                           ),
                           style: Theme.of(context).textTheme.headline.copyWith(
                                 fontSize: 38.0,
@@ -61,8 +60,47 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                               ),
                           maxLength: 20,
                         ),
+                        new TextFormField(
+                          controller: locationController,
+                          enabled: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Location',
+                            labelStyle: labelStyle,
+                          ),
+                          style: inputTextStyle,
+                          maxLength: 35,
+                        ),
+                        new TextFormField(
+                          controller: descriptionController,
+                          enabled: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Description',
+                            labelStyle: labelStyle,
+                          ),
+                          maxLength: 300,
+                          maxLines: 5,
+                          style: inputTextStyle,
+                        ),
                       ],
                     ),
+                  ),
+                ),
+                Container(
+                  margin: EdgeInsets.only(top: 50.0, bottom: 20.0, left: 110.0, right: 110.0),
+                  child: new RaisedButton(
+                    child: new Text(
+                      'NEXT',
+                      style: new TextStyle(color: Colors.white),
+                    ),
+                    color: Theme.of(context).accentColor,
+                    onPressed: () {
+                      party.name = nameController.text;
+                      party.place = locationController.text;
+                      party.description = descriptionController.text;
+                      print(party.name);
+                      print(party.description);
+                      print(party.place);
+                    },
                   ),
                 ),
               ],
@@ -76,6 +114,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
 
 class _PartyImageContainer extends StatefulWidget {
   _PartyImageContainer({this.chosenImage});
+
   final bool chosenImage;
 
   @override
@@ -113,7 +152,7 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
           new FlatButton(
             child: new Icon(
               Icons.photo,
-              color: secondary,
+              color: Theme.of(context).accentColor,
               size: 45.0,
             ),
             onPressed: () => print("Pressed"),
@@ -122,7 +161,7 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
           new Text(
             'Add a picture!',
             style: new TextStyle(
-              color: secondary,
+              color: Theme.of(context).accentColor,
               fontSize: 26.0,
             ),
           ),
