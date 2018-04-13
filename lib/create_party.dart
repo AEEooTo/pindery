@@ -5,6 +5,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:image_picker/image_picker.dart' show ImageSource;
+import 'package:transparent_image/transparent_image.dart';
 
 import 'theme.dart';
 import 'party.dart';
@@ -21,8 +23,6 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   // keys
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
-
-  bool _chosenImage = false;
 
   // To be filled party instance
   Party party = new Party();
@@ -55,9 +55,9 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
               child: new ListView(
                 children: <Widget>[
                   new Container(
-                    height: 150.0,
+                    height: 200.0,
                     child: new _PartyImageContainer(
-                      chosenImage: _chosenImage,
+                      party: party,
                     ),
                   ),
                   new Padding(
@@ -213,37 +213,41 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   bool _validateFields() {
     return nameController.text != "" &&
         locationController.text != "" &&
-        descriptionController.text != "";
+        descriptionController.text != "" &&
+        party.imageUrl != null;
   }
 }
 
 class _PartyImageContainer extends StatefulWidget {
-  _PartyImageContainer({this.chosenImage});
-
-  final bool chosenImage;
+  _PartyImageContainer({this.party});
+  final Party party;
+  bool loadingImage = false;
 
   @override
   _PartyImageContainerState createState() =>
-      new _PartyImageContainerState(chosenImage: chosenImage);
+      new _PartyImageContainerState(party: party, loadingImage: loadingImage);
 }
 
 class _PartyImageContainerState extends State<_PartyImageContainer> {
-  _PartyImageContainerState({this.chosenImage});
-
-  final bool chosenImage;
+  _PartyImageContainerState({this.party, this.loadingImage});
+  final Party party;
+  bool loadingImage = false;
 
   @override
   Widget build(BuildContext context) {
-    if (chosenImage) {
-      return new Container(
-        decoration: new BoxDecoration(
-          image: new DecorationImage(
-            image: new AssetImage(
-              'assets/img/movingParty.jpeg',
+    if (party.imageUrl != null) {
+      return new Stack(
+        fit: StackFit.expand,
+        children: <Widget>[
+          new Center(child: new CircularProgressIndicator()),
+          new Center(
+            child: new FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: party.imageUrl,
+              fit: BoxFit.fitWidth,
             ),
-            fit: BoxFit.cover,
           ),
-        ),
+        ],
       );
     }
     return new Container(
@@ -254,14 +258,45 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new FlatButton(
-            child: new Icon(
-              Icons.photo,
-              color: Theme.of(context).accentColor,
-              size: 45.0,
+          new Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: new IconButton(
+                    icon: new Icon(
+                      Icons.photo,
+                      color: Theme.of(context).accentColor,
+                      size: 45.0,
+                    ),
+                    tooltip: 'Choose a picture from the gallery',
+                    onPressed: () async {
+                      setState(() => loadingImage = true);
+                      party.pickImage(ImageSource.gallery);
+                      setState(() => loadingImage = false);
+                    },
+                  ),
+                ),
+                new Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: new IconButton(
+                    icon: new Icon(
+                      Icons.camera,
+                      color: Theme.of(context).accentColor,
+                      size: 45.0,
+                    ),
+                    onPressed: () async {
+                      setState(() => loadingImage = true);
+                      party.pickImage(ImageSource.camera);
+                      setState(() => loadingImage = false);
+                    },
+                    tooltip: 'Take a new picture',
+                  ),
+                ),
+              ],
             ),
-            onPressed: () => print("Pressed"),
-            shape: CircleBorder(),
           ),
           new Text(
             'Add a picture!',
