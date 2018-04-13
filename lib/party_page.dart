@@ -1,3 +1,6 @@
+/// This page contains the code for the specific page of every party.
+///
+
 import 'package:flutter/material.dart';
 
 import 'party.dart';
@@ -6,13 +9,14 @@ import 'theme.dart';
 
 enum AppBarBehavior { normal, pinned, floating, snapping }
 
-class PartyPageState extends StatelessWidget {
+class PartyPage extends StatelessWidget {
+  PartyPage({this.party});
+
+  static const String routeName = '/party-page';
   final Party party;
 
-  AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
+  final AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
   final double _appBarHeight = 256.0;
-
-  PartyPageState({this.party});
 
   @override
   Widget build(BuildContext context) {
@@ -20,36 +24,80 @@ class PartyPageState extends StatelessWidget {
         drawer: new Drawer(
           child: new PinderyDrawer(),
         ),
-        body: new CustomScrollView(
-            slivers: <Widget>[
-              new SliverAppBar(
-                expandedHeight: _appBarHeight,
-                pinned: _appBarBehavior == AppBarBehavior.pinned,
-                floating: _appBarBehavior == AppBarBehavior.floating ||
-                    _appBarBehavior == AppBarBehavior.snapping,
-                snap: _appBarBehavior == AppBarBehavior.snapping,
-                flexibleSpace: new FlexibleSpaceBar(
-                  title: new Text(party.name),
-                  background: new Stack(
-                    fit: StackFit.expand,
-                    children: <Widget>[
-                      new Image.asset(
-                        party.imagePath,
-                        fit: BoxFit.cover,
-                        height: _appBarHeight,
+        body: new CustomScrollView(slivers: <Widget>[
+          new SliverAppBar(
+            expandedHeight: _appBarHeight,
+            pinned: _appBarBehavior == AppBarBehavior.pinned,
+            floating: _appBarBehavior == AppBarBehavior.floating ||
+                _appBarBehavior == AppBarBehavior.snapping,
+            snap: _appBarBehavior == AppBarBehavior.snapping,
+            flexibleSpace: new FlexibleSpaceBar(
+              title: new Text(party.name),
+              background: new Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  new Image.asset(
+                    party.imagePath,
+                    fit: BoxFit.cover,
+                    height: _appBarHeight,
+                  ),
+                  // This gradient ensures that the toolbar icons are distinct
+                  // against the background image.
+                  const DecoratedBox(
+                    decoration: const BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: const Alignment(0.0, -1.0),
+                        end: const Alignment(0.0, -0.4),
+                        colors: const <Color>[
+                          const Color(0x60000000),
+                          const Color(0x00000000)
+                        ],
                       ),
-                      // This gradient ensures that the toolbar icons are distinct
-                      // against the background image.
-                      const DecoratedBox(
-                        decoration: const BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: const Alignment(0.0, -1.0),
-                            end: const Alignment(0.0, -0.4),
-                            colors: const <Color>[
-                              const Color(0x60000000), const Color(0x00000000)],
-                          ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          new SliverList(
+            delegate: new SliverChildListDelegate(
+              <Widget>[
+                new BlackPartyHeader(
+                  organiser: party.organiser,
+                  rating: party.rating,
+                  ratingNumber: party.ratingNumber,
+                ),
+                new WhitePartyHeader(
+                  data: party.place,
+                  icon: const IconData(0xe0c8, fontFamily: 'MaterialIcons'),
+                ),
+                new WhitePartyHeader(
+                  data: party.day,
+                  icon: const IconData(0xe192, fontFamily: 'MaterialIcons'),
+                ),
+                new WhitePartyHeader(
+                  data: 'Necessary points: ' + party.pinderPoints.toString(),
+                  icon: const IconData(0xe5ca, fontFamily: 'MaterialIcons'),
+                ),
+                new WhitePartyHeader(
+                  data: party.privacy,
+                  icon: const IconData(0xe80b, fontFamily: 'MaterialIcons'),
+                ),
+                new Padding(
+                  padding: const EdgeInsets.only(
+                      left: 26.0, top: 13.0, right: 54.0, bottom: 13.0),
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: new Text(
+                          'Description',
+                          style: new TextStyle(
+                              fontSize: 14.0, fontWeight: FontWeight.bold),
                         ),
                       ),
+                      new Text(party.description)
                     ],
                   ),
                 ),
@@ -220,13 +268,12 @@ class WhitePartyBlock extends StatelessWidget {
   final String data;
   final IconData icon;
 
-  Widget build (BuildContext context){
+  Widget build(BuildContext context) {
     return new Container(
       height: 48.0,
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       decoration: new BoxDecoration(
-          border: new Border(bottom: new BorderSide(color: divider))
-      ),
+          border: new Border(bottom: new BorderSide(color: dividerColor))),
       child: new DefaultTextStyle(
         style: Theme.of(context).textTheme.subhead,
         child: new SafeArea(
@@ -238,22 +285,25 @@ class WhitePartyBlock extends StatelessWidget {
               new Container(
                   padding: const EdgeInsets.symmetric(vertical: 0.0),
                   width: 72.0,
-                  child: new Icon(icon, color:secondary, size: 20.0,)
-              ),
+                  child: new Icon(
+                    icon,
+                    color: secondary,
+                    size: 20.0,
+                  )),
               new Expanded(
                   child: new Text(
-                      data,
-                    style: new TextStyle(
-                      fontSize: 17.0,
-                    ),
-                  )
-              ),
+                data,
+                style: new TextStyle(
+                  fontSize: 17.0,
+                ),
+              )),
             ],
           ),
         ),
       ),
     );
   }
+}
 
 }
 

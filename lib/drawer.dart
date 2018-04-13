@@ -1,9 +1,14 @@
+/// drawer.dart
+/// This file contains the code for Pindery's drawer
+///
+
 import 'package:flutter/material.dart';
 
 final String name = "Edoardo Debenedetti";
 final String coverImagePath = "assets/img/movingParty.jpeg";
 final String avatarPath = "assets/img/avatar.jpg";
 
+/// Default drawer for Pindery app
 class PinderyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

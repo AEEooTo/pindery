@@ -1,16 +1,18 @@
+/// Class that defines every Party object in the app.
 class Party {
   Party({this.name, this.day, this.imagePath,this.organiser, this.place, this.rating,
-  this.ratingNumber,this.privacy, this.pinderPoints, this.description});
-  final String name;
+  this.ratingNumber,this.privacy, this.pinderPoints, this.description, this.id});
+  String name;
   final String day;
   final String imagePath;
   final String organiser;
-  final String place;
+  String place;
   final num rating;
   final int ratingNumber;
   final String privacy;
   final int pinderPoints;
-  final String description;
+  String description;
+  final String id;
 
 
   static List<Party> partyGenerator() {
@@ -24,6 +26,9 @@ class Party {
       rating: 1,
       ratingNumber: 23,
       privacy: 'Public',
+
+
+      id: '1'
       pinderPoints: 6,
       description: 'Sounds like a nice party!\nEspecially if you like cats..'
     );
@@ -38,6 +43,7 @@ class Party {
         privacy: 'Public',
         pinderPoints: 7,
         description: 'lorem ipsum, quia dolor sit, amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt, ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit, qui in ea voluptate velit esse, quam nihil molestiae consequatur, vel illum, qui dolorem eum fugiat, quo voluptas nulla pariatur? [33] At vero eos et accusamus et iusto odio dignissimos ducimus, qui blanditiis praesentium voluptatum deleniti atque corrupti, quos dolores et quas molestias excepturi sint, obcaecati cupiditate non provident, similique '
+        id: '2'
     );
     partyList[2] = new Party(
       name: 'Fancy Party',
@@ -49,7 +55,8 @@ class Party {
         ratingNumber: 25,
         privacy: 'Public',
         pinderPoints: 5,
-        description: 'Sounds like a nice party!'
+        description: 'Sounds like a nice party!',
+        id: '3',
     );
     partyList[3] = new Party(
       name: 'Pasta Party',
@@ -61,7 +68,8 @@ class Party {
         ratingNumber: 27,
         privacy: 'Public',
         pinderPoints: 5,
-        description: 'Sounds like a nice party!'
+        description: 'Sounds like a nice party!',
+        id: '42'
     );
     partyList[4] = new Party(
       name: 'Caserma Party',
@@ -73,6 +81,7 @@ class Party {
         ratingNumber: 267,
         privacy: 'Public',
         pinderPoints: 5,
+        id: '5'
         description: 'If you like Caserma Monte Grappa, you should totally join!'
     );
     return partyList;
