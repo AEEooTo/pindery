@@ -242,6 +242,7 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
           new Center(child: new CircularProgressIndicator()),
           new Center(
             child: new FadeInImage.memoryNetwork(
+              // TODO: fix size
               placeholder: kTransparentImage,
               image: party.imageUrl,
               fit: BoxFit.fitWidth,
@@ -273,6 +274,7 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
                     ),
                     tooltip: 'Choose a picture from the gallery',
                     onPressed: () async {
+                      // TODO: fix asyncronicity and setState()
                       setState(() => loadingImage = true);
                       party.pickImage(ImageSource.gallery);
                       setState(() => loadingImage = false);

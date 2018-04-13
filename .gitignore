@@ -10,3 +10,4 @@ ios/.generated/
 packages
 .flutter-plugins
 android/gen/
+android/app/google-services.json
