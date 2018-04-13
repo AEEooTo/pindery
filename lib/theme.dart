@@ -20,3 +20,10 @@ ThemeData pinderyTheme = new ThemeData(
   dividerColor: divider,
   buttonTheme: new ButtonThemeData(textTheme: ButtonTextTheme.accent),
 );
+
+TextStyle pinderyTextStyle = new TextStyle(
+    fontSize:14.0,
+    color: Colors.black,
+    textBaseline: TextBaseline.alphabetic,
+
+);

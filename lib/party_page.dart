@@ -62,19 +62,19 @@ class PartyPageState extends StatelessWidget {
                       rating: party.rating,
                       ratingNumber: party.ratingNumber,
                     ),
-                    new WhitePartyHeader(
+                    new WhitePartyBlock(
                       data: party.place,
                       icon: const IconData(0xe0c8, fontFamily: 'MaterialIcons'),
                     ),
-                    new WhitePartyHeader(
+                    new WhitePartyBlock(
                       data: party.day,
                       icon: const IconData(0xe192, fontFamily: 'MaterialIcons'),
                     ),
-                    new WhitePartyHeader(
+                    new WhitePartyBlock(
                       data: 'Necessary points: ' + party.pinderPoints.toString(),
                       icon: const IconData(0xe5ca, fontFamily: 'MaterialIcons'),
                     ),
-                    new WhitePartyHeader(
+                    new WhitePartyBlock(
                       data: party.privacy,
                       icon: const IconData(0xe80b, fontFamily: 'MaterialIcons'),
                     ),
@@ -94,7 +94,9 @@ class PartyPageState extends StatelessWidget {
                                 ),
                               ),
                               new Text (
-                                  party.description
+                                  party.description,
+                                  style: pinderyTextStyle,
+                                  textAlign: TextAlign.justify,
                               )
                             ],
                       ),
@@ -116,6 +118,7 @@ class BlackPartyHeader extends StatelessWidget {
   final String organiser;
   final num rating;
   final int ratingNumber;
+  List <Icon> stars= new List(5);
 
   Widget build(BuildContext context) {
     return new Container(
@@ -125,66 +128,94 @@ class BlackPartyHeader extends StatelessWidget {
       height: 86.0,
       child: new Padding(
         padding: const EdgeInsets.all(16.0),
-        child: new Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: new Row(
           children: <Widget>[
-            new Text(
-              'by ' + organiser,
-              style: new TextStyle(
-                color: secondary,
-                fontSize: 14.0,
-                fontWeight: FontWeight.w400,
-              ),
+            new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Text(
+                  'by ' + organiser,
+                  style: new TextStyle(
+                    color: secondary,
+                    fontSize: 14.0,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                new Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 4.0),
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      new Text(
+                        rating.toString(),
+                        style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      new Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                        child: new RatingStars(number: rating,),
+                      ),
+                        /*child: new Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            new Icon(Icons.star, color: secondary, size: 14.0,),
+                            new Icon(Icons.star, color: secondary, size: 14.0,),
+                            new Icon(Icons.star, color: secondary, size: 14.0),
+                            new Icon(Icons.star, color: secondary, size: 14.0),
+                            new Icon(Icons.star, color: Colors.white, size: 14.0),
+                          ],
+                        ),*/
+                      new Text(
+                        ratingNumber.toString() + ' reviews',
+                        style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      )
+                    ],
+                  ),
+                )
+              ],
             ),
-            new Padding(
-              padding: const EdgeInsets.symmetric(vertical: 4.0),
-              child: new Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  new Text(
-                    rating.toString(),
-                    style: new TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  new Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
-                    child: new Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
 
-                        new Icon(Icons.star, color: secondary,size: 14.0,),
-                        new Icon(Icons.star, color: secondary, size: 14.0,),
-                        new Icon(Icons.star, color: secondary, size: 14.0),
-                        new Icon(Icons.star, color: secondary, size: 14.0),
-                        new Icon(Icons.star, color: Colors.white, size: 14.0),
-                      ],
+            new Expanded(
+              child: new FloatingActionButton(
+                onPressed: () {
+                  Scaffold.of(context).showSnackBar(new SnackBar(
+                    content: new Text(
+                        "Pressed mate",
+                        textAlign: TextAlign.center,
                     ),
-                  ),
-                  new Text(
-                    ratingNumber.toString() + ' reviews',
-                    style: new TextStyle(
-                      color: Colors.white,
-                      fontSize: 14.0,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  )
-                ],
-              ),
-            )
+                  ));
+                  },
+                child: new Icon(Icons.add),
+                ),
+            ),
           ],
         ),
       ),
     );
   }
+
+  int ratingmethod (int rating )
+  {
+    if (rating==1)
+      {
+
+      }
+    return 1;
+  }
+
 }
 
-class WhitePartyHeader extends StatelessWidget {
-  WhitePartyHeader({this.data, this.icon});
+class WhitePartyBlock extends StatelessWidget {
+  WhitePartyBlock({this.data, this.icon});
 
   final String data;
   final IconData icon;
@@ -223,5 +254,39 @@ class WhitePartyHeader extends StatelessWidget {
       ),
     );
   }
+
+}
+
+class RatingStars extends StatelessWidget{
+  RatingStars({this.number});
+
+  final int number;
+  final List<bool> active= new List(5);
+
+
+  void starsMethod (int number) {
+      int i = 0;
+      for (i; i < 5 && i < number; i++) {
+        active[i] = true;
+      }
+      for (i+1; i < 5; i++) {
+        active[i] = false;
+      }
+  }
+
+  Widget build(BuildContext context) {
+    starsMethod(number);
+    return  new Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        new Icon(Icons.star, color: active[0] ? secondary : Colors.white, size: 14.0,),
+        new Icon(Icons.star, color: active[1] ? secondary : Colors.white, size: 14.0,),
+        new Icon(Icons.star, color: active[2] ? secondary : Colors.white, size: 14.0),
+        new Icon(Icons.star, color: active[3] ? secondary : Colors.white, size: 14.0),
+        new Icon(Icons.star, color: active[4] ? secondary : Colors.white, size: 14.0),
+      ],
+    );
+  }
+
 
 }
