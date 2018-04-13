@@ -18,7 +18,11 @@ class CreatePartyPage extends StatefulWidget {
 }
 
 class _CreatePartyPageState extends State<CreatePartyPage> {
-  bool _chosenImage = true;
+  // keys
+  final scaffoldKey = new GlobalKey<ScaffoldState>();
+  final formKey = new GlobalKey<FormState>();
+
+  bool _chosenImage = false;
 
   // To be filled party instance
   Party party = new Party();
@@ -35,9 +39,10 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   TimeOfDay _toTime = const TimeOfDay(hour: 00, minute: 00);
 
   Widget build(BuildContext context) {
-    return Theme(
+    return new Theme(
       data: Theme.of(context),
       child: new Scaffold(
+        key: scaffoldKey,
         appBar: new AppBar(
           title: new Text('New party'),
         ),
@@ -45,7 +50,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
           child: new SafeArea(
             top: false,
             bottom: false,
-            child: Container(
+            child: new Container(
               color: primaryLight,
               child: new ListView(
                 children: <Widget>[
@@ -55,14 +60,19 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                       chosenImage: _chosenImage,
                     ),
                   ),
-                  Padding(
+                  new Padding(
                     padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                    child: Form(
-                      child: Column(
+                    child: new Form(
+                      autovalidate: true,
+                      key: formKey,
+                      child: new Column(
                         children: <Widget>[
                           new TextFormField(
                             controller: nameController,
-                            enabled: true,
+                            validator: (val) => val.isEmpty
+                                ? 'You must insert a name for this party.'
+                                : null,
+                            onSaved: (val) => party.name = val,
                             decoration: const InputDecoration(
                                 labelText: 'Party name',
                                 labelStyle: labelStyle,
@@ -80,17 +90,23 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                           ),
                           new TextFormField(
                             controller: locationController,
-                            enabled: true,
+                            validator: (val) => val.isEmpty
+                                ? 'You must insert a location for this party.'
+                                : null,
+                            onSaved: (val) => party.place = val,
                             decoration: const InputDecoration(
                               labelText: 'Location',
                               labelStyle: labelStyle,
                             ),
                             style: inputTextStyle,
-                            maxLength: 35,
+                            maxLength: 50,
                           ),
                           new TextFormField(
                             controller: descriptionController,
-                            enabled: true,
+                            validator: (val) => val.isEmpty
+                                ? 'You must insert a description for this party.'
+                                : null,
+                            onSaved: (val) => party.description = val,
                             decoration: const InputDecoration(
                               labelText: 'Description',
                               labelStyle: labelStyle,
@@ -103,7 +119,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                       ),
                     ),
                   ),
-                  Padding(
+                  new Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       children: <Widget>[
@@ -140,20 +156,17 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                       ],
                     ),
                   ),
-                  Container(
-                    margin: EdgeInsets.only(
+                  new Container(
+                    margin: const EdgeInsets.only(
                         top: 20.0, bottom: 20.0, left: 110.0, right: 110.0),
                     child: new RaisedButton(
                       child: new Text(
                         'NEXT',
                         style: new TextStyle(color: Colors.white),
                       ),
-                      color: Theme.of(context).accentColor,
-                      onPressed: () {
-                        _assignPartyFields();
-                        party.sendParty();
-                        _printPartyInfo();
-                      },
+                      onPressed: _validateFields()
+                          ? () => _handleSubmitted(context)
+                          : null,
                     ),
                   ),
                 ],
@@ -165,16 +178,28 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     );
   }
 
+  void _handleSubmitted(BuildContext context) {
+    final FormState form = formKey.currentState;
+    final ScaffoldState scaffold = scaffoldKey.currentState;
+    form.save();
+    scaffold.showSnackBar(
+      new SnackBar(content: new Text('The party was saved on the DB')),
+    );
+    _assignPartyFields();
+    party.sendParty();
+    _printPartyInfo();
+    // Navigator.pop(context);
+  }
+
+  /// Method to assign the different collected fields to the Party instance
   void _assignPartyFields() {
-    party.name = nameController.text;
-    party.place = locationController.text;
-    party.description = descriptionController.text;
     party.day = _fromDate.toString();
     party.fromTime = _fromTime.format(context);
     party.toDay = _toDate.toString();
     party.toTime = _toTime.format(context);
   }
 
+  /// Just for debugging purpose
   void _printPartyInfo() {
     print(party.name);
     print(party.description);
@@ -183,6 +208,12 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     print(party.fromTime);
     print(party.toDay);
     print(party.toTime);
+  }
+
+  bool _validateFields() {
+    return nameController.text != "" &&
+        locationController.text != "" &&
+        descriptionController.text != "";
   }
 }
 
@@ -220,6 +251,8 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
         color: const Color(0x99FFFFFF),
       ),
       child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           new FlatButton(
             child: new Icon(
@@ -243,6 +276,7 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
   }
 }
 
+/// DateTime picker method, used to create a DateTime picker
 class _DateTimePicker extends StatelessWidget {
   const _DateTimePicker(
       {Key key,
@@ -308,6 +342,7 @@ class _DateTimePicker extends StatelessWidget {
   }
 }
 
+/// Dropdown Input method
 class _InputDropdown extends StatelessWidget {
   const _InputDropdown(
       {Key key,

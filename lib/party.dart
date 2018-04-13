@@ -35,15 +35,17 @@ class Party {
   String description;
   final String id;
 
+  /// Method to push the party on the DB
   Future<Null> sendParty() async {
     // Firebase Firestore reference
     final reference = Firestore.instance
         .collection('cities')
-        .document(city)
+        .document(city.toLowerCase())
         .collection('parties');
     reference.add(partyMapper());
   }
 
+  /// Method to create a map from the Party instance to be pushed to Firestore
   Map<String, String> partyMapper() {
     Map<String, String> partyMap = {
       "name": name,
