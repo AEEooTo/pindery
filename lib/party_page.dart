@@ -2,7 +2,6 @@
 ///
 
 import 'package:flutter/material.dart';
-
 import 'party.dart';
 import 'drawer.dart';
 import 'theme.dart';
@@ -84,7 +83,7 @@ class PartyPage extends StatelessWidget {
                       icon: const IconData(0xe80b, fontFamily: 'MaterialIcons'),
                     ),
                     new Padding(
-                      padding: const EdgeInsets.only(left: 26.0, top: 13.0, right: 54.0, bottom: 13.0),
+                      padding: const EdgeInsets.only(left: 26.0, top: 13.0, right: 26.0, bottom: 13.0),
                       child: new Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -101,7 +100,6 @@ class PartyPage extends StatelessWidget {
                           new Text (
                             party.description,
                             style: pinderyTextStyle,
-                            textAlign: TextAlign.justify,
                           )
                         ],
                       ),
@@ -123,12 +121,12 @@ class BlackPartyHeader extends StatelessWidget {
   final String organiser;
   final num rating;
   final int ratingNumber;
-  List <Icon> stars= new List(5);
+  final List <Icon> stars= new List(5);
 
   Widget build(BuildContext context) {
     return new Container(
       decoration: new BoxDecoration(
-        color: primaryDark,
+        color: primary,
       ),
       height: 86.0,
       child: new Padding(
@@ -165,16 +163,6 @@ class BlackPartyHeader extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 12.0),
                         child: new RatingStars(number: rating,),
                       ),
-                      /*child: new Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            new Icon(Icons.star, color: secondary, size: 14.0,),
-                            new Icon(Icons.star, color: secondary, size: 14.0,),
-                            new Icon(Icons.star, color: secondary, size: 14.0),
-                            new Icon(Icons.star, color: secondary, size: 14.0),
-                            new Icon(Icons.star, color: Colors.white, size: 14.0),
-                          ],
-                        ),*/
                       new Text(
                         ratingNumber.toString() + ' reviews',
                         style: new TextStyle(
@@ -190,16 +178,19 @@ class BlackPartyHeader extends StatelessWidget {
             ),
 
             new Expanded(
-              child: new FloatingActionButton(
-                onPressed: () {
-                  Scaffold.of(context).showSnackBar(new SnackBar(
-                    content: new Text(
-                      "Pressed mate",
-                      textAlign: TextAlign.center,
-                    ),
-                  ));
-                },
-                child: new Icon(Icons.add),
+              child:new Container(
+                alignment: Alignment.centerRight,
+                child: new FloatingActionButton(
+                  onPressed: () {
+                    Scaffold.of(context).showSnackBar(new SnackBar(
+                      content: new Text(
+                        "Pressed mate",
+                        textAlign: TextAlign.center,
+                      ),
+                    ));
+                  },
+                  child: new Icon(Icons.local_bar),
+                ),
               ),
             ),
           ],
