@@ -274,10 +274,8 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
                     ),
                     tooltip: 'Choose a picture from the gallery',
                     onPressed: () async {
-                      // TODO: fix asyncronicity and setState()
-                      setState(() => loadingImage = true);
-                      party.pickImage(ImageSource.gallery);
-                      setState(() => loadingImage = false);
+                      // passes the state to use setstate
+                      party.pickImage(ImageSource.gallery, this);
                     },
                   ),
                 ),
@@ -291,7 +289,7 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
                     ),
                     onPressed: () async {
                       setState(() => loadingImage = true);
-                      party.pickImage(ImageSource.camera);
+                      party.pickImage(ImageSource.camera, this);
                       setState(() => loadingImage = false);
                     },
                     tooltip: 'Take a new picture',

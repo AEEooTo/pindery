@@ -67,13 +67,13 @@ class Party {
     return partyMap;
   }
 
-  Future<Null> pickImage(ImageSource source) async {
+  void pickImage(ImageSource source, State state) async {
     File imageFile = await ImagePicker.pickImage(source: source);
     int random = new Random().nextInt(100000);
     StorageReference ref = FirebaseStorage.instance.ref().child("/partyImages/party_image_$random.jpg");
     StorageUploadTask uploadTask = ref.put(imageFile);
     Uri downloadUrl = (await uploadTask.future).downloadUrl;
-    imageUrl = downloadUrl.toString();
+    state.setState(() => imageUrl = downloadUrl.toString());
   }
 
   static List<Party> partyGenerator() {
