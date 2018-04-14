@@ -1,6 +1,11 @@
 import 'dart:async';
+import 'dart:math';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:flutter/material.dart';
 
 /// Class that defines every Party object in the app.
 class Party {
@@ -18,7 +23,8 @@ class Party {
       this.privacy,
       this.pinderPoints,
       this.description,
-      this.id});
+      this.id,
+      this.imageUrl});
   String name;
   String day;
   String imagePath;
@@ -27,6 +33,7 @@ class Party {
   String fromTime;
   String toDay;
   String toTime;
+  String imageUrl;
   final String city = "Shanghai";
   final num rating;
   final int ratingNumber;
@@ -35,15 +42,17 @@ class Party {
   String description;
   final String id;
 
+  /// Method to push the party on the DB
   Future<Null> sendParty() async {
     // Firebase Firestore reference
     final reference = Firestore.instance
         .collection('cities')
-        .document(city)
+        .document(city.toLowerCase())
         .collection('parties');
     reference.add(partyMapper());
   }
 
+  /// Method to create a map from the Party instance to be pushed to Firestore
   Map<String, String> partyMapper() {
     Map<String, String> partyMap = {
       "name": name,
@@ -53,8 +62,18 @@ class Party {
       "fromTime": fromTime,
       "toDay": toDay,
       "toTime": toTime,
+      "imageUrl": imageUrl,
     };
     return partyMap;
+  }
+
+  void pickImage(ImageSource source, State state) async {
+    File imageFile = await ImagePicker.pickImage(source: source);
+    int random = new Random().nextInt(100000);
+    StorageReference ref = FirebaseStorage.instance.ref().child("/partyImages/party_image_$random.jpg");
+    StorageUploadTask uploadTask = ref.put(imageFile);
+    Uri downloadUrl = (await uploadTask.future).downloadUrl;
+    state.setState(() => imageUrl = downloadUrl.toString());
   }
 
   static List<Party> partyGenerator() {
