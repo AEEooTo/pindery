@@ -2,13 +2,10 @@
 /// contains the code for the first step of creating a party
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:image_picker/image_picker.dart';
 
-import 'pindery_utils.dart';
+import 'party_details_utils.dart';
 import 'theme.dart';
 import 'party.dart';
 
@@ -57,7 +54,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                 children: <Widget>[
                   new Container(
                     height: 200.0,
-                    child: new _PartyImageContainer(
+                    child: new PartyImageContainer(
                       party: party,
                     ),
                   ),
@@ -124,7 +121,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                     padding: const EdgeInsets.all(16.0),
                     child: new Column(
                       children: <Widget>[
-                        new _DateTimePicker(
+                        new DateTimePicker(
                           labelText: 'From',
                           selectedDate: _fromDate,
                           selectedTime: _fromTime,
@@ -139,7 +136,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                             });
                           },
                         ),
-                        new _DateTimePicker(
+                        new DateTimePicker(
                           labelText: 'To',
                           selectedDate: _toDate,
                           selectedTime: _toTime,
@@ -157,9 +154,6 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                       ],
                     ),
                   ),
-                  new MaterialButton(
-                    onPressed: () => print(party?.imageLocalPath),
-                  ),
                   new Container(
                     margin: const EdgeInsets.only(
                         top: 20.0, bottom: 20.0, left: 110.0, right: 110.0),
@@ -168,7 +162,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                         'NEXT',
                         style: new TextStyle(color: Colors.white),
                       ),
-                      onPressed: _validateFields() ? () => _uploadingDialog() : null,
+                      onPressed:
+                          validateFields() ? () => _uploadingDialog() : null,
                     ),
                   ),
                 ],
@@ -180,37 +175,45 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     );
   }
 
-  void _handleSubmitted(BuildContext context) {
+  void _handleSubmitted(BuildContext context) async {
     final FormState form = formKey.currentState;
     final ScaffoldState scaffold = scaffoldKey.currentState;
+    await party.uploadImage(party.imageLocalPath);
     form.save();
+    assignPartyFields(party);
+    party.sendParty();
+    printPartyInfo();
+    Navigator.of(context).pop();
     scaffold.showSnackBar(
       new SnackBar(content: new Text('The party was saved on the DB')),
     );
-    _assignPartyFields();
-    party.sendParty();
-    _printPartyInfo();
-    // Navigator.pop(context);
   }
 
   Future<Null> _uploadingDialog() async {
+    _handleSubmitted(context);
     return showDialog<Null>(
       context: context,
-      barrierDismissible: false, // user must tap button!
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return new AlertDialog(
-          title: new Text('Rewind and remember'),
+          title: new Text('Loading'),
           content: new SingleChildScrollView(
             child: new ListBody(
               children: <Widget>[
-                new Text('You will never be satisfied.'),
-                new Text('You\’re like me. I’m never satisfied.'),
+                new Text('Loading cool infos.'),
+                new Text('You\'ll be soon ready to party hard.'),
+                new Center(
+                  child: new Container(
+                    height: 1.5,
+                    margin: EdgeInsets.only(top: 16.0),
+                    child: new LinearProgressIndicator(),),
+                ),
               ],
             ),
           ),
           actions: <Widget>[
             new FlatButton(
-              child: new Text('Regret'),
+              child: new Text('CANCEL'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -222,7 +225,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   }
 
   /// Method to assign the different collected fields to the Party instance
-  void _assignPartyFields() {
+  void assignPartyFields(Party party) {
     party.day = _fromDate.toString();
     party.fromTime = _fromTime.format(context);
     party.toDay = _toDate.toString();
@@ -230,7 +233,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   }
 
   /// Just for debugging purpose
-  void _printPartyInfo() {
+  void printPartyInfo() {
     print(party.name);
     print(party.description);
     print(party.place);
@@ -240,7 +243,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     print(party.toTime);
   }
 
-  bool _validateFields() {
+  bool validateFields() {
     return nameController.text.trim().isNotEmpty &&
         locationController.text.trim().isNotEmpty &&
         descriptionController.text.trim().isNotEmpty &&
@@ -248,197 +251,77 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   }
 }
 
-/// Container for the top party image
-class _PartyImageContainer extends StatefulWidget {
-  _PartyImageContainer({this.party});
+class PartyForm extends StatelessWidget {
+  PartyForm({this.party});
 
-  final Party party;
+  Party party;
 
-  @override
-  _PartyImageContainerState createState() =>
-      new _PartyImageContainerState(party: party);
-}
+  // Text editing controllers
+  TextEditingController nameController = new TextEditingController();
+  TextEditingController locationController = new TextEditingController();
+  TextEditingController descriptionController = new TextEditingController();
 
-class _PartyImageContainerState extends State<_PartyImageContainer> {
-  _PartyImageContainerState({this.party});
-
-  final Party party;
+  // DateTime variables
+  DateTime _fromDate = new DateTime.now();
+  TimeOfDay _fromTime = const TimeOfDay(hour: 21, minute: 00);
+  DateTime _toDate = new DateTime.now();
+  TimeOfDay _toTime = const TimeOfDay(hour: 00, minute: 00);
 
   @override
   Widget build(BuildContext context) {
-    if (party.imageLocalPath != null) {
-      return new Container(
-        child: Image.file(
-          party.imageLocalPath,
-          fit: BoxFit.cover,
-        ),
-      );
-    }
-    return new Container(
-      decoration: new BoxDecoration(
-        color: const Color(0x99FFFFFF),
-      ),
+    final formKey = new GlobalKey<FormState>();
+    return new Form(
+      autovalidate: true,
+      key: formKey,
       child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          new Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: new IconButton(
-                    icon: new Icon(
-                      Icons.photo,
-                      color: Theme.of(context).accentColor,
-                      size: 45.0,
-                    ),
-                    tooltip: 'Choose a picture from the gallery',
-                    onPressed: () async {
-                      party.imageLocalPath =
-                          await PinderyUtils.pickImage(ImageSource.gallery);
-                      setState(() {});
-                    },
-                  ),
+          new TextFormField(
+            controller: nameController,
+            validator: (val) =>
+                val.isEmpty ? 'You must insert a name for this party.' : null,
+            onSaved: (val) => party.name = val,
+            decoration: const InputDecoration(
+                labelText: 'Party name',
+                labelStyle: labelStyle,
+                border: const UnderlineInputBorder(
+                    borderSide: const BorderSide(
+                  color: const Color(0xFFE52059),
+                ))),
+            style: Theme.of(context).textTheme.headline.copyWith(
+                  fontSize: 38.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
                 ),
-                new Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: new IconButton(
-                    icon: new Icon(
-                      Icons.camera,
-                      color: Theme.of(context).accentColor,
-                      size: 45.0,
-                    ),
-                    onPressed: () async {
-                      party.imageLocalPath =
-                          await PinderyUtils.pickImage(ImageSource.camera);
-                      setState(() {});
-                    },
-                    tooltip: 'Take a new picture',
-                  ),
-                ),
-              ],
-            ),
+            maxLength: 20,
           ),
-          new Text(
-            'Add a picture!',
-            style: new TextStyle(
-              color: Theme.of(context).accentColor,
-              fontSize: 26.0,
+          new TextFormField(
+            controller: locationController,
+            validator: (val) => val.isEmpty
+                ? 'You must insert a location for this party.'
+                : null,
+            onSaved: (val) => party.place = val,
+            decoration: const InputDecoration(
+              labelText: 'Location',
+              labelStyle: labelStyle,
             ),
+            style: inputTextStyle,
+            maxLength: 50,
+          ),
+          new TextFormField(
+            controller: descriptionController,
+            validator: (val) => val.isEmpty
+                ? 'You must insert a description for this party.'
+                : null,
+            onSaved: (val) => party.description = val,
+            decoration: const InputDecoration(
+              labelText: 'Description',
+              labelStyle: labelStyle,
+            ),
+            maxLength: 300,
+            maxLines: 5,
+            style: inputTextStyle,
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// DateTime picker object, used to create a DateTime picker
-class _DateTimePicker extends StatelessWidget {
-  const _DateTimePicker(
-      {Key key,
-      this.labelText,
-      this.selectedDate,
-      this.selectedTime,
-      this.selectDate,
-      this.selectTime})
-      : super(key: key);
-
-  final String labelText;
-  final DateTime selectedDate;
-  final TimeOfDay selectedTime;
-  final ValueChanged<DateTime> selectDate;
-  final ValueChanged<TimeOfDay> selectTime;
-
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: new DateTime(
-            DateTime.now().year, DateTime.now().month, DateTime.now().day),
-        lastDate: new DateTime(2101));
-    if (picked != null && picked != selectedDate) selectDate(picked);
-  }
-
-  Future<Null> _selectTime(BuildContext context) async {
-    final TimeOfDay picked =
-        await showTimePicker(context: context, initialTime: selectedTime);
-    if (picked != null && picked != selectedTime) selectTime(picked);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final TextStyle valueStyle = Theme.of(context).textTheme.title;
-    return new Row(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
-        new Expanded(
-          flex: 4,
-          child: new _InputDropdown(
-            labelText: labelText,
-            valueText: new DateFormat.yMMMd().format(selectedDate),
-            valueStyle: valueStyle,
-            onPressed: () {
-              _selectDate(context);
-            },
-          ),
-        ),
-        const SizedBox(width: 12.0),
-        new Expanded(
-          flex: 3,
-          child: new _InputDropdown(
-            valueText: selectedTime.format(context),
-            valueStyle: valueStyle,
-            onPressed: () {
-              _selectTime(context);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-/// Dropdown Input object
-class _InputDropdown extends StatelessWidget {
-  const _InputDropdown(
-      {Key key,
-      this.child,
-      this.labelText,
-      this.valueText,
-      this.valueStyle,
-      this.onPressed})
-      : super(key: key);
-
-  final String labelText;
-  final String valueText;
-  final TextStyle valueStyle;
-  final VoidCallback onPressed;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return new InkWell(
-      onTap: onPressed,
-      child: new InputDecorator(
-        decoration: new InputDecoration(
-          labelText: labelText,
-          labelStyle: labelStyle,
-        ),
-        baseStyle: valueStyle,
-        child: new Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            new Text(valueText, style: inputTextStyle),
-            new Icon(
-              Icons.arrow_drop_down,
-              color: inputFieldColor,
-            )
-          ],
-        ),
       ),
     );
   }
