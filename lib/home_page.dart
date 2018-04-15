@@ -17,6 +17,7 @@ class PinderyHomePage extends StatefulWidget {
 }
 
 class _PinderyHomePageState extends State<PinderyHomePage> {
+  _PinderyHomePageState({Contex});
   @override
   Widget build(BuildContext context) {
     List<PartyCard> _partyCards = PartyCard.partyCardsGenerator();

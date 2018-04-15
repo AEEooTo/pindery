@@ -82,26 +82,33 @@ class PartyPage extends StatelessWidget {
                       data: party.privacy,
                       icon: const IconData(0xe80b, fontFamily: 'MaterialIcons'),
                     ),
-                    new Padding(
-                      padding: const EdgeInsets.only(left: 26.0, top: 13.0, right: 26.0, bottom: 13.0),
-                      child: new Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          new Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: new Text(
-                              'Description',
-                              style: new TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold
+                    new Container(
+                      decoration: new BoxDecoration(
+
+                        color: Colors.white,
+                      ),
+                      child: new Padding(
+                        padding: const EdgeInsets.only(left: 26.0, top: 13.0, right: 26.0, bottom: 13.0),
+                        child: new Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            new Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: new Text(
+                                'Description',
+                                style: new TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: primary
+                                ),
                               ),
                             ),
-                          ),
-                          new Text (
-                            party.description,
-                            style: pinderyTextStyle,
-                          )
-                        ],
+                            new Text (
+                              party.description,
+                              style: pinderyTextStyle,
+                            )
+                          ],
+                        ),
                       ),
                     )
 
@@ -217,10 +224,12 @@ class WhitePartyBlock extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return new Container(
+
       height: 48.0,
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       decoration: new BoxDecoration(
-          border: new Border(bottom: new BorderSide(color: dividerColor))
+          border: new Border(bottom: new BorderSide(color: dividerColor)),
+          color: Colors.white,
       ),
       child: new DefaultTextStyle(
         style: Theme.of(context).textTheme.subhead,
@@ -239,6 +248,7 @@ class WhitePartyBlock extends StatelessWidget {
                   child: new Text(
                     data,
                     style: new TextStyle(
+                      color: primary,
                       fontSize: 17.0,
                     ),
                   )

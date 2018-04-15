@@ -79,7 +79,7 @@ class Party {
   static List<Party> partyGenerator() {
     List<Party> partyList = new List(5);
     partyList[0] = new Party(
-        name: 'Cats Party',
+        name: 'Kittens Party',
         day: 'Every day',
         imagePath: 'assets/img/kittens.jpeg',
         organiser: 'Anna ovviamente',
