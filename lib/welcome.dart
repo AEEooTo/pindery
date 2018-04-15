@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'drawer.dart';
 import 'theme.dart';
+import 'login.dart';
 
 class WelcomePage extends StatelessWidget{
   WelcomePage({Contex});
@@ -72,7 +73,6 @@ class WelcomePage extends StatelessWidget{
                 )
               )
             ],
-
           ),
         ),
       )
@@ -97,6 +97,12 @@ class WelcomeButton extends StatelessWidget{
             color: Colors.white
         ),),
       onPressed: (){
+        Navigator.push(
+          context,
+          new MaterialPageRoute(
+              builder: (context) => new LoginPage()),
+        );
+
 
       },
     );
