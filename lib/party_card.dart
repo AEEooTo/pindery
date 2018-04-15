@@ -3,10 +3,10 @@
 ///
 
 import 'package:flutter/material.dart';
-
 import 'party.dart';
 import 'party_page.dart';
 import 'theme.dart';
+import 'welcome.dart';
 
 class PartyCard extends StatelessWidget {
   PartyCard({this.party});

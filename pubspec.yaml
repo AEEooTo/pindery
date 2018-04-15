@@ -51,7 +51,7 @@ flutter:
       - assets/img/avatar.jpg
       - assets/img/kittens.jpeg
       - assets/img/demo_falsa.png
-
+      - assets/img/logo_v_2_rosso.png
 
 
   # To add custom fonts to your application, add a fonts section here,
