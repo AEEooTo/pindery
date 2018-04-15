@@ -173,6 +173,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                         'NEXT',
                         style: new TextStyle(color: Colors.white),
                       ),
+                      // TODO: add party catalogue screen
                       onPressed: validateFields()
                           ? () async {
                               final ScaffoldState scaffoldState =

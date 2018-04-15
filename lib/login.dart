@@ -11,6 +11,7 @@ TextEditingController usernameController = new TextEditingController();
 TextEditingController passwordController = new TextEditingController();
 
 class LoginPage extends StatefulWidget {
+  static const routeName = '/login-page';
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -18,8 +19,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
-  String username;
-  String password;
+  String _username;
+  String _password;
 
 
   Widget build(BuildContext context) {
@@ -61,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                                   validator: (val) => val.isEmpty
                                       ? 'You must insert a username.'
                                       : null,
-                                  onSaved: (val) => username = val,
+                                  onSaved: (val) => _username = val,
                                   decoration: const InputDecoration(
                                       labelText: 'Username',
                                       labelStyle: TextStyle(
@@ -83,11 +84,12 @@ class _LoginPageState extends State<LoginPage> {
                                 ),
                               ),
                               new TextFormField(
+                                // TODO: hide password characters!!1!!1
                                 controller: passwordController,
                                 validator: (val) => val.isEmpty
                                     ? 'You must insert a password.'
                                     : null,
-                                onSaved: (val) => password = val,
+                                onSaved: (val) => _password = val,
                                 decoration: const InputDecoration(
                                     labelText: 'Password',
                                     labelStyle: TextStyle(

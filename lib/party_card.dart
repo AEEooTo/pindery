@@ -22,6 +22,7 @@ class PartyCard extends StatelessWidget {
         height: 200.0,
         child: new Stack(
           children: <Widget>[
+            // TODO: fix image size in stack
             new Center(child: new CircularProgressIndicator()),
             new Center(
               child: new FadeInImage.memoryNetwork(

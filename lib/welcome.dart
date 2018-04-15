@@ -9,6 +9,7 @@ import 'login.dart';
 
 class WelcomePage extends StatelessWidget{
   WelcomePage({Contex});
+  static const routeName = '/welcome-page';
 
   Widget build(BuildContext context) {
     return new Scaffold(
