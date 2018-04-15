@@ -23,7 +23,8 @@ class PartyCard extends StatelessWidget {
             image: new DecorationImage(
               image: new AssetImage(party.imagePath),
               fit: BoxFit.cover,
-            )),
+            ),
+        ),
         child: new Container(
           margin: new EdgeInsets.only(top: 90.0),
           decoration: new BoxDecoration(color: new Color(0x59000000)),
@@ -86,15 +87,5 @@ class PartyCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  static List<PartyCard> partyCardsGenerator() {
-    List<Party> parties = Party.partyGenerator();
-    List<PartyCard> partyCards = new List<PartyCard>();
-    for (var party in parties) {
-      partyCards.add(new PartyCard(party: party));
-    }
-
-    return partyCards;
   }
 }
