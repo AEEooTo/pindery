@@ -2,6 +2,7 @@
 ///
 
 import 'package:flutter/material.dart';
+import 'package:transparent_image/transparent_image.dart';
 import 'party.dart';
 import 'drawer.dart';
 import 'theme.dart';
@@ -37,8 +38,11 @@ class PartyPage extends StatelessWidget {
                   background: new Stack(
                     fit: StackFit.expand,
                     children: <Widget>[
-                      new Image.asset(
-                        party.imagePath,
+                      //todo : fix progress indicator (cannot be seen)
+                      new CircularProgressIndicator(),
+                      new FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image : party.imageUrl,
                         fit: BoxFit.cover,
                         height: _appBarHeight,
                       ),
