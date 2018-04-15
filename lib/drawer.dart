@@ -4,8 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'theme.dart';
-import 'party_page.dart';
-import 'party.dart';
+import 'welcome.dart';
 
 final String name = "Edoardo Debenedetti";
 final String coverImagePath = "assets/img/movingParty.jpeg";
@@ -103,6 +102,11 @@ class DrawerBlock extends StatelessWidget {
                 ),
             ),
             onTap: (){
+              Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) => new WelcomePage()),
+              );
 
             },
           )
