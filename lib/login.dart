@@ -54,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                         new Container(
                           child: new Column(
                             children: <Widget>[
-                              Padding(
+                              new Padding(
                                 padding: const EdgeInsets.only(bottom: 16.0),
                                 child: new TextFormField(
                                   controller: usernameController,
@@ -107,8 +107,8 @@ class _LoginPageState extends State<LoginPage> {
                                 maxLength: 20,
                               ),
                               new Padding(
-                                padding: const EdgeInsets.only(top: 100.0),
-                                child: new LoginButton(
+                                padding: const EdgeInsets.only(top: 80.0),
+                                child: new WelcomeButton(
                                   text: '  LOG IN  ',
                                   color: primary,
                                 ),
@@ -132,29 +132,27 @@ class _LoginPageState extends State<LoginPage> {
 
 }
 
-class LoginButton extends StatelessWidget{
-  LoginButton({this.text, this.color});
+class WelcomeButton extends StatelessWidget{
+  WelcomeButton({this.text, this.color});
 
   final String text;
   final Color color;
 
   Widget build (BuildContext context){
     return new RaisedButton(
+
       padding: EdgeInsets.symmetric(horizontal: 100.0),
       color: color,
       child: new Text(
         text,
         style: new TextStyle(
             color: Colors.white
-        ),),/*
-      */onPressed: _validateFields() ? () => null : null,
+        ),),
+      onPressed: (){
+
+
+      },
     );
-
-
   }
-  bool _validateFields() {
-    return usernameController.text.trim().isNotEmpty &&
-        passwordController.text.trim().isNotEmpty;
 
-  }
 }
