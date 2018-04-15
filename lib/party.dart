@@ -24,12 +24,13 @@ class Party {
       this.pinderPoints,
       this.description,
       this.id,
-      this.imageUrl});
+      this.imageUrl,});
 
   Party.fromJSON(DocumentSnapshot snapshot) {
     name = snapshot['name'];
     place = snapshot['place'];
     description = snapshot['description'];
+    imageUrl = snapshot['imageUrl'];
 
     //todo implement the rest of the function after standardizing datetime
     day = 'Every day';
