@@ -121,7 +121,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                   ),
                   new Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Column(
+                    child: new Column(
                       children: <Widget>[
                         new _DateTimePicker(
                           labelText: 'From',
@@ -211,15 +211,16 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   }
 
   bool _validateFields() {
-    return nameController.text != "" &&
-        locationController.text != "" &&
-        descriptionController.text != "" &&
+    return nameController.text.trim().isNotEmpty &&
+        locationController.text.trim().isNotEmpty &&
+        descriptionController.text.trim().isNotEmpty &&
         party.imageUrl != null;
   }
 }
 
 class _PartyImageContainer extends StatefulWidget {
   _PartyImageContainer({this.party});
+
   final Party party;
   bool loadingImage = false;
 
@@ -230,6 +231,7 @@ class _PartyImageContainer extends StatefulWidget {
 
 class _PartyImageContainerState extends State<_PartyImageContainer> {
   _PartyImageContainerState({this.party, this.loadingImage});
+
   final Party party;
   bool loadingImage = false;
 
