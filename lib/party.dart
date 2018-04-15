@@ -26,8 +26,20 @@ class Party {
       this.id,
       this.imageUrl});
 
-  Party.fromJSON(Map<String, dynamic> snapshot) {
+  Party.fromJSON(DocumentSnapshot snapshot) {
     name = snapshot['name'];
+    place = snapshot['place'];
+    description = snapshot['description'];
+
+    //todo implement the rest of the function after standardizing datetime
+    day = 'Every day';
+    imagePath = 'assets/img/kittens.jpeg';
+    organiser = 'Anna ovviamente';
+    rating = 1;
+    ratingNumber = 23;
+    privacy = 'Public';
+    id = '1';
+    pinderPoints = 6;
     //todo implement fromJSON
   }
 
@@ -40,13 +52,13 @@ class Party {
   String toDay;
   String toTime;
   String imageUrl;
-  final String city = "Shanghai";
-  final num rating;
-  final int ratingNumber;
-  final String privacy;
-  final int pinderPoints;
+  String city = "Shanghai";
+  num rating;
+  int ratingNumber;
+  String privacy;
+  int pinderPoints;
   String description;
-  final String id;
+  String id;
 
   /// Method to push the party on the DB
   Future<Null> sendParty() async {
@@ -76,7 +88,9 @@ class Party {
   void pickImage(ImageSource source, State state) async {
     File imageFile = await ImagePicker.pickImage(source: source);
     int random = new Random().nextInt(100000);
-    StorageReference ref = FirebaseStorage.instance.ref().child("/partyImages/party_image_$random.jpg");
+    StorageReference ref = FirebaseStorage.instance
+        .ref()
+        .child("/partyImages/party_image_$random.jpg");
     StorageUploadTask uploadTask = ref.put(imageFile);
     Uri downloadUrl = (await uploadTask.future).downloadUrl;
     state.setState(() => imageUrl = downloadUrl.toString());

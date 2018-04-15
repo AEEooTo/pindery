@@ -22,39 +22,19 @@ class PartyCardList extends StatelessWidget {
     return new StreamBuilder<QuerySnapshot>(
         stream: _getReference(testCity).snapshots,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          print("entered the streamBuilder");
           if (!snapshot.hasData) {
-            print("Looking for some data...");
-            print(snapshot);
             return new Text('Loading...');
-          }
-          print("Snapshot has data!");
-          print(snapshot.data.documents);
-          for (DocumentSnapshot document in snapshot.data.documents) {
-            print(document);
           }
           return new ListView.builder(
               padding: new EdgeInsets.all(8.0),
               reverse: false,
               itemBuilder: (_, int index) {
-                print("entered the itemBuilder");
                 for (DocumentSnapshot document in snapshot.data.documents) {
                   print(document);
                 }
                 final DocumentSnapshot document =
                     snapshot.data.documents[index];
-                Party party = new Party(
-                    name: document['name'],
-                    day: 'Every day',
-                    imagePath: 'assets/img/kittens.jpeg',
-                    organiser: 'Anna ovviamente',
-                    place: document['place'],
-                    rating: 1,
-                    ratingNumber: 23,
-                    privacy: 'Public',
-                    id: '1',
-                    pinderPoints: 6,
-                    description: document['description']);
+                Party party = new Party.fromJSON(document);
                 return new PartyCard(party: party);
               },
               itemCount: snapshot.data.documents.length);
