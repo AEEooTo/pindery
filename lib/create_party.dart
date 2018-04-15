@@ -11,13 +11,21 @@ import 'party.dart';
 
 /// Page used to create a new party
 class CreatePartyPage extends StatefulWidget {
+  CreatePartyPage({this.homePageKey});
+
   static const String routeName = '/create-party';
+  final GlobalKey homePageKey;
 
   @override
-  _CreatePartyPageState createState() => new _CreatePartyPageState();
+  _CreatePartyPageState createState() =>
+      new _CreatePartyPageState(homePageKey: homePageKey);
 }
 
 class _CreatePartyPageState extends State<CreatePartyPage> {
+  _CreatePartyPageState({this.homePageKey});
+
+  final GlobalKey homePageKey;
+
   // keys
   final scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
@@ -35,6 +43,9 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   TimeOfDay _fromTime = const TimeOfDay(hour: 21, minute: 00);
   DateTime _toDate = new DateTime.now();
   TimeOfDay _toTime = const TimeOfDay(hour: 00, minute: 00);
+
+  // bool to check if the process was cancelled
+  bool cancelled = false;
 
   Widget build(BuildContext context) {
     return new Theme(
@@ -162,8 +173,28 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                         'NEXT',
                         style: new TextStyle(color: Colors.white),
                       ),
-                      onPressed:
-                          validateFields() ? () => _uploadingDialog() : null,
+                      onPressed: validateFields()
+                          ? () async {
+                              final ScaffoldState scaffoldState =
+                                  scaffoldKey.currentState;
+                              final ScaffoldState homePageState =
+                                  homePageKey.currentState;
+                              cancelled = false;
+                              await _uploadingDialog();
+                              print('cancelled = ' + cancelled.toString());
+                              if (!cancelled) {
+                                Navigator.of(context).pop();
+                                homePageState.showSnackBar(new SnackBar(
+                                  content: new Text("Party creation cancelled"),
+                                ));
+                              } else {
+                                scaffoldState.showSnackBar(new SnackBar(
+                                  // TODO: really cancel the party
+                                  content: new Text("Party creation cancelled"),
+                                ));
+                              }
+                            }
+                          : null,
                     ),
                   ),
                 ],
@@ -175,22 +206,20 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     );
   }
 
-  void _handleSubmitted(BuildContext context) async {
+  void _handleSubmitted() async {
     final FormState form = formKey.currentState;
-    final ScaffoldState scaffold = scaffoldKey.currentState;
     await party.uploadImage(party.imageLocalPath);
     form.save();
-    assignPartyFields(party);
-    party.sendParty();
-    printPartyInfo();
-    Navigator.of(context).pop();
-    scaffold.showSnackBar(
-      new SnackBar(content: new Text('The party was saved on the DB')),
-    );
+    if (!cancelled) {
+      assignPartyFields(party);
+      party.sendParty();
+      printPartyInfo();
+      Navigator.of(context).pop();
+    }
   }
 
   Future<Null> _uploadingDialog() async {
-    _handleSubmitted(context);
+    _handleSubmitted();
     return showDialog<Null>(
       context: context,
       barrierDismissible: false,
@@ -206,7 +235,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                   child: new Container(
                     height: 1.5,
                     margin: EdgeInsets.only(top: 16.0),
-                    child: new LinearProgressIndicator(),),
+                    child: new LinearProgressIndicator(),
+                  ),
                 ),
               ],
             ),
@@ -215,6 +245,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
             new FlatButton(
               child: new Text('CANCEL'),
               onPressed: () {
+                cancelled = true;
                 Navigator.of(context).pop();
               },
             ),
@@ -251,21 +282,22 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   }
 }
 
-class PartyForm extends StatelessWidget {
+// TODO: abstract the form
+/* class PartyForm extends StatelessWidget {
   PartyForm({this.party});
 
-  Party party;
+  final Party party;
 
   // Text editing controllers
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController locationController = new TextEditingController();
-  TextEditingController descriptionController = new TextEditingController();
+  final TextEditingController nameController = new TextEditingController();
+  final TextEditingController locationController = new TextEditingController();
+  final TextEditingController descriptionController = new TextEditingController();
 
   // DateTime variables
-  DateTime _fromDate = new DateTime.now();
-  TimeOfDay _fromTime = const TimeOfDay(hour: 21, minute: 00);
-  DateTime _toDate = new DateTime.now();
-  TimeOfDay _toTime = const TimeOfDay(hour: 00, minute: 00);
+  final DateTime _fromDate = new DateTime.now();
+  final TimeOfDay _fromTime = const TimeOfDay(hour: 21, minute: 00);
+  final DateTime _toDate = new DateTime.now();
+  final TimeOfDay _toTime = const TimeOfDay(hour: 00, minute: 00);
 
   @override
   Widget build(BuildContext context) {
@@ -325,4 +357,4 @@ class PartyForm extends StatelessWidget {
       ),
     );
   }
-}
+} */

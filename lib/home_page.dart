@@ -1,5 +1,5 @@
 /// This file contains the code for Pindery's homepage's structure.
-/// 
+///
 import 'package:flutter/material.dart';
 
 import 'theme.dart';
@@ -18,10 +18,17 @@ class PinderyHomePage extends StatefulWidget {
 
 class _PinderyHomePageState extends State<PinderyHomePage> {
   _PinderyHomePageState({Contex});
+
+  // AGGIUNTO ADESSO DA TENERE
+  final GlobalKey<ScaffoldState> homeScaffoldKey =
+      new GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     List<PartyCard> _partyCards = PartyCard.partyCardsGenerator();
     return new Scaffold(
+      key: homeScaffoldKey,
+      // AGGIUNTO ADESSO DA TENERE
       appBar: new AppBar(
         title: new Text(widget.title),
       ),
@@ -38,9 +45,13 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
         ),
       ),
       floatingActionButton: new FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context,
-          new MaterialPageRoute(builder: (context) => new CreatePartyPage()),
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) => new CreatePartyPage(
+                      homePageKey: homeScaffoldKey,
+                    )), // AGGIUNTO ADESSO; DA TENERE
           );
         },
         child: new Icon(Icons.add),
