@@ -4,8 +4,6 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:flutter/material.dart';
 
 /// Class that defines every Party object in the app.
 class Party {
@@ -24,16 +22,19 @@ class Party {
       this.pinderPoints,
       this.description,
       this.id,
-      this.imageUrl});
+      this.imageUrl,
+      this.imageLocalPath,
+      });
   String name;
   String day;
-  String imagePath;
+  String imagePath; // used for local assets, to let Anna work offline
   String organiser;
   String place;
   String fromTime;
   String toDay;
   String toTime;
   String imageUrl;
+  File imageLocalPath; // REALLY used to upload the image to Firebase storage, but is intended just for use on user's device
   final String city = "Shanghai";
   final num rating;
   final int ratingNumber;
@@ -67,13 +68,13 @@ class Party {
     return partyMap;
   }
 
-  void pickImage(ImageSource source, State state) async {
-    File imageFile = await ImagePicker.pickImage(source: source);
+  Future<String> uploadImage(File imageFile) async {
     int random = new Random().nextInt(100000);
     StorageReference ref = FirebaseStorage.instance.ref().child("/partyImages/party_image_$random.jpg");
     StorageUploadTask uploadTask = ref.put(imageFile);
     Uri downloadUrl = (await uploadTask.future).downloadUrl;
-    state.setState(() => imageUrl = downloadUrl.toString());
+    imageUrl = downloadUrl.toString();
+    return imageUrl;
   }
 
   static List<Party> partyGenerator() {

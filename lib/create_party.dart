@@ -2,12 +2,13 @@
 /// contains the code for the first step of creating a party
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:image_picker/image_picker.dart' show ImageSource;
-import 'package:transparent_image/transparent_image.dart';
+import 'package:image_picker/image_picker.dart';
 
+import 'pindery_utils.dart';
 import 'theme.dart';
 import 'party.dart';
 
@@ -156,6 +157,9 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                       ],
                     ),
                   ),
+                  new MaterialButton(
+                    onPressed: () => print(party?.imageLocalPath),
+                  ),
                   new Container(
                     margin: const EdgeInsets.only(
                         top: 20.0, bottom: 20.0, left: 110.0, right: 110.0),
@@ -164,9 +168,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                         'NEXT',
                         style: new TextStyle(color: Colors.white),
                       ),
-                      onPressed: _validateFields()
-                          ? () => _handleSubmitted(context)
-                          : null,
+                      onPressed: _validateFields() ? () => _uploadingDialog() : null,
                     ),
                   ),
                 ],
@@ -189,6 +191,34 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     party.sendParty();
     _printPartyInfo();
     // Navigator.pop(context);
+  }
+
+  Future<Null> _uploadingDialog() async {
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Rewind and remember'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('You will never be satisfied.'),
+                new Text('You\’re like me. I’m never satisfied.'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('Regret'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   /// Method to assign the different collected fields to the Party instance
@@ -214,43 +244,34 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     return nameController.text.trim().isNotEmpty &&
         locationController.text.trim().isNotEmpty &&
         descriptionController.text.trim().isNotEmpty &&
-        party.imageUrl != null;
+        party.imageLocalPath != null;
   }
 }
 
+/// Container for the top party image
 class _PartyImageContainer extends StatefulWidget {
   _PartyImageContainer({this.party});
 
   final Party party;
-  bool loadingImage = false;
 
   @override
   _PartyImageContainerState createState() =>
-      new _PartyImageContainerState(party: party, loadingImage: loadingImage);
+      new _PartyImageContainerState(party: party);
 }
 
 class _PartyImageContainerState extends State<_PartyImageContainer> {
-  _PartyImageContainerState({this.party, this.loadingImage});
+  _PartyImageContainerState({this.party});
 
   final Party party;
-  bool loadingImage = false;
 
   @override
   Widget build(BuildContext context) {
-    if (party.imageUrl != null) {
-      return new Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          new Center(child: new CircularProgressIndicator()),
-          new Center(
-            child: new FadeInImage.memoryNetwork(
-              // TODO: fix size
-              placeholder: kTransparentImage,
-              image: party.imageUrl,
-              fit: BoxFit.fitWidth,
-            ),
-          ),
-        ],
+    if (party.imageLocalPath != null) {
+      return new Container(
+        child: Image.file(
+          party.imageLocalPath,
+          fit: BoxFit.cover,
+        ),
       );
     }
     return new Container(
@@ -276,8 +297,9 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
                     ),
                     tooltip: 'Choose a picture from the gallery',
                     onPressed: () async {
-                      // passes the state to use setstate
-                      party.pickImage(ImageSource.gallery, this);
+                      party.imageLocalPath =
+                          await PinderyUtils.pickImage(ImageSource.gallery);
+                      setState(() {});
                     },
                   ),
                 ),
@@ -290,9 +312,9 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
                       size: 45.0,
                     ),
                     onPressed: () async {
-                      setState(() => loadingImage = true);
-                      party.pickImage(ImageSource.camera, this);
-                      setState(() => loadingImage = false);
+                      party.imageLocalPath =
+                          await PinderyUtils.pickImage(ImageSource.camera);
+                      setState(() {});
                     },
                     tooltip: 'Take a new picture',
                   ),
@@ -313,7 +335,7 @@ class _PartyImageContainerState extends State<_PartyImageContainer> {
   }
 }
 
-/// DateTime picker method, used to create a DateTime picker
+/// DateTime picker object, used to create a DateTime picker
 class _DateTimePicker extends StatelessWidget {
   const _DateTimePicker(
       {Key key,
@@ -379,7 +401,7 @@ class _DateTimePicker extends StatelessWidget {
   }
 }
 
-/// Dropdown Input method
+/// Dropdown Input object
 class _InputDropdown extends StatelessWidget {
   const _InputDropdown(
       {Key key,
