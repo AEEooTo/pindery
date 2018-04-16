@@ -12,8 +12,8 @@ import 'dart:math' as Math;
 import 'package:image/image.dart' as Im;
 import 'package:path_provider/path_provider.dart';
 
-import 'theme.dart';
-import 'party.dart';
+import '../theme.dart';
+import '../party.dart';
 
 class PinderyDetailsUtils {
   static Future<File> pickImage(ImageSource source) async {
@@ -233,3 +233,12 @@ class InputDropdown extends StatelessWidget {
   print("Decoded image");
   return new File('$path/img_$rand.jpg')..writeAsBytesSync(Im.encodeJpg(image, quality: 10));
 */
+
+String hourStringParser(TimeOfDay time) {
+  String hours = time.hour.toString();
+  String minutes = time.minute.toString();
+  if (time.minute < 10) {
+    minutes = '0' + time.minute.toString();
+  }
+  return hours + ':' + minutes;
+}

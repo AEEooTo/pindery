@@ -59,7 +59,7 @@ class PinderyDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new DrawerBlock(icon: Icons.star ,data: 'Parties',),
+                new DrawerBlock(icon: Icons.star ,data: 'Parties', widgetBuilder: (context) => new WelcomePage(),),
                 new DrawerBlock(icon: Icons.face, data: 'My parties',),
                 new DrawerBlock(icon: Icons.settings,data: 'Settings',)
                 ]
@@ -73,10 +73,11 @@ class PinderyDrawer extends StatelessWidget {
 }
 
 class DrawerBlock extends StatelessWidget {
-  DrawerBlock({this.data, this.icon});
+  DrawerBlock({this.data, this.icon, this.widgetBuilder});
 
   final String data;
   final IconData icon;
+  final WidgetBuilder widgetBuilder;
 
   Widget build(BuildContext context) {
     return new Container(
@@ -105,7 +106,7 @@ class DrawerBlock extends StatelessWidget {
               Navigator.push(
                 context,
                 new MaterialPageRoute(
-                    builder: (context) => new WelcomePage()),
+                    builder: widgetBuilder),
               );
             },
           )

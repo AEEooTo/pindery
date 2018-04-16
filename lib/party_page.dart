@@ -22,6 +22,7 @@ class PartyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      backgroundColor: Colors.white,
         drawer: new Drawer(
           child: new PinderyDrawer(),
         ),
@@ -118,11 +119,14 @@ class PartyPage extends StatelessWidget {
                       ],
                     ),
                   ),
-                )
-              ],
-            ),
+                ),
+
+            ]
           ),
-        ]));
+        )
+        ]
+        )
+    );
   }
 }
 
