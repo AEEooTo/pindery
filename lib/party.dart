@@ -4,15 +4,15 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 
 /// Class that defines every Party object in the app.
 class Party {
   Party({this.name,
-    this.day,
+    this.fromDay,
     this.fromTime,
     this.toTime,
     this.toDay,
-    this.imagePath,
     this.organiser,
     this.place,
     this.rating,
@@ -23,6 +23,7 @@ class Party {
     this.id,
     this.imageUrl,
     this.imageLocalPath,
+    this.maxPeople,
   });
 
   Party.fromJSON(DocumentSnapshot snapshot) {
@@ -30,36 +31,40 @@ class Party {
     place = snapshot['place'];
     description = snapshot['description'];
     imageUrl = snapshot['imageUrl'];
+    fromDay = snapshot['fromDay'];
+    fromTime = snapshot['fromTime'];
+    toDay = snapshot['toDay'];
+    toTime = snapshot['toTime'];
+    privacy = snapshot['privacy'];
+    id = snapshot.documentID;
 
-    //todo implement the rest of the function after standardizing datetime
-    day = 'Every day';
-    imagePath = 'assets/img/kittens.jpeg';
+    //TODO: implement the rest of the function after standardizing datetime
     organiser = 'Anna ovviamente';
     rating = 1;
     ratingNumber = 23;
-    privacy = 'Public';
-    id = '1';
     pinderPoints = 6;
-    //todo implement fromJSON
   }
 
   String name;
-  String day;
-  String imagePath; // used for local assets, to let Anna work offline
+  DateTime fromDay;
   String organiser;
   String place;
   String fromTime;
-  String toDay;
+  DateTime toDay;
   String toTime;
   String imageUrl;
   File imageLocalPath; // REALLY used to upload the image to Firebase storage, but is intended just for use on user's device
   String city = "Shanghai";
   num rating;
   int ratingNumber;
-  String privacy;
+  int privacy;
   int pinderPoints;
   String description;
   String id;
+  int maxPeople;
+
+  static const List<String> privacyOptions = ['Public', 'Closed', 'Secret'];
+  static const List<IconData> privacyOptionsIcons = [const IconData(0xe80b, fontFamily: 'MaterialIcons'), const IconData(0xe939, fontFamily: 'MaterialIcons') ,const IconData(0xe897, fontFamily: 'MaterialIcons')];
 
   /// Method to push the party on the DB
   Future<Null> sendParty() async {
@@ -72,16 +77,18 @@ class Party {
   }
 
   /// Method to create a map from the Party instance to be pushed to Firestore
-  Map<String, String> partyMapper() {
-    Map<String, String> partyMap = {
+  Map<String, dynamic> partyMapper() {
+    Map<String, dynamic> partyMap = {
       "name": name,
       "place": place,
       "description": description,
-      "fromDay": day,
-      "fromTime": fromTime,
+      "fromDay": fromDay,
+      "fromTime": fromTime.toString(),
       "toDay": toDay,
-      "toTime": toTime,
+      "toTime": toTime.toString(),
       "imageUrl": imageUrl,
+      "maxPeople": maxPeople,
+      "privacy": privacy,
     };
     return partyMap;
   }

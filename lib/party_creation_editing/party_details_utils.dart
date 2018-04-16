@@ -9,8 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
 
-import 'theme.dart';
-import 'party.dart';
+import '../theme.dart';
+import '../party.dart';
 
 class PinderyDetailsUtils {
   static Future<File> pickImage(ImageSource source) async {
@@ -213,4 +213,13 @@ class InputDropdown extends StatelessWidget {
       ),
     );
   }
+}
+
+String hourStringParser(TimeOfDay time) {
+  String hours = time.hour.toString();
+  String minutes = time.minute.toString();
+  if (time.minute < 10) {
+    minutes = '0' + time.minute.toString();
+  }
+  return hours + ':' + minutes;
 }
