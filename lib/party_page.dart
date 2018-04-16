@@ -81,7 +81,6 @@ class PartyPage extends StatelessWidget {
                       party.fromDay.month.toString() +
                       '/' +
                       party.fromDay.year.toString(),
-                  // TODO: use prettier format
                   icon: const IconData(0xe192, fontFamily: 'MaterialIcons'),
                 ),
                 new WhitePartyBlock(
@@ -89,8 +88,8 @@ class PartyPage extends StatelessWidget {
                   icon: const IconData(0xe5ca, fontFamily: 'MaterialIcons'),
                 ),
                 new WhitePartyBlock(
-                  data: party.privacy,
-                  icon: const IconData(0xe80b, fontFamily: 'MaterialIcons'),
+                  data: Party.privacyOptions[party.privacy],
+                  icon: Party.privacyOptionsIcons[party.privacy],
                 ),
                 new Container(
                   decoration: new BoxDecoration(
@@ -226,7 +225,7 @@ class WhitePartyBlock extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return new Container(
-      height: 48.0,
+      height: 55.0,
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       decoration: new BoxDecoration(
         border: new Border(bottom: new BorderSide(color: dividerColor)),
@@ -238,6 +237,7 @@ class WhitePartyBlock extends StatelessWidget {
           top: false,
           bottom: false,
           child: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               new Container(

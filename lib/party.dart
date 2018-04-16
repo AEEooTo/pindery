@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/material.dart' show TimeOfDay;
+import 'package:flutter/material.dart';
 
 /// Class that defines every Party object in the app.
 class Party {
@@ -35,13 +35,13 @@ class Party {
     fromTime = snapshot['fromTime'];
     toDay = snapshot['toDay'];
     toTime = snapshot['toTime'];
+    privacy = snapshot['privacy'];
+    id = snapshot.documentID;
 
     //TODO: implement the rest of the function after standardizing datetime
     organiser = 'Anna ovviamente';
     rating = 1;
     ratingNumber = 23;
-    privacy = 'Public';
-    id = '1';
     pinderPoints = 6;
   }
 
@@ -57,11 +57,14 @@ class Party {
   String city = "Shanghai";
   num rating;
   int ratingNumber;
-  String privacy;
+  int privacy;
   int pinderPoints;
   String description;
   String id;
   int maxPeople;
+
+  static const List<String> privacyOptions = ['Public', 'Closed', 'Secret'];
+  static const List<IconData> privacyOptionsIcons = [const IconData(0xe80b, fontFamily: 'MaterialIcons'), const IconData(0xe939, fontFamily: 'MaterialIcons') ,const IconData(0xe897, fontFamily: 'MaterialIcons')];
 
   /// Method to push the party on the DB
   Future<Null> sendParty() async {
@@ -85,6 +88,7 @@ class Party {
       "toTime": toTime.toString(),
       "imageUrl": imageUrl,
       "maxPeople": maxPeople,
+      "privacy": privacy,
     };
     return partyMap;
   }
