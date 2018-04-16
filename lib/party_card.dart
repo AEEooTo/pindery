@@ -27,6 +27,9 @@ class PartyCard extends StatelessWidget {
               child: new FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
                 image: party.imageUrl,
+                fit : BoxFit.cover,
+                width: 338.0,
+                height: 200.0,
               ),
             ),
             new Container(
