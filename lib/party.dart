@@ -9,10 +9,8 @@ import 'package:flutter/material.dart';
 /// Class that defines every Party object in the app.
 class Party {
   Party({this.name,
-    this.fromDay,
-    this.fromTime,
-    this.toTime,
-    this.toDay,
+    this.fromDayTime,
+    this.toDayTime,
     this.organiser,
     this.place,
     this.rating,
@@ -31,10 +29,8 @@ class Party {
     place = snapshot['place'];
     description = snapshot['description'];
     imageUrl = snapshot['imageUrl'];
-    fromDay = snapshot['fromDay'];
-    fromTime = snapshot['fromTime'];
-    toDay = snapshot['toDay'];
-    toTime = snapshot['toTime'];
+    fromDayTime = snapshot['fromDayTime'];
+    toDayTime = snapshot['toDayTime'];
     privacy = snapshot['privacy'];
     id = snapshot.documentID;
 
@@ -46,12 +42,10 @@ class Party {
   }
 
   String name;
-  DateTime fromDay;
+  DateTime fromDayTime;
   String organiser;
   String place;
-  String fromTime;
-  DateTime toDay;
-  String toTime;
+  DateTime toDayTime;
   String imageUrl;
   File imageLocalPath; // REALLY used to upload the image to Firebase storage, but is intended just for use on user's device
   String city = "Shanghai";
@@ -82,10 +76,8 @@ class Party {
       "name": name,
       "place": place,
       "description": description,
-      "fromDay": fromDay,
-      "fromTime": fromTime.toString(),
-      "toDay": toDay,
-      "toTime": toTime.toString(),
+      "fromDayTime": fromDayTime,
+      "toDayTime": toDayTime,
       "imageUrl": imageUrl,
       "maxPeople": maxPeople,
       "privacy": privacy,

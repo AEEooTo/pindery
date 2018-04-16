@@ -43,7 +43,7 @@ class PartyCardList extends StatelessWidget {
                 List<DocumentSnapshot> documentsList = snapshot.data.documents;
                 documentsList.sort(
                     (DocumentSnapshot documentA, DocumentSnapshot documentB) {
-                      return documentA['name'].toString().length.compareTo(documentB['name'].toString().length);
+                      return documentA['fromDayTime'].compareTo(documentB['fromDayTime']);
                     }
                 );
                 final DocumentSnapshot document =
