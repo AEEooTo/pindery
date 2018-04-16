@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 import 'drawer.dart';
 import 'theme.dart';
-//import 'package:validator/validator.dart';
+import 'package:validator/validator.dart';
 
 String _password;
 TextEditingController _passwordController = new TextEditingController();
@@ -58,7 +58,7 @@ class _SignUpPageState extends State<SignupPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       new Container(
-                        padding: const EdgeInsets.only(top: 30.0),
+                        padding: const EdgeInsets.only(top: 30.0, bottom: 15.0),
                         child: new Text(
                           'Join Pindery!',
                           style: new TextStyle(
@@ -69,7 +69,11 @@ class _SignUpPageState extends State<SignupPage> {
                         ),
                       ),
                       new Container(
-                          padding: EdgeInsets.all(21.0),
+                        decoration: new BoxDecoration(
+                          border: Border.all(color: dividerColor),
+                          shape: BoxShape.circle
+                        ),
+                          padding: EdgeInsets.all(15.0),
                           child: new IconButton(
                             icon: new Icon(
                               Icons.photo_camera,
@@ -84,9 +88,9 @@ class _SignUpPageState extends State<SignupPage> {
                             new InformationField(
                               labelText: 'Name',
                               controller: nameController,
-                              /*validator: (val) => isAlpha(val)
+                              validator: (val) => !isAlpha(val) && val.isNotEmpty
                                   ? 'You must insert a name'
-                                  : null,*/
+                                  : null,
                               onSaved: (val) => _name = val,
                               onFieldSubmitted: (String value) {
                                 setState(() {
@@ -97,9 +101,9 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new InformationField(
                               labelText: 'Surname',
-                              /*validator: (val) => isAlpha(val)
+                              validator: (val) => !isAlpha(val) && val.isNotEmpty
                                   ? 'You must insert a surname'
-                                  : null,*/
+                                  : null,
                               controller: surnameController,
                               onSaved: (val) => _surname = val,
                               onFieldSubmitted: (String value) {
@@ -111,9 +115,9 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new InformationField(
                               labelText: 'E-mail',
-                    /*          validator: (val) => !isEmail(val)
+                              validator: (val) => !isEmail(val) && val.isNotEmpty
                                   ? 'You mus insert a vald email'
-                                  : null,*/
+                                  : null,
                               textInputType: TextInputType.emailAddress,
                               controller: emailController,
                               onSaved: (val) => _email = val,
@@ -135,10 +139,10 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new PasswordField(
                               labelText: 'Confirm password',
-                              /*validator: (val) =>
-                                  val != _passwordController.text
+                              validator: (val) =>
+                                  val != _passwordController.text && val.isNotEmpty
                                       ? 'The passwords must be equal'
-                                      : null,*/
+                                      : null,
                               controller: _confirmPasswordController,
                               onSaved: (val) => _cpassword = val,
                               onFieldSubmitted: (String value) {
@@ -188,7 +192,7 @@ class SignUpButton extends StatelessWidget {
       ),
       onPressed: () {
         //final FormState formState = formKey.currentState;
-        if (true) {
+        if (_confirmPasswordController.text==_passwordController.text) {
           //formState.save();
           Navigator.push(
             context,
@@ -197,7 +201,7 @@ class SignUpButton extends StatelessWidget {
         } else {
           Scaffold.of(context).showSnackBar(new SnackBar(
                 content: new Text(
-                  "Password different",
+                  "The two passwords are different!",
                   textAlign: TextAlign.center,
                 ),
               ));
@@ -213,7 +217,7 @@ class PasswordField extends StatefulWidget {
       this.labelText,
       this.helperText,
       this.onSaved,
-      //this.validator,
+      this.validator,
       this.onFieldSubmitted,
       this.controller});
 
@@ -221,7 +225,7 @@ class PasswordField extends StatefulWidget {
   final String labelText;
   final String helperText;
   final FormFieldSetter<String> onSaved;
-  //final FormFieldValidator<String> validator;
+  final FormFieldValidator<String> validator;
   final ValueChanged<String> onFieldSubmitted;
   final TextEditingController controller;
 
@@ -239,7 +243,7 @@ class _PasswordFieldState extends State<PasswordField> {
       controller: widget.controller,
       obscureText: _obscureText,
       onSaved: widget.onSaved,
-      //validator: widget.validator,
+      validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
       decoration: new InputDecoration(
         fillColor: Colors.white,
@@ -269,7 +273,7 @@ class InformationField extends StatefulWidget {
       this.labelText,
       this.helperText,
       this.onSaved,
-      //this.validator,
+      this.validator,
       this.onFieldSubmitted,
       this.textInputType,
       this.controller});
@@ -278,10 +282,11 @@ class InformationField extends StatefulWidget {
   final String labelText;
   final String helperText;
   final FormFieldSetter<String> onSaved;
-//  final FormFieldValidator<String> validator;
+  final FormFieldValidator<String> validator;
   final ValueChanged<String> onFieldSubmitted;
   final TextInputType textInputType;
   final TextEditingController controller;
+
 
   @override
   _InformationFieldState createState() => new _InformationFieldState();
@@ -294,7 +299,7 @@ class _InformationFieldState extends State<InformationField> {
       controller: widget.controller,
       keyboardType: widget.textInputType,
       onSaved: widget.onSaved,
-      //validator: widget.validator,
+      validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
       decoration: new InputDecoration(
         fillColor: Colors.white,
