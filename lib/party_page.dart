@@ -39,9 +39,7 @@ class PartyPage extends StatelessWidget {
                 fit: StackFit.expand,
                 children: <Widget>[
                   //todo : fix progress indicator (cannot be seen)
-
                   new Center(child : new CircularProgressIndicator(),),
-
                   new FadeInImage.memoryNetwork(
                     placeholder: kTransparentImage,
                     image: party.imageUrl,

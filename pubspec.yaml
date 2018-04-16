@@ -12,7 +12,7 @@ dependencies:
   firebase_storage:
   image_picker:
   transparent_image:
-  image: ^1.1.30
+  image:
   path_provider: ^0.4.0
   validator: ">=0.0.4 <0.1.0"
 

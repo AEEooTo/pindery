@@ -18,7 +18,7 @@ import '../party.dart';
 class PinderyDetailsUtils {
   static Future<File> pickImage(ImageSource source) async {
     File imageFile = await ImagePicker.pickImage(source: source);
-    //imageFile = await compressImage(imageFile);
+    imageFile = await compressImage(imageFile);
     return imageFile;
   }
 }
@@ -219,20 +219,17 @@ class InputDropdown extends StatelessWidget {
   }
 }
 
-/*Future<File> compressImage(File imageFull) async {
-  print("waiting for temporary directory");
+Future<File> compressImage(File imageFull) async {
   final tempDir = await getTemporaryDirectory();
   final path = tempDir.path;
   int rand = new Math.Random().nextInt(10000);
 
-  print("Found directory");
-  List<int> tmp = imageFull.readAsBytesSync();
-  print("read image as bytes");
-  Im.Image image = Im.decodeImage(tmp.cast());
+  Im.Image image = Im.decodeImage(imageFull.readAsBytesSync());
+
   // Im.Image smallerImage = Im.copyResize(image, 500); // choose the size here, it will maintain aspect ratio
-  print("Decoded image");
-  return new File('$path/img_$rand.jpg')..writeAsBytesSync(Im.encodeJpg(image, quality: 10));
-*/
+  return new File('$path/img_$rand.jpg')
+    ..writeAsBytesSync(Im.encodeJpg(image, quality: 50));
+}
 
 /// Function to parse a time from a TimeOfDay object to obtain a string
 /// // TODO: delete this method if [dateTimeParser] works
