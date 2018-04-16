@@ -2,13 +2,12 @@
 /// contains the code for the first step of creating a party
 
 // TODO: abstract the form
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 
 import 'party_details_utils.dart';
-import 'theme.dart';
-import 'party.dart';
+import '../theme.dart';
+import '../party.dart';
+import 'catalogue_choosing.dart';
 
 /// Page used to create a new party
 class CreatePartyPage extends StatefulWidget {
@@ -234,27 +233,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                       ),
                       // TODO: add party catalogue screen
                       onPressed: _validateFields()
-                          ? () async {
-                              final ScaffoldState scaffoldState =
-                                  scaffoldKey.currentState;
-                              final ScaffoldState homePageState =
-                                  homePageKey.currentState;
-                              cancelled = false;
-                              await _uploadingDialog();
-                              print('cancelled = ' + cancelled.toString());
-                              if (!cancelled) {
-                                Navigator.of(context).pop();
-                                homePageState.showSnackBar(new SnackBar(
-                                  content:
-                                      new Text("Great! The party was created!"),
-                                ));
-                              } else {
-                                scaffoldState.showSnackBar(new SnackBar(
-                                  // TODO: really cancel the party
-                                  content: new Text("Party creation cancelled"),
-                                ));
-                              }
-                            }
+                          ? () => _handleSubmitted()
                           : null,
                     ),
                   ),
@@ -282,62 +261,31 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
         party.imageLocalPath != null;
   }
 
-  void _handleSubmitted() async {
+  void _handleSubmitted() {
+    printPartyInfo();
     final FormState form = formKey.currentState;
-    await party.uploadImage(party.imageLocalPath);
-    party.privacy = _allPrivacyOptions.indexOf(_privacyOption);
     form.save();
-    if (!cancelled) {
-      assignPartyFields(party);
-      party.sendParty();
-      printPartyInfo();
-      Navigator.of(context).pop();
-    }
-  }
-
-  Future<Null> _uploadingDialog() async {
-    _handleSubmitted();
-    return showDialog<Null>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return new AlertDialog(
-          title: new Text('Loading'),
-          content: new SingleChildScrollView(
-            child: new ListBody(
-              children: <Widget>[
-                new Text('Loading cool infos.'),
-                new Text('You\'ll be soon ready to party hard.'),
-                new Center(
-                  child: new Container(
-                    height: 1.5,
-                    margin: EdgeInsets.only(top: 16.0),
-                    child: new LinearProgressIndicator(),
-                  ),
-                ),
-              ],
+    assignPartyFields();
+    printPartyInfo();
+    Navigator.push(
+      context,
+      new MaterialPageRoute(
+        builder: (context) => new ChooseCataloguePage(
+              homePageKey: homePageKey,
+              party: party,
             ),
-          ),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text('CANCEL'),
-              onPressed: () {
-                cancelled = true;
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
+      ),
     );
   }
 
   /// Method to assign the different collected fields to the Party instance
-  void assignPartyFields(Party party) {
+  // Migrated
+  void assignPartyFields() {
     party.fromDay = _fromDate;
-    party.fromTime = _fromTime.toString();
+    party.fromTime = hourStringParser(_fromTime);
     party.toDay = _toDate;
-    party.toTime = _toTime.toString();
+    party.toTime = hourStringParser(_toTime);
+    party.privacy = _allPrivacyOptions.indexOf(_privacyOption);
   }
 
   /// Just for debugging purpose

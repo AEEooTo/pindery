@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'theme.dart';
 import 'drawer.dart' show PinderyDrawer;
-import 'create_party.dart';
+import 'package:pindery/party_creation_editing/create_party.dart';
 import 'party_cardlist.dart';
 
 class PinderyHomePage extends StatefulWidget {
