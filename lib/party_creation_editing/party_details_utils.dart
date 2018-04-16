@@ -234,6 +234,7 @@ class InputDropdown extends StatelessWidget {
   return new File('$path/img_$rand.jpg')..writeAsBytesSync(Im.encodeJpg(image, quality: 10));
 */
 
+/// Function to parse a time from a TimeOfDay object to obtain a string
 String hourStringParser(TimeOfDay time) {
   String hours = time.hour.toString();
   String minutes = time.minute.toString();
