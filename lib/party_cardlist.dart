@@ -25,15 +25,18 @@ class PartyCardList extends StatelessWidget {
           if (!snapshot.hasData) {
             // TODO: add a better loading view
             return new Container(
-              child : new Column(
+              child: new Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   new Center(child: new CircularProgressIndicator()),
+                  const SizedBox(
+                    height: 12.0,
+                  ),
                   new Text("Loading..."),
                 ],
-            ),
-          );
+              ),
+            );
           }
           return new ListView.builder(
               padding: new EdgeInsets.all(8.0),

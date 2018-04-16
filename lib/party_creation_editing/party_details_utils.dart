@@ -72,8 +72,8 @@ class PartyImageContainerState extends State<PartyImageContainer> {
                     ),
                     tooltip: 'Choose a picture from the gallery',
                     onPressed: () async {
-                      party.imageLocalPath =
-                          await PinderyDetailsUtils.pickImage(ImageSource.gallery);
+                      party.imageLocalPath = await PinderyDetailsUtils
+                          .pickImage(ImageSource.gallery);
                       setState(() {});
                     },
                   ),
@@ -87,8 +87,8 @@ class PartyImageContainerState extends State<PartyImageContainer> {
                       size: 45.0,
                     ),
                     onPressed: () async {
-                      party.imageLocalPath =
-                          await PinderyDetailsUtils.pickImage(ImageSource.camera);
+                      party.imageLocalPath = await PinderyDetailsUtils
+                          .pickImage(ImageSource.camera);
                       setState(() {});
                     },
                     tooltip: 'Take a new picture',

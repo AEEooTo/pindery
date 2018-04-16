@@ -16,7 +16,6 @@ class PinderyHomePage extends StatefulWidget {
 }
 
 class _PinderyHomePageState extends State<PinderyHomePage> {
-
   final GlobalKey<ScaffoldState> homeScaffoldKey =
       new GlobalKey<ScaffoldState>();
 
@@ -46,4 +45,3 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
     );
   }
 }
-

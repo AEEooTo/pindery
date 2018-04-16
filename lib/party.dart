@@ -58,7 +58,11 @@ class Party {
   int maxPeople;
 
   static const List<String> privacyOptions = ['Public', 'Closed', 'Secret'];
-  static const List<IconData> privacyOptionsIcons = [const IconData(0xe80b, fontFamily: 'MaterialIcons'), const IconData(0xe939, fontFamily: 'MaterialIcons') ,const IconData(0xe897, fontFamily: 'MaterialIcons')];
+  static const List<IconData> privacyOptionsIcons = [
+    const IconData(0xe80b, fontFamily: 'MaterialIcons'),
+    const IconData(0xe939, fontFamily: 'MaterialIcons'),
+    const IconData(0xe897, fontFamily: 'MaterialIcons')
+  ];
 
   /// Method to push the party on the DB
   Future<Null> sendParty() async {

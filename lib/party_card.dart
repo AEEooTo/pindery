@@ -13,13 +13,14 @@ class PartyCard extends StatelessWidget {
   PartyCard({this.party});
 
   final Party party;
+  final double cardHeight = 200.0;
 
   @override
   Widget build(BuildContext context) {
     print(party.imageUrl);
     return new Card(
       child: new Container(
-        height: 200.0,
+        height: cardHeight,
         child: new Stack(
           children: <Widget>[
             // TODO: fix image size in stack

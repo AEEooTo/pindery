@@ -232,9 +232,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                         style: new TextStyle(color: Colors.white),
                       ),
                       // TODO: add party catalogue screen
-                      onPressed: _validateFields()
-                          ? () => _handleSubmitted()
-                          : null,
+                      onPressed:
+                          _validateFields() ? () => _handleSubmitted() : null,
                     ),
                   ),
                 ],
