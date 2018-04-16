@@ -6,21 +6,27 @@ import 'package:flutter/material.dart';
 import 'drawer.dart';
 import 'theme.dart';
 
-
-TextEditingController usernameController = new TextEditingController();
+String _password;
 TextEditingController passwordController = new TextEditingController();
+String _cpassword;
+TextEditingController cpasswordController = new TextEditingController();
 
-class LoginPage extends StatefulWidget {
+class SignupPage extends StatefulWidget {
   static const routeName = '/login-page';
 
   @override
-  _LoginPageState createState() => new _LoginPageState();
-  }
+  _SignUpPageState createState() => new _SignUpPageState();
+}
 
-class _LoginPageState extends State<LoginPage> {
+class _SignUpPageState extends State<SignupPage> {
 
+  String _name;
+  TextEditingController nameController = new TextEditingController();
+  String _surname;
+  TextEditingController surnameController = new TextEditingController();
   String _email;
-  String _password;
+  TextEditingController emailController = new TextEditingController();
+
 
 
   Widget build(BuildContext context) {
@@ -44,49 +50,86 @@ class _LoginPageState extends State<LoginPage> {
             autovalidate: true,
             child: DropdownButtonHideUnderline(
               child: new SafeArea(
-                  top: false,
-                  bottom: false,
-                  child: ListView(
+                top: false,
+                bottom: false,
+                child: ListView(
                     children: <Widget>[ new Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
                         new Container(
-                          padding: const EdgeInsets.all(80.0),
-                          child: new Text('Log in!',
-                          style: new TextStyle(
-                            fontSize: 40.0,
-                            color: secondary,
-                            fontWeight: FontWeight.w600
-                          ),),
+                          padding: const EdgeInsets.only(top: 50.0),
+                          child: new Text('Join Pindery!',
+                            style: new TextStyle(
+                                fontSize: 35.0,
+                                color: primary,
+                                fontWeight: FontWeight.w800,
+                            ),),
+                        ),
+                        new Container(
+                          padding: EdgeInsets.all(21.0),
+                          child: new IconButton(
+                            icon: new Icon(Icons.photo_camera,size: 32.0,),
+                            onPressed: (){},
+                            splashColor: secondary,
+                          )
                         ),
                         new Container(
                           child: new Column(
                             children: <Widget>[
-                              new Padding(
-                                padding: const EdgeInsets.only(bottom: 16.0),
-                                child: new EmailField(labelText: 'E-mail',
-                                  helperText: 'Insert your e-mail',
-                                  onFieldSubmitted: (String value) {
-                                    setState(() {
-                                      _email = value;
-                                    });
-                                  },
-                                ),
+                              new InformationField(labelText: 'Name',
+                                controller: nameController,
+                                onSaved: (val) => _name = val,
+                                onFieldSubmitted: (String value) {
+                                  setState(() {
+                                    _name = value;
+                                  });
+                                },
+                                textInputType: TextInputType.text,
+                              ),
+                              new InformationField(labelText: 'Surname',
+                                controller: surnameController,
+                                onSaved: (val) => _surname = val,
+                                onFieldSubmitted: (String value) {
+                                  setState(() {
+                                    _surname = value;
+                                  });
+                                },
+                                textInputType: TextInputType.text,
+                              ),
+                              new InformationField(labelText: 'E-mail',
+                                textInputType: TextInputType.emailAddress,
+                                controller: emailController,
+                                onSaved: (val) => _email = val,
+                                onFieldSubmitted: (String value) {
+                                  setState(() {
+                                    _email = value;
+                                  });
+                                },
                               ),
                               new PasswordField(
                                 labelText: 'Password',
-                                helperText: 'Insert your password',
+                                controller: passwordController,
+                                onSaved: (val) => _password = val,
                                 onFieldSubmitted: (String value) {
                                   setState(() {
                                     _password = value;
                                   });
                                 },
-
+                              ),
+                              new PasswordField(
+                                labelText: 'Confirm your password',
+                                controller: cpasswordController,
+                                onSaved: (val) => _cpassword = val,
+                                onFieldSubmitted: (String value) {
+                                  setState(() {
+                                    _cpassword = value;
+                                  });
+                                },
                               ),
                               new Padding(
                                 padding: const EdgeInsets.only(top: 80.0),
-                                child: new LogInButton(
-                                  text: '  LOG IN  ',
+                                child: new SignUpButton(
+                                  text: '  SIGN UP  ',
                                   color: primary,
                                 ),
                               ),
@@ -96,7 +139,7 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     ]
-                  ),
+                ),
               ),
             ),
           ),
@@ -106,8 +149,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class LogInButton extends StatelessWidget{
-  LogInButton({this.text, this.color});
+class SignUpButton extends StatelessWidget{
+  SignUpButton({this.text, this.color});
 
   final String text;
   final Color color;
@@ -123,12 +166,25 @@ class LogInButton extends StatelessWidget{
             color: Colors.white
         ),),
       onPressed: (){
-        
-        Navigator.push(
-          context,
-          new MaterialPageRoute(
-              builder: (context) => new LogingInPage()),
-        );
+        if (_password==_cpassword)
+          {
+            Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new SigninUpPage()),
+            );
+          }
+
+          else
+            {
+              Scaffold.of(context).showSnackBar(new SnackBar(
+                content: new Text(
+                  "Pressed mate",
+                  textAlign: TextAlign.center,
+                ),
+              ));
+            }
+
       },
     );
   }
@@ -144,6 +200,7 @@ class PasswordField extends StatefulWidget {
     this.onSaved,
     this.validator,
     this.onFieldSubmitted,
+    this.controller
   });
 
 
@@ -153,19 +210,20 @@ class PasswordField extends StatefulWidget {
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String> validator;
   final ValueChanged<String> onFieldSubmitted;
+  final TextEditingController controller;
 
   @override
   _PasswordFieldState createState() => new _PasswordFieldState();
 }
 
 class _PasswordFieldState extends State<PasswordField> {
-  bool _obscureText = true;
+  bool _obscureText = false;
 
   @override
   Widget build(BuildContext context) {
     return new TextFormField(
       autocorrect: false,
-      controller: passwordController,
+      controller: widget.controller,
       obscureText: _obscureText,
       onSaved: widget.onSaved,
       validator: widget.validator,
@@ -176,13 +234,13 @@ class _PasswordFieldState extends State<PasswordField> {
         filled: true,
         hintText: widget.hintText,
         hintStyle: new TextStyle(
-        color: dividerColor,
-        fontSize: 30.0,
+          color: dividerColor,
+          fontSize: 30.0,
         ),
         labelText: widget.labelText,
         labelStyle: new TextStyle(
-          color: dividerColor,
-          fontSize: 30.0,
+            color: dividerColor,
+            fontSize: 30.0,
             fontWeight: FontWeight.w300
         ),
         helperText: widget.helperText,
@@ -190,21 +248,13 @@ class _PasswordFieldState extends State<PasswordField> {
           color: dividerColor,
           fontSize: 14.0,
         ),
-        suffixIcon: new GestureDetector(
-          onTap: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-          child: new Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
-        ),
       ),
     );
   }
 }
 
-class EmailField extends StatefulWidget {
-  const EmailField({
+class InformationField extends StatefulWidget {
+  const InformationField({
 
     this.hintText,
     this.labelText,
@@ -212,6 +262,8 @@ class EmailField extends StatefulWidget {
     this.onSaved,
     this.validator,
     this.onFieldSubmitted,
+    this.textInputType,
+    this.controller
   });
 
 
@@ -221,19 +273,21 @@ class EmailField extends StatefulWidget {
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String> validator;
   final ValueChanged<String> onFieldSubmitted;
+  final TextInputType textInputType;
+  final TextEditingController controller;
 
   @override
-  _EmailFieldState createState() => new _EmailFieldState();
+  _InformationFieldState createState() => new _InformationFieldState();
 }
 
-class _EmailFieldState extends State<EmailField> {
+class _InformationFieldState extends State<InformationField> {
 
   @override
   Widget build(BuildContext context) {
     return new TextFormField(
-      controller: usernameController,
-      keyboardType: TextInputType.emailAddress,
-      maxLength: 30,
+      controller: widget.controller,
+      keyboardType: widget.textInputType,
+      maxLength: 20,
       onSaved: widget.onSaved,
       validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
@@ -263,8 +317,8 @@ class _EmailFieldState extends State<EmailField> {
 }
 
 ///////
-class LogingInPage extends StatelessWidget{
-  LogingInPage({Contex});
+class SigninUpPage extends StatelessWidget{
+  SigninUpPage({Contex});
   Widget build(BuildContext context){
     return new Scaffold(
       drawer: new Drawer(
@@ -294,10 +348,10 @@ class LogingInPage extends StatelessWidget{
             new Padding(
               padding: const EdgeInsets.only(bottom: 81.0),
               child: new Text(
-                'Logging in!',
+                'Signing up!',
                 style: new TextStyle(
                     fontSize: 40.0,
-                    color: secondary,
+                    color: primary,
                     fontWeight: FontWeight.w600
                 ),
               ),
@@ -305,12 +359,12 @@ class LogingInPage extends StatelessWidget{
             new Padding(
               padding: EdgeInsets.all(16.0),
               child: new Container(
-              height: 1.5,
-              margin: EdgeInsets.only(top: 16.0),
-              child: new LinearProgressIndicator(
+                height: 1.5,
+                margin: EdgeInsets.only(top: 16.0),
+                child: new LinearProgressIndicator(
 
-              ),
-            ),)
+                ),
+              ),)
           ],
         ),
       ),

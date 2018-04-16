@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'drawer.dart';
 import 'theme.dart';
 import 'login.dart';
+import 'signup.dart';
 
 class WelcomePage extends StatelessWidget{
   WelcomePage({Contex});
@@ -61,6 +62,7 @@ class WelcomePage extends StatelessWidget{
                       child: new WelcomeButton(
                         text: '  LOG IN  ',
                         color: primary,
+                        widgetBuilder: (context) => new LoginPage(),
                       ),
                     ),
                     Padding(
@@ -68,6 +70,7 @@ class WelcomePage extends StatelessWidget{
                       child: new WelcomeButton(
                         text: 'SIGN UP',
                         color: secondary,
+                        widgetBuilder: (context) => new SignupPage(),
                       ),
                     )
                   ],
@@ -82,10 +85,11 @@ class WelcomePage extends StatelessWidget{
   }
 
 class WelcomeButton extends StatelessWidget{
-  WelcomeButton({this.text, this.color});
+  WelcomeButton({this.text, this.color, this.widgetBuilder});
 
    final String text;
    final Color color;
+   final WidgetBuilder widgetBuilder;
 
   Widget build (BuildContext context){
     return new RaisedButton(
@@ -101,7 +105,7 @@ class WelcomeButton extends StatelessWidget{
         Navigator.push(
           context,
           new MaterialPageRoute(
-              builder: (context) => new LoginPage()),
+              builder: widgetBuilder),
         );
 
 
