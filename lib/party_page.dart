@@ -120,66 +120,11 @@ class PartyPage extends StatelessWidget {
                     ),
                   ),
                 ),
-              ),
-              new SliverList(
-                  delegate: new SliverChildListDelegate(
-                  <Widget>[
-                    new BlackPartyHeader(
-                      organiser: party.organiser,
-                      rating: party.rating,
-                      ratingNumber: party.ratingNumber,
-                    ),
-                    new WhitePartyBlock(
-                      data: party.place,
-                      icon: const IconData(0xe0c8, fontFamily: 'MaterialIcons'),
-                    ),
-                    new WhitePartyBlock(
-                      data: party.day,
-                      icon: const IconData(0xe192, fontFamily: 'MaterialIcons'),
-                    ),
-                    new WhitePartyBlock(
-                      data: 'Necessary points: ' + party.pinderPoints.toString(),
-                      icon: const IconData(0xe5ca, fontFamily: 'MaterialIcons'),
-                    ),
-                    new WhitePartyBlock(
-                      data: party.privacy,
-                      icon: const IconData(0xe80b, fontFamily: 'MaterialIcons'),
-                    ),
-                    new Container(
-                      decoration: new BoxDecoration(
 
-                        color: Colors.white,
-                      ),
-                      child: new Padding(
-                        padding: const EdgeInsets.only(left: 26.0, top: 13.0, right: 26.0, bottom: 13.0),
-                        child: new Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            new Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: new Text(
-                                'Description',
-                                style: new TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: primary
-                                ),
-                              ),
-                            ),
-                            new Text (
-                              party.description,
-                              style: pinderyTextStyle,
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-
-
-                  ],
-                ),
-              ),
             ]
+          ),
+        )
+        ]
         )
     );
   }
