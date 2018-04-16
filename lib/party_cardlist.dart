@@ -40,8 +40,14 @@ class PartyCardList extends StatelessWidget {
               reverse: false,
               itemBuilder: (_, int index) {
                 // TODO: invert the order of the parties (from newer to older)
+                List<DocumentSnapshot> documentsList = snapshot.data.documents;
+                documentsList.sort(
+                    (DocumentSnapshot documentA, DocumentSnapshot documentB) {
+                      return documentA['name'].toString().length.compareTo(documentB['name'].toString().length);
+                    }
+                );
                 final DocumentSnapshot document =
-                    snapshot.data.documents[index];
+                    documentsList[index];
                 Party party = new Party.fromJSON(document);
                 return new PartyCard(party: party);
               },
