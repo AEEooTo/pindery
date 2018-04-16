@@ -1,4 +1,4 @@
-/// This page contains the code for log in into the app.
+/// This page contains the code for log in into the app and the logging in uploading page
 ///
 ///
 
@@ -25,7 +25,14 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget build(BuildContext context) {
     return new Theme(
-      data: Theme.of(context),
+      data: new ThemeData(
+        primaryColor: primary,
+        primaryColorLight: primaryLight,
+        primaryColorDark: primaryDark,
+        accentColor: secondary,
+        buttonTheme: new ButtonThemeData(textTheme: ButtonTextTheme.accent),
+        brightness: Brightness.light,
+      ),
       child: new Scaffold(
         drawer: new Drawer(
           child: new PinderyDrawer(),
@@ -45,9 +52,9 @@ class _LoginPageState extends State<LoginPage> {
                       children: <Widget>[
                         new Container(
                           padding: const EdgeInsets.all(80.0),
-                          child: new Text('Login!',
+                          child: new Text('Log in!',
                           style: new TextStyle(
-                            fontSize: 30.0,
+                            fontSize: 40.0,
                             color: secondary,
                             fontWeight: FontWeight.w600
                           ),),
@@ -57,31 +64,13 @@ class _LoginPageState extends State<LoginPage> {
                             children: <Widget>[
                               new Padding(
                                 padding: const EdgeInsets.only(bottom: 16.0),
-                                child: new TextFormField(
-                                  controller: usernameController,
-                                  validator: (val) => val.isEmpty
-                                      ? 'You must insert a username.'
-                                      : null,
-                                  onSaved: (val) => _username = val,
-                                  decoration: const InputDecoration(
-                                      labelText: 'Username',
-                                      labelStyle: TextStyle(
-                                        color: dividerColor,
-                                        fontSize: 30.0,
-                                        fontWeight: FontWeight.w300
-                                      ),
-                                      border: const UnderlineInputBorder(
-                                          borderSide: const BorderSide(
-                                            color: dividerColor,
-                                          ),
-                                      )),
-                                  style:
-                                  Theme.of(context).textTheme.headline.copyWith(
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.w300,
-                                    color: dividerColor,
-                                  ),
-                                  maxLength: 20,
+                                child: new UsernameField(labelText: 'E-mail',
+                                  helperText: 'Insert your e-mail',
+                                  onFieldSubmitted: (String value) {
+                                    setState(() {
+                                      _username = value;
+                                    });
+                                  },
                                 ),
                               ),
                               new PasswordField(
@@ -89,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                                 helperText: 'Insert your password',
                                 onFieldSubmitted: (String value) {
                                   setState(() {
-                                    password = value;
+                                    _password = value;
                                   });
                                 },
 
@@ -174,13 +163,14 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return new TextFormField(
-
+      autocorrect: false,
+      controller: passwordController,
       obscureText: _obscureText,
-      maxLength: 10,
       onSaved: widget.onSaved,
       validator: widget.validator,
       onFieldSubmitted: widget.onFieldSubmitted,
       decoration: new InputDecoration(
+        fillColor: Colors.white,
         border: const UnderlineInputBorder(),
         filled: true,
         hintText: widget.hintText,
@@ -212,6 +202,66 @@ class _PasswordFieldState extends State<PasswordField> {
   }
 }
 
+class UsernameField extends StatefulWidget {
+  const UsernameField({
+
+    this.hintText,
+    this.labelText,
+    this.helperText,
+    this.onSaved,
+    this.validator,
+    this.onFieldSubmitted,
+  });
+
+
+  final String hintText;
+  final String labelText;
+  final String helperText;
+  final FormFieldSetter<String> onSaved;
+  final FormFieldValidator<String> validator;
+  final ValueChanged<String> onFieldSubmitted;
+
+  @override
+  _UsernameFieldState createState() => new _UsernameFieldState();
+}
+
+class _UsernameFieldState extends State<UsernameField> {
+
+  @override
+  Widget build(BuildContext context) {
+    return new TextFormField(
+      controller: usernameController,
+      keyboardType: TextInputType.emailAddress,
+      maxLength: 10,
+      onSaved: widget.onSaved,
+      validator: widget.validator,
+      onFieldSubmitted: widget.onFieldSubmitted,
+      decoration: new InputDecoration(
+        fillColor: Colors.white,
+        border: const UnderlineInputBorder(),
+        filled: true,
+        hintText: widget.hintText,
+        hintStyle: new TextStyle(
+          color: dividerColor,
+          fontSize: 30.0,
+        ),
+        labelText: widget.labelText,
+        labelStyle: new TextStyle(
+            color: dividerColor,
+            fontSize: 30.0,
+            fontWeight: FontWeight.w300
+        ),
+        helperText: widget.helperText,
+        helperStyle: new TextStyle(
+          color: dividerColor,
+          fontSize: 14.0,
+        ),
+      ),
+    );
+  }
+}
+
+///////
 class LogingInPage extends StatelessWidget{
   LogingInPage({Contex});
   Widget build(BuildContext context){
