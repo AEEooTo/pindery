@@ -84,32 +84,6 @@ class _LoginPageState extends State<LoginPage> {
                                   maxLength: 20,
                                 ),
                               ),
-<<<<<<< Updated upstream
-                              new TextFormField(
-                                // TODO: hide password characters!!1!!1
-                                controller: passwordController,
-                                validator: (val) => val.isEmpty
-                                    ? 'You must insert a password.'
-                                    : null,
-                                onSaved: (val) => _password = val,
-                                decoration: const InputDecoration(
-                                    labelText: 'Password',
-                                    labelStyle: TextStyle(
-                                        color: dividerColor,
-                                        fontSize: 30.0
-                                    ),
-                                    border: const UnderlineInputBorder(
-                                        borderSide: const BorderSide(
-                                          color: dividerColor,
-                                        ))),
-                                style:
-                                Theme.of(context).textTheme.headline.copyWith(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.w300,
-                                  color: dividerColor,
-                                ),
-                                maxLength: 20,
-=======
                               new PasswordField(
                                 labelText: 'Password',
                                 helperText: 'Insert your password',
@@ -119,7 +93,6 @@ class _LoginPageState extends State<LoginPage> {
                                   });
                                 },
 
->>>>>>> Stashed changes
                               ),
                               new Padding(
                                 padding: const EdgeInsets.only(top: 80.0),
