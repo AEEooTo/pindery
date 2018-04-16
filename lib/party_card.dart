@@ -24,13 +24,12 @@ class PartyCard extends StatelessWidget {
           children: <Widget>[
             // TODO: fix image size in stack
             new Center(child: new CircularProgressIndicator()),
-            new Center(
+            new ConstrainedBox(
+              constraints: BoxConstraints.expand(),
               child: new FadeInImage.memoryNetwork(
                 placeholder: kTransparentImage,
                 image: party.imageUrl,
-                fit : BoxFit.cover,
-                width: 338.0,
-                height: 200.0,
+                fit: BoxFit.cover,
               ),
             ),
             new Container(
