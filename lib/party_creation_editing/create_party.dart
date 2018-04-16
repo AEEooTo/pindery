@@ -281,10 +281,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   /// Method to assign the different collected fields to the Party instance
   // Migrated
   void assignPartyFields() {
-    party.fromDay = _fromDate;
-    party.fromTime = hourStringParser(_fromTime);
-    party.toDay = _toDate;
-    party.toTime = hourStringParser(_toTime);
+    party.fromDayTime = dateTimeParser(_fromTime, _fromDate);
+    party.toDayTime = dateTimeParser(_toTime, _toDate);
     party.privacy = _allPrivacyOptions.indexOf(_privacyOption);
   }
 
@@ -293,9 +291,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     print(party.name);
     print(party.description);
     print(party.place);
-    print(party.fromDay);
-    print(party.fromTime);
-    print(party.toDay);
-    print(party.toTime);
+    print(party.fromDayTime);
+    print(party.toDayTime);
   }
 }

@@ -56,11 +56,11 @@ class PartyCard extends StatelessWidget {
                         new Container(
                           padding: const EdgeInsets.only(left: 16.0),
                           child: new Text(
-                            party.fromDay.day.toString() +
+                            party.fromDayTime.day.toString() +
                                 '/' +
-                                party.fromDay.month.toString() +
+                                party.fromDayTime.month.toString() +
                                 '/' +
-                                party.fromDay.year.toString(),
+                                party.fromDayTime.year.toString(),
                             overflow: TextOverflow.ellipsis,
                             style: new TextStyle(
                                 fontSize: 17.0, color: Colors.white),

@@ -235,11 +235,23 @@ class InputDropdown extends StatelessWidget {
 */
 
 /// Function to parse a time from a TimeOfDay object to obtain a string
-String hourStringParser(TimeOfDay time) {
+/// // TODO: delete this method if [dateTimeParser] works
+/* String hourStringParser(TimeOfDay time) {
   String hours = time.hour.toString();
   String minutes = time.minute.toString();
   if (time.minute < 10) {
     minutes = '0' + time.minute.toString();
   }
   return hours + ':' + minutes;
+} */
+
+/// Function to parse a DateTime from a TimeOfDay object and DateTime object to obtain a string
+DateTime dateTimeParser(TimeOfDay time, DateTime date) {
+  int _minutes = time.minute;
+  int _hours = time.hour;
+  int _day = date.day;
+  int _month = date.month;
+  int _year = date.year;
+  print(DateTime(_year, _month, _day, _hours, _minutes));
+  return DateTime(_year, _month, _day, _hours, _minutes);
 }

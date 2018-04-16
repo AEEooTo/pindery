@@ -77,11 +77,11 @@ class PartyPage extends StatelessWidget {
                   icon: const IconData(0xe0c8, fontFamily: 'MaterialIcons'),
                 ),
                 new WhitePartyBlock(
-                  data: party.fromDay.day.toString() +
+                  data: party.fromDayTime.day.toString() +
                       '/' +
-                      party.fromDay.month.toString() +
+                      party.fromDayTime.month.toString() +
                       '/' +
-                      party.fromDay.year.toString(),
+                      party.fromDayTime.year.toString(),
                   icon: const IconData(0xe192, fontFamily: 'MaterialIcons'),
                 ),
                 new WhitePartyBlock(
