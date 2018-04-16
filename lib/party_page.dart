@@ -271,7 +271,7 @@ class WhitePartyBlock extends StatelessWidget {
 class RatingStars extends StatelessWidget {
   RatingStars({this.number});
 
-  final num number;
+  num number;
   final List<bool> active = new List(5);
 
   void starsMethod(num number) {
@@ -285,19 +285,21 @@ class RatingStars extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
+    number=2.5;
     starsMethod(number);
+
     return new Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        new Icon( active[0]? (number<0.5? Icons.star_half: Icons.star): Icons.star_border,
+        new Icon( active[0]? (number<=0.5? Icons.star_half: Icons.star): Icons.star_border,
             color: active[0] ? secondary : Colors.white, size: 14.0),
-        new Icon( active[1]? (number<1.5? Icons.star_half: Icons.star): Icons.star_border,
+        new Icon( active[1]? (number<=1.5? Icons.star_half: Icons.star): Icons.star_border,
           color: active[1] ? secondary : Colors.white, size: 14.0, ),
-        new Icon(active[2]? (number<2.5? Icons.star_half: Icons.star): Icons.star_border,
+        new Icon(active[2]? (number<=2.5? Icons.star_half: Icons.star): Icons.star_border,
             color: active[2] ? secondary : Colors.white, size: 14.0),
-        new Icon(active[3]? (number<3.5? Icons.star_half: Icons.star): Icons.star_border,
+        new Icon(active[3]? (number<=3.5? Icons.star_half: Icons.star): Icons.star_border,
             color: active[3] ? secondary : Colors.white, size: 14.0),
-        new Icon(active[4]? (number<4.5? Icons.star_half: Icons.star): Icons.star_border,
+        new Icon(active[4]? (number<=4.5? Icons.star_half: Icons.star): Icons.star_border,
             color: active[4] ? secondary : Colors.white, size: 14.0),
       ],
     );

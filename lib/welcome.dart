@@ -9,7 +9,6 @@ import 'login.dart';
 import 'signup.dart';
 
 class WelcomePage extends StatelessWidget{
-  WelcomePage({Contex});
   static const routeName = '/welcome-page';
 
   Widget build(BuildContext context) {
@@ -35,7 +34,6 @@ class WelcomePage extends StatelessWidget{
                   height: 214.0,
                   width: 214.0,
                   decoration: new BoxDecoration(
-
                       image: new DecorationImage(
                         image: new AssetImage('assets/img/logo_v_2_rosso.png'),
                         fit: BoxFit.fitHeight,
