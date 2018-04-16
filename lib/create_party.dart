@@ -27,8 +27,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   final GlobalKey homePageKey;
 
   // keys
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
-  final formKey = new GlobalKey<FormState>();
+  final GlobalKey scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey formKey = new GlobalKey<FormState>();
 
   // To be filled party instance
   Party party = new Party();
@@ -37,6 +37,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   TextEditingController nameController = new TextEditingController();
   TextEditingController locationController = new TextEditingController();
   TextEditingController descriptionController = new TextEditingController();
+  TextEditingController maxPeopleController = new TextEditingController();
 
   // DateTime variables
   DateTime _fromDate = new DateTime.now();
@@ -124,45 +125,55 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                             maxLines: 5,
                             style: inputTextStyle,
                           ),
+                          new Column(
+                            children: <Widget>[
+                              new DateTimePicker(
+                                labelText: 'From',
+                                selectedDate: _fromDate,
+                                selectedTime: _fromTime,
+                                selectDate: (DateTime date) {
+                                  setState(() {
+                                    _fromDate = date;
+                                  });
+                                },
+                                selectTime: (TimeOfDay time) {
+                                  setState(() {
+                                    _fromTime = time;
+                                  });
+                                },
+                              ),
+                              new DateTimePicker(
+                                labelText: 'To',
+                                selectedDate: _toDate,
+                                selectedTime: _toTime,
+                                selectDate: (DateTime date) {
+                                  setState(() {
+                                    _toDate = date;
+                                  });
+                                },
+                                selectTime: (TimeOfDay time) {
+                                  setState(() {
+                                    _toTime = time;
+                                  });
+                                },
+                              ),
+                              new TextFormField(
+                                controller: maxPeopleController,
+                                keyboardType: TextInputType.number,
+                                validator: (val) => !isNumeric(val)
+                                    ? 'You must insert the maximum number of people'
+                                    : null,
+                                onSaved: (val) => party.maxPeople = int.parse(val),
+                                decoration: const InputDecoration(
+                                  labelText: 'Maximum people',
+                                  labelStyle: labelStyle,
+                                ),
+                                style: inputTextStyle,
+                              ),
+                            ],
+                          ),
                         ],
                       ),
-                    ),
-                  ),
-                  new Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: new Column(
-                      children: <Widget>[
-                        new DateTimePicker(
-                          labelText: 'From',
-                          selectedDate: _fromDate,
-                          selectedTime: _fromTime,
-                          selectDate: (DateTime date) {
-                            setState(() {
-                              _fromDate = date;
-                            });
-                          },
-                          selectTime: (TimeOfDay time) {
-                            setState(() {
-                              _fromTime = time;
-                            });
-                          },
-                        ),
-                        new DateTimePicker(
-                          labelText: 'To',
-                          selectedDate: _toDate,
-                          selectedTime: _toTime,
-                          selectDate: (DateTime date) {
-                            setState(() {
-                              _toDate = date;
-                            });
-                          },
-                          selectTime: (TimeOfDay time) {
-                            setState(() {
-                              _toTime = time;
-                            });
-                          },
-                        ),
-                      ],
                     ),
                   ),
                   new Container(
@@ -174,7 +185,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                         style: new TextStyle(color: Colors.white),
                       ),
                       // TODO: add party catalogue screen
-                      onPressed: validateFields()
+                      onPressed: _validateFields()
                           ? () async {
                               final ScaffoldState scaffoldState =
                                   scaffoldKey.currentState;
@@ -186,7 +197,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                               if (!cancelled) {
                                 Navigator.of(context).pop();
                                 homePageState.showSnackBar(new SnackBar(
-                                  content: new Text("Party creation cancelled"),
+                                  content: new Text("Great! The party was created!"),
                                 ));
                               } else {
                                 scaffoldState.showSnackBar(new SnackBar(
@@ -205,6 +216,21 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
         ),
       ),
     );
+  }
+
+  bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return int.parse(s, onError: (e) => null) != null;
+  }
+  
+  bool _validateFields() {
+    return nameController.text.trim().isNotEmpty &&
+        locationController.text.trim().isNotEmpty &&
+        descriptionController.text.trim().isNotEmpty &&
+        isNumeric(maxPeopleController.text) &&
+        party.imageLocalPath != null;
   }
 
   void _handleSubmitted() async {
@@ -258,10 +284,10 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
 
   /// Method to assign the different collected fields to the Party instance
   void assignPartyFields(Party party) {
-    party.day = _fromDate.toString();
-    party.fromTime = _fromTime.format(context);
-    party.toDay = _toDate.toString();
-    party.toTime = _toTime.format(context);
+    party.fromDay = _fromDate;
+    party.fromTime = _fromTime.toString();
+    party.toDay = _toDate;
+    party.toTime = _toTime.toString();
   }
 
   /// Just for debugging purpose
@@ -269,17 +295,10 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     print(party.name);
     print(party.description);
     print(party.place);
-    print(party.day);
+    print(party.fromDay);
     print(party.fromTime);
     print(party.toDay);
     print(party.toTime);
-  }
-
-  bool validateFields() {
-    return nameController.text.trim().isNotEmpty &&
-        locationController.text.trim().isNotEmpty &&
-        descriptionController.text.trim().isNotEmpty &&
-        party.imageLocalPath != null;
   }
 }
 
