@@ -107,7 +107,6 @@ class DrawerBlock extends StatelessWidget {
                 new MaterialPageRoute(
                     builder: (context) => new WelcomePage()),
               );
-
             },
           )
         ),

@@ -25,104 +25,104 @@ class PartyPage extends StatelessWidget {
         drawer: new Drawer(
           child: new PinderyDrawer(),
         ),
-        body: new CustomScrollView(
-            slivers: <Widget>[
-              new SliverAppBar(
-                expandedHeight: _appBarHeight,
-                pinned: _appBarBehavior == AppBarBehavior.pinned,
-                floating: _appBarBehavior == AppBarBehavior.floating ||
-                    _appBarBehavior == AppBarBehavior.snapping,
-                snap: _appBarBehavior == AppBarBehavior.snapping,
-                flexibleSpace: new FlexibleSpaceBar(
-                  title: new Text(party.name),
-                  background: new Stack(
-                    fit: StackFit.expand,
-                    children: <Widget>[
-                      //todo : fix progress indicator (cannot be seen)
-                      new CircularProgressIndicator(),
-                      new FadeInImage.memoryNetwork(
-                        placeholder: kTransparentImage,
-                        image : party.imageUrl,
-                        fit: BoxFit.cover,
-                        height: _appBarHeight,
+        body: new CustomScrollView(slivers: <Widget>[
+          new SliverAppBar(
+            expandedHeight: _appBarHeight,
+            pinned: _appBarBehavior == AppBarBehavior.pinned,
+            floating: _appBarBehavior == AppBarBehavior.floating ||
+                _appBarBehavior == AppBarBehavior.snapping,
+            snap: _appBarBehavior == AppBarBehavior.snapping,
+            flexibleSpace: new FlexibleSpaceBar(
+              title: new Text(party.name),
+              background: new Stack(
+                fit: StackFit.expand,
+                children: <Widget>[
+                  //todo : fix progress indicator (cannot be seen)
+                  new CircularProgressIndicator(),
+                  new FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: party.imageUrl,
+                    fit: BoxFit.cover,
+                    height: _appBarHeight,
+                  ),
+                  // This gradient ensures that the toolbar icons are distinct
+                  // against the background image.
+                  const DecoratedBox(
+                    decoration: const BoxDecoration(
+                      gradient: const LinearGradient(
+                        begin: const Alignment(0.0, -1.0),
+                        end: const Alignment(0.0, -0.4),
+                        colors: const <Color>[
+                          const Color(0x60000000),
+                          const Color(0x00000000)
+                        ],
                       ),
-                      // This gradient ensures that the toolbar icons are distinct
-                      // against the background image.
-                      const DecoratedBox(
-                        decoration: const BoxDecoration(
-                          gradient: const LinearGradient(
-                            begin: const Alignment(0.0, -1.0),
-                            end: const Alignment(0.0, -0.4),
-                            colors: const <Color>[
-                              const Color(0x60000000), const Color(0x00000000)],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          new SliverList(
+            delegate: new SliverChildListDelegate(
+              <Widget>[
+                new BlackPartyHeader(
+                  organiser: party.organiser,
+                  rating: party.rating,
+                  ratingNumber: party.ratingNumber,
+                ),
+                new WhitePartyBlock(
+                  data: party.place,
+                  icon: const IconData(0xe0c8, fontFamily: 'MaterialIcons'),
+                ),
+                new WhitePartyBlock(
+                  data: party.fromDay.day.toString() +
+                      '/' +
+                      party.fromDay.month.toString() +
+                      '/' +
+                      party.fromDay.year.toString(),
+                  icon: const IconData(0xe192, fontFamily: 'MaterialIcons'),
+                ),
+                new WhitePartyBlock(
+                  data: 'Necessary points: ' + party.pinderPoints.toString(),
+                  icon: const IconData(0xe5ca, fontFamily: 'MaterialIcons'),
+                ),
+                new WhitePartyBlock(
+                  data: Party.privacyOptions[party.privacy],
+                  icon: Party.privacyOptionsIcons[party.privacy],
+                ),
+                new Container(
+                  decoration: new BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: new Padding(
+                    padding: const EdgeInsets.only(
+                        left: 26.0, top: 13.0, right: 26.0, bottom: 13.0),
+                    child: new Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        new Padding(
+                          padding: const EdgeInsets.only(bottom: 8.0),
+                          child: new Text(
+                            'Description',
+                            style: new TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
+                                color: primary),
                           ),
                         ),
-                      ),
-                    ],
+                        new Text(
+                          party.description,
+                          style: pinderyTextStyle,
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ),
-              new SliverList(
-                delegate: new SliverChildListDelegate(
-                  <Widget>[
-                    new BlackPartyHeader(
-                      organiser: party.organiser,
-                      rating: party.rating,
-                      ratingNumber: party.ratingNumber,
-                    ),
-                    new WhitePartyBlock(
-                      data: party.place,
-                      icon: const IconData(0xe0c8, fontFamily: 'MaterialIcons'),
-                    ),
-                    new WhitePartyBlock(
-                      data: party.day,
-                      icon: const IconData(0xe192, fontFamily: 'MaterialIcons'),
-                    ),
-                    new WhitePartyBlock(
-                      data: 'Necessary points: ' + party.pinderPoints.toString(),
-                      icon: const IconData(0xe5ca, fontFamily: 'MaterialIcons'),
-                    ),
-                    new WhitePartyBlock(
-                      data: party.privacy,
-                      icon: const IconData(0xe80b, fontFamily: 'MaterialIcons'),
-                    ),
-                    new Container(
-                      decoration: new BoxDecoration(
-
-                        color: Colors.white,
-                      ),
-                      child: new Padding(
-                        padding: const EdgeInsets.only(left: 26.0, top: 13.0, right: 26.0, bottom: 13.0),
-                        child: new Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            new Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: new Text(
-                                'Description',
-                                style: new TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: primary
-                                ),
-                              ),
-                            ),
-                            new Text (
-                              party.description,
-                              style: pinderyTextStyle,
-                            )
-                          ],
-                        ),
-                      ),
-                    )
-
-
-                  ],
-                ),
-              ),
-            ]
-        )
-    );
+                )
+              ],
+            ),
+          ),
+        ]));
   }
 }
 
@@ -132,7 +132,7 @@ class BlackPartyHeader extends StatelessWidget {
   final String organiser;
   final num rating;
   final int ratingNumber;
-  final List <Icon> stars= new List(5);
+  final List<Icon> stars = new List(5);
 
   Widget build(BuildContext context) {
     return new Container(
@@ -172,7 +172,9 @@ class BlackPartyHeader extends StatelessWidget {
                       ),
                       new Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: new RatingStars(number: rating,),
+                        child: new RatingStars(
+                          number: rating,
+                        ),
                       ),
                       new Text(
                         ratingNumber.toString() + ' reviews',
@@ -187,18 +189,17 @@ class BlackPartyHeader extends StatelessWidget {
                 )
               ],
             ),
-
             new Expanded(
-              child:new Container(
+              child: new Container(
                 alignment: Alignment.centerRight,
                 child: new FloatingActionButton(
                   onPressed: () {
                     Scaffold.of(context).showSnackBar(new SnackBar(
-                      content: new Text(
-                        "Pressed mate",
-                        textAlign: TextAlign.center,
-                      ),
-                    ));
+                          content: new Text(
+                            "Pressed mate",
+                            textAlign: TextAlign.center,
+                          ),
+                        ));
                   },
                   child: new Icon(Icons.local_bar),
                 ),
@@ -210,14 +211,10 @@ class BlackPartyHeader extends StatelessWidget {
     );
   }
 
-  int ratingmethod (int rating )
-  {
-    if (rating==1) {
-
-    }
+  int ratingmethod(int rating) {
+    if (rating == 1) {}
     return 1;
   }
-
 }
 
 class WhitePartyBlock extends StatelessWidget {
@@ -228,12 +225,11 @@ class WhitePartyBlock extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return new Container(
-
-      height: 48.0,
+      height: 55.0,
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       decoration: new BoxDecoration(
-          border: new Border(bottom: new BorderSide(color: dividerColor)),
-          color: Colors.white,
+        border: new Border(bottom: new BorderSide(color: dividerColor)),
+        color: Colors.white,
       ),
       child: new DefaultTextStyle(
         style: Theme.of(context).textTheme.subhead,
@@ -241,39 +237,40 @@ class WhitePartyBlock extends StatelessWidget {
           top: false,
           bottom: false,
           child: new Row(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               new Container(
                   padding: const EdgeInsets.symmetric(vertical: 0.0),
                   width: 72.0,
-                  child: new Icon(icon, color: secondary, size: 20.0,)
-              ),
+                  child: new Icon(
+                    icon,
+                    color: secondary,
+                    size: 20.0,
+                  )),
               new Expanded(
                   child: new Text(
-                    data,
-                    style: new TextStyle(
-                      color: primary,
-                      fontSize: 17.0,
-                    ),
-                  )
-              ),
+                data,
+                style: new TextStyle(
+                  color: primary,
+                  fontSize: 17.0,
+                ),
+              )),
             ],
           ),
         ),
       ),
     );
   }
-
 }
 
-class RatingStars extends StatelessWidget{
+class RatingStars extends StatelessWidget {
   RatingStars({this.number});
 
   final int number;
-  final List<bool> active= new List(5);
+  final List<bool> active = new List(5);
 
-
-  void starsMethod (int number) {
+  void starsMethod(int number) {
     int i = 0;
     for (i; i < 5 && i < number; i++) {
       active[i] = true;
@@ -285,17 +282,26 @@ class RatingStars extends StatelessWidget{
 
   Widget build(BuildContext context) {
     starsMethod(number);
-    return  new Row(
+    return new Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        new Icon(Icons.star, color: active[0] ? secondary : Colors.white, size: 14.0,),
-        new Icon(Icons.star, color: active[1] ? secondary : Colors.white, size: 14.0,),
-        new Icon(Icons.star, color: active[2] ? secondary : Colors.white, size: 14.0),
-        new Icon(Icons.star, color: active[3] ? secondary : Colors.white, size: 14.0),
-        new Icon(Icons.star, color: active[4] ? secondary : Colors.white, size: 14.0),
+        new Icon(
+          Icons.star,
+          color: active[0] ? secondary : Colors.white,
+          size: 14.0,
+        ),
+        new Icon(
+          Icons.star,
+          color: active[1] ? secondary : Colors.white,
+          size: 14.0,
+        ),
+        new Icon(Icons.star,
+            color: active[2] ? secondary : Colors.white, size: 14.0),
+        new Icon(Icons.star,
+            color: active[3] ? secondary : Colors.white, size: 14.0),
+        new Icon(Icons.star,
+            color: active[4] ? secondary : Colors.white, size: 14.0),
       ],
     );
   }
-
-
 }

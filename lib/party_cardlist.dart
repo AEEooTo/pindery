@@ -23,15 +23,14 @@ class PartyCardList extends StatelessWidget {
         stream: _getReference(testCity).snapshots,
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
+            // TODO: add a better loading view
             return new Text('Loading...');
           }
           return new ListView.builder(
               padding: new EdgeInsets.all(8.0),
               reverse: false,
               itemBuilder: (_, int index) {
-                for (DocumentSnapshot document in snapshot.data.documents) {
-                  print(document);
-                }
+                // TODO: invert the order of the parties (from newer to older)
                 final DocumentSnapshot document =
                     snapshot.data.documents[index];
                 Party party = new Party.fromJSON(document);

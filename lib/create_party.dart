@@ -1,6 +1,7 @@
 /// create_party.dart
 /// contains the code for the first step of creating a party
 
+// TODO: abstract the form
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -27,8 +28,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   final GlobalKey homePageKey;
 
   // keys
-  final scaffoldKey = new GlobalKey<ScaffoldState>();
-  final formKey = new GlobalKey<FormState>();
+  final GlobalKey scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey formKey = new GlobalKey<FormState>();
 
   // To be filled party instance
   Party party = new Party();
@@ -37,6 +38,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   TextEditingController nameController = new TextEditingController();
   TextEditingController locationController = new TextEditingController();
   TextEditingController descriptionController = new TextEditingController();
+  TextEditingController maxPeopleController = new TextEditingController();
 
   // DateTime variables
   DateTime _fromDate = new DateTime.now();
@@ -46,6 +48,10 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
 
   // bool to check if the process was cancelled
   bool cancelled = false;
+
+  // Privacy options
+  final List<String> _allPrivacyOptions = Party.privacyOptions;
+  String _privacyOption = Party.privacyOptions[0];
 
   Widget build(BuildContext context) {
     return new Theme(
@@ -124,45 +130,98 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                             maxLines: 5,
                             style: inputTextStyle,
                           ),
+                          new Column(
+                            children: <Widget>[
+                              new DateTimePicker(
+                                labelText: 'From',
+                                selectedDate: _fromDate,
+                                selectedTime: _fromTime,
+                                selectDate: (DateTime date) {
+                                  setState(() {
+                                    _fromDate = date;
+                                  });
+                                },
+                                selectTime: (TimeOfDay time) {
+                                  setState(() {
+                                    _fromTime = time;
+                                  });
+                                },
+                              ),
+                              new DateTimePicker(
+                                labelText: 'To',
+                                selectedDate: _toDate,
+                                selectedTime: _toTime,
+                                selectDate: (DateTime date) {
+                                  setState(() {
+                                    _toDate = date;
+                                  });
+                                },
+                                selectTime: (TimeOfDay time) {
+                                  setState(() {
+                                    _toTime = time;
+                                  });
+                                },
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: <Widget>[
+                                  new Expanded(
+                                    child: new TextFormField(
+                                      controller: maxPeopleController,
+                                      keyboardType: TextInputType.number,
+                                      validator: (val) => !isNumeric(val)
+                                          ? 'You must insert the maximum\n number of people'
+                                          : null,
+                                      onSaved: (val) =>
+                                          party.maxPeople = int.parse(val),
+                                      decoration: const InputDecoration(
+                                        labelText: 'Maximum people',
+                                        labelStyle: labelStyle,
+                                      ),
+                                      style: inputTextStyle,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12.0),
+                                  new Expanded(
+                                    child: new InputDecorator(
+                                      decoration: const InputDecoration(
+                                        labelText: 'Privacy',
+                                        hintText: 'Choose a privacy option',
+                                      ),
+                                      isEmpty: _privacyOption == null,
+                                      child: new DropdownButton<String>(
+                                        value: _privacyOption,
+                                        isDense: true,
+                                        onChanged: (String newValue) {
+                                          setState(() {
+                                            _privacyOption = newValue;
+                                          });
+                                        },
+                                        items: _allPrivacyOptions
+                                            .map((String value) {
+                                          return new DropdownMenuItem<String>(
+                                            value: value,
+                                            child: Row(
+                                              children: <Widget>[
+                                                new Icon(
+                                                    Party.privacyOptionsIcons[
+                                                        Party.privacyOptions
+                                                            .indexOf(value)]),
+                                                const SizedBox(width: 12.0),
+                                                new Text(value),
+                                              ],
+                                            ),
+                                          );
+                                        }).toList(),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ],
                       ),
-                    ),
-                  ),
-                  new Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: new Column(
-                      children: <Widget>[
-                        new DateTimePicker(
-                          labelText: 'From',
-                          selectedDate: _fromDate,
-                          selectedTime: _fromTime,
-                          selectDate: (DateTime date) {
-                            setState(() {
-                              _fromDate = date;
-                            });
-                          },
-                          selectTime: (TimeOfDay time) {
-                            setState(() {
-                              _fromTime = time;
-                            });
-                          },
-                        ),
-                        new DateTimePicker(
-                          labelText: 'To',
-                          selectedDate: _toDate,
-                          selectedTime: _toTime,
-                          selectDate: (DateTime date) {
-                            setState(() {
-                              _toDate = date;
-                            });
-                          },
-                          selectTime: (TimeOfDay time) {
-                            setState(() {
-                              _toTime = time;
-                            });
-                          },
-                        ),
-                      ],
                     ),
                   ),
                   new Container(
@@ -173,7 +232,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                         'NEXT',
                         style: new TextStyle(color: Colors.white),
                       ),
-                      onPressed: validateFields()
+                      // TODO: add party catalogue screen
+                      onPressed: _validateFields()
                           ? () async {
                               final ScaffoldState scaffoldState =
                                   scaffoldKey.currentState;
@@ -185,7 +245,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                               if (!cancelled) {
                                 Navigator.of(context).pop();
                                 homePageState.showSnackBar(new SnackBar(
-                                  content: new Text("Party creation cancelled"),
+                                  content:
+                                      new Text("Great! The party was created!"),
                                 ));
                               } else {
                                 scaffoldState.showSnackBar(new SnackBar(
@@ -206,9 +267,25 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     );
   }
 
+  bool isNumeric(String s) {
+    if (s == null) {
+      return false;
+    }
+    return int.parse(s, onError: (e) => null) != null;
+  }
+
+  bool _validateFields() {
+    return nameController.text.trim().isNotEmpty &&
+        locationController.text.trim().isNotEmpty &&
+        descriptionController.text.trim().isNotEmpty &&
+        isNumeric(maxPeopleController.text) &&
+        party.imageLocalPath != null;
+  }
+
   void _handleSubmitted() async {
     final FormState form = formKey.currentState;
     await party.uploadImage(party.imageLocalPath);
+    party.privacy = _allPrivacyOptions.indexOf(_privacyOption);
     form.save();
     if (!cancelled) {
       assignPartyFields(party);
@@ -257,10 +334,10 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
 
   /// Method to assign the different collected fields to the Party instance
   void assignPartyFields(Party party) {
-    party.day = _fromDate.toString();
-    party.fromTime = _fromTime.format(context);
-    party.toDay = _toDate.toString();
-    party.toTime = _toTime.format(context);
+    party.fromDay = _fromDate;
+    party.fromTime = _fromTime.toString();
+    party.toDay = _toDate;
+    party.toTime = _toTime.toString();
   }
 
   /// Just for debugging purpose
@@ -268,93 +345,9 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     print(party.name);
     print(party.description);
     print(party.place);
-    print(party.day);
+    print(party.fromDay);
     print(party.fromTime);
     print(party.toDay);
     print(party.toTime);
   }
-
-  bool validateFields() {
-    return nameController.text.trim().isNotEmpty &&
-        locationController.text.trim().isNotEmpty &&
-        descriptionController.text.trim().isNotEmpty &&
-        party.imageLocalPath != null;
-  }
 }
-
-// TODO: abstract the form
-/* class PartyForm extends StatelessWidget {
-  PartyForm({this.party});
-
-  final Party party;
-
-  // Text editing controllers
-  final TextEditingController nameController = new TextEditingController();
-  final TextEditingController locationController = new TextEditingController();
-  final TextEditingController descriptionController = new TextEditingController();
-
-  // DateTime variables
-  final DateTime _fromDate = new DateTime.now();
-  final TimeOfDay _fromTime = const TimeOfDay(hour: 21, minute: 00);
-  final DateTime _toDate = new DateTime.now();
-  final TimeOfDay _toTime = const TimeOfDay(hour: 00, minute: 00);
-
-  @override
-  Widget build(BuildContext context) {
-    final formKey = new GlobalKey<FormState>();
-    return new Form(
-      autovalidate: true,
-      key: formKey,
-      child: new Column(
-        children: <Widget>[
-          new TextFormField(
-            controller: nameController,
-            validator: (val) =>
-                val.isEmpty ? 'You must insert a name for this party.' : null,
-            onSaved: (val) => party.name = val,
-            decoration: const InputDecoration(
-                labelText: 'Party name',
-                labelStyle: labelStyle,
-                border: const UnderlineInputBorder(
-                    borderSide: const BorderSide(
-                  color: const Color(0xFFE52059),
-                ))),
-            style: Theme.of(context).textTheme.headline.copyWith(
-                  fontSize: 38.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-            maxLength: 20,
-          ),
-          new TextFormField(
-            controller: locationController,
-            validator: (val) => val.isEmpty
-                ? 'You must insert a location for this party.'
-                : null,
-            onSaved: (val) => party.place = val,
-            decoration: const InputDecoration(
-              labelText: 'Location',
-              labelStyle: labelStyle,
-            ),
-            style: inputTextStyle,
-            maxLength: 50,
-          ),
-          new TextFormField(
-            controller: descriptionController,
-            validator: (val) => val.isEmpty
-                ? 'You must insert a description for this party.'
-                : null,
-            onSaved: (val) => party.description = val,
-            decoration: const InputDecoration(
-              labelText: 'Description',
-              labelStyle: labelStyle,
-            ),
-            maxLength: 300,
-            maxLines: 5,
-            style: inputTextStyle,
-          ),
-        ],
-      ),
-    );
-  }
-} */
