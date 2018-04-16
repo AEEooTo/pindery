@@ -58,7 +58,7 @@ class _SignUpPageState extends State<SignupPage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       new Container(
-                        padding: const EdgeInsets.only(top: 30.0),
+                        padding: const EdgeInsets.only(top: 30.0, bottom: 15.0),
                         child: new Text(
                           'Join Pindery!',
                           style: new TextStyle(
@@ -69,7 +69,11 @@ class _SignUpPageState extends State<SignupPage> {
                         ),
                       ),
                       new Container(
-                          padding: EdgeInsets.all(21.0),
+                        decoration: new BoxDecoration(
+                          border: Border.all(color: dividerColor),
+                          shape: BoxShape.circle
+                        ),
+                          padding: EdgeInsets.all(15.0),
                           child: new IconButton(
                             icon: new Icon(
                               Icons.photo_camera,
@@ -84,7 +88,7 @@ class _SignUpPageState extends State<SignupPage> {
                             new InformationField(
                               labelText: 'Name',
                               controller: nameController,
-                              validator: (val) => !isAlpha(val) && !val.isEmpty
+                              validator: (val) => !isAlpha(val) && val.isNotEmpty
                                   ? 'You must insert a name'
                                   : null,
                               onSaved: (val) => _name = val,
@@ -97,7 +101,7 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new InformationField(
                               labelText: 'Surname',
-                              validator: (val) => !isAlpha(val) && !val.isEmpty
+                              validator: (val) => !isAlpha(val) && val.isNotEmpty
                                   ? 'You must insert a surname'
                                   : null,
                               controller: surnameController,
@@ -111,7 +115,7 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new InformationField(
                               labelText: 'E-mail',
-                              validator: (val) => !isEmail(val) && !val.isEmpty
+                              validator: (val) => !isEmail(val) && val.isNotEmpty
                                   ? 'You mus insert a vald email'
                                   : null,
                               textInputType: TextInputType.emailAddress,
@@ -136,7 +140,7 @@ class _SignUpPageState extends State<SignupPage> {
                             new PasswordField(
                               labelText: 'Confirm password',
                               validator: (val) =>
-                                  val != _passwordController.text && !val.isEmpty
+                                  val != _passwordController.text && val.isNotEmpty
                                       ? 'The passwords must be equal'
                                       : null,
                               controller: _confirmPasswordController,
@@ -197,7 +201,7 @@ class SignUpButton extends StatelessWidget {
         } else {
           Scaffold.of(context).showSnackBar(new SnackBar(
                 content: new Text(
-                  "Password different",
+                  "The two passwords are different!",
                   textAlign: TextAlign.center,
                 ),
               ));
@@ -282,6 +286,7 @@ class InformationField extends StatefulWidget {
   final ValueChanged<String> onFieldSubmitted;
   final TextInputType textInputType;
   final TextEditingController controller;
+
 
   @override
   _InformationFieldState createState() => new _InformationFieldState();

@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'drawer.dart';
 import 'theme.dart';
+import 'package:validator/validator.dart';
 
 
 TextEditingController usernameController = new TextEditingController();
@@ -65,6 +66,9 @@ class _LoginPageState extends State<LoginPage> {
                               new Padding(
                                 padding: const EdgeInsets.only(bottom: 16.0),
                                 child: new EmailField(labelText: 'E-mail',
+                                  validator: (val) => !isEmail(val) && val.isNotEmpty
+                                      ? 'You mus insert a vald email'
+                                      : null,
                                   helperText: 'Insert your e-mail',
                                   onFieldSubmitted: (String value) {
                                     setState(() {
