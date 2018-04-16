@@ -24,7 +24,16 @@ class PartyCardList extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             // TODO: add a better loading view
-            return new Text('Loading...');
+            return new Container(
+              child : new Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Center(child: new CircularProgressIndicator()),
+                  new Text("Loading..."),
+                ],
+            ),
+          );
           }
           return new ListView.builder(
               padding: new EdgeInsets.all(8.0),

@@ -8,6 +8,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:math' as Math;
+import 'package:image/image.dart' as Im;
+import 'package:path_provider/path_provider.dart';
 
 import 'theme.dart';
 import 'party.dart';
@@ -15,6 +18,7 @@ import 'party.dart';
 class PinderyDetailsUtils {
   static Future<File> pickImage(ImageSource source) async {
     File imageFile = await ImagePicker.pickImage(source: source);
+    //imageFile = await compressImage(imageFile);
     return imageFile;
   }
 }
@@ -214,3 +218,18 @@ class InputDropdown extends StatelessWidget {
     );
   }
 }
+
+/*Future<File> compressImage(File imageFull) async {
+  print("waiting for temporary directory");
+  final tempDir = await getTemporaryDirectory();
+  final path = tempDir.path;
+  int rand = new Math.Random().nextInt(10000);
+
+  print("Found directory");
+  List<int> tmp = imageFull.readAsBytesSync();
+  print("read image as bytes");
+  Im.Image image = Im.decodeImage(tmp.cast());
+  // Im.Image smallerImage = Im.copyResize(image, 500); // choose the size here, it will maintain aspect ratio
+  print("Decoded image");
+  return new File('$path/img_$rand.jpg')..writeAsBytesSync(Im.encodeJpg(image, quality: 10));
+*/
