@@ -20,7 +20,8 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignupPage> {
-  //final GlobalKey formKey = new GlobalKey<FormState>();
+
+  final formKey = new GlobalKey<FormState>();
 
   String _name;
   TextEditingController nameController = new TextEditingController();
@@ -44,45 +45,45 @@ class _SignUpPageState extends State<SignupPage> {
           child: new PinderyDrawer(),
         ),
         backgroundColor: Colors.white,
-        body: Padding(
+        body: new Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: new Form(
-            //key: formKey,
-            autovalidate: true,
-            child: DropdownButtonHideUnderline(
-              child: new SafeArea(
-                top: false,
-                bottom: false,
-                child: ListView(children: <Widget>[
-                  new Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      new Container(
-                        padding: const EdgeInsets.only(top: 30.0, bottom: 15.0),
-                        child: new Text(
-                          'Join Pindery!',
-                          style: new TextStyle(
-                            fontSize: 35.0,
-                            color: primary,
-                            fontWeight: FontWeight.w800,
-                          ),
+          child: DropdownButtonHideUnderline(
+            child: new SafeArea(
+              top: false,
+              bottom: false,
+              child: ListView(children: <Widget>[
+                new Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    new Container(
+                      padding: const EdgeInsets.only(top: 30.0, bottom: 15.0),
+                      child: new Text(
+                        'Join Pindery!',
+                        style: new TextStyle(
+                          fontSize: 35.0,
+                          color: primary,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
-                      new Container(
-                        decoration: new BoxDecoration(
-                          border: Border.all(color: dividerColor),
-                          shape: BoxShape.circle
-                        ),
-                          padding: EdgeInsets.all(15.0),
-                          child: new IconButton(
-                            icon: new Icon(
-                              Icons.photo_camera,
-                              size: 32.0,
-                            ),
-                            onPressed: () {},
-                            splashColor: secondary,
-                          )),
-                      new Container(
+                    ),
+                    new Container(
+                      decoration: new BoxDecoration(
+                        border: Border.all(color: dividerColor),
+                        shape: BoxShape.circle
+                      ),
+                        padding: EdgeInsets.all(15.0),
+                        child: new IconButton(
+                          icon: new Icon(
+                            Icons.photo_camera,
+                            size: 32.0,
+                          ),
+                          onPressed: () {},
+                          splashColor: secondary,
+                        )),
+                    new Container(
+                      child: new Form(
+                        key: formKey,
+                        autovalidate: true,
                         child: new Column(
                           children: <Widget>[
                             new InformationField(
@@ -140,7 +141,7 @@ class _SignUpPageState extends State<SignupPage> {
                             new PasswordField(
                               labelText: 'Confirm password',
                               validator: (val) =>
-                                  val != _passwordController.text && val.isNotEmpty
+                                  val != _passwordController.text
                                       ? 'The passwords must be equal'
                                       : null,
                               controller: _confirmPasswordController,
@@ -157,16 +158,16 @@ class _SignUpPageState extends State<SignupPage> {
                               child: new SignUpButton(
                                 text: '  SIGN UP  ',
                                 color: secondary,
-                                //formKey: formKey,
+                                formKey: formKey,
                               ),
                             ),
                           ],
                         ),
-                      )
-                    ],
-                  ),
-                ]),
-              ),
+                      ),
+                    )
+                  ],
+                ),
+              ]),
             ),
           ),
         ),
@@ -176,11 +177,11 @@ class _SignUpPageState extends State<SignupPage> {
 }
 
 class SignUpButton extends StatelessWidget {
-  SignUpButton({this.text, this.color, /*this.formKey*/});
+  SignUpButton({this.text, this.color, this.formKey});
 
   final String text;
   final Color color;
-  //final GlobalKey formKey;
+  final formKey;
 
   Widget build(BuildContext context) {
     return new RaisedButton(
@@ -191,20 +192,14 @@ class SignUpButton extends StatelessWidget {
         style: new TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
       ),
       onPressed: () {
-        //final FormState formState = formKey.currentState;
-        if (_confirmPasswordController.text==_passwordController.text) {
-          //formState.save();
+        print('e');
+        final formState = formKey.currentState;
+        if (formState.validate()) {
+          formState.save();
           Navigator.push(
             context,
             new MaterialPageRoute(builder: (context) => new SigninUpPage()),
           );
-        } else {
-          Scaffold.of(context).showSnackBar(new SnackBar(
-                content: new Text(
-                  "The two passwords are different!",
-                  textAlign: TextAlign.center,
-                ),
-              ));
         }
       },
     );
