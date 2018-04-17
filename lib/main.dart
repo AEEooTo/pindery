@@ -24,7 +24,10 @@ class Pindery extends StatelessWidget {
       supportedLocales: pinderySupportedLocales,
       title: 'Pindery',
       theme: pinderyTheme,
-      home: new PinderyHomePage(_auth),
+      home: new PinderyHomePage(firebaseAuth: _auth,),
+      routes: <String, WidgetBuilder>{
+        '/welcome-page' : (BuildContext context) => new WelcomePage(_auth),
+      },
     );
   }
 }

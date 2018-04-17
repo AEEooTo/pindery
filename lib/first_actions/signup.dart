@@ -235,9 +235,7 @@ class SignUpButton extends StatelessWidget {
         formState.save();
         if (_confirmPasswordController.text == _passwordController.text) {
           await _handleSignUp(firebaseAuth, context);
-          Navigator.pop(context);
-          Navigator.pop(context);
-          Navigator.pop(context);
+          Navigator.popAndPushNamed(context, '/welcome-page');
         } else {
           Scaffold.of(context).showSnackBar(new SnackBar(
             content: new Text(
@@ -280,6 +278,10 @@ class SignUpButton extends StatelessWidget {
   void _trulyHandleSignUp(FirebaseAuth firebaseAuth, BuildContext context) async {
     FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
         email: _email, password: _password);
+    print("Still ${firebaseAuth.currentUser()}");
+    firebaseAuth.signInWithEmailAndPassword(email: _email, password: _password);
+    firebaseAuth.onAuthStateChanged
+    print("Now ${firebaseAuth.currentUser()}");
     print("created user : $user");
     Navigator.pop(context);
   }

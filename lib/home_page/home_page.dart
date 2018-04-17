@@ -35,14 +35,16 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    _user = firebaseAuth.onAuthStateChanged.listen(onData)
     new FutureBuilder<FirebaseUser>(
         future: getUser(_user, _auth),
         builder: (context, snapshot) {
           new Text("Loading");
           // loading
         });
+    getUser(_user, _auth);
     if (_user == null) {
-      print("qui dentro, no user");
+      print("qui dentro, user $firebaseUser");
       return new WelcomePage(_auth);
       //new MaterialPageRoute(builder: (context) => new WelcomePage());
     }else {
@@ -75,6 +77,7 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
 
   Future<FirebaseUser> _getUser() async {
     firebaseUser = await firebaseAuth.currentUser();
+    print("ricalcolato");
     return firebaseUser;
   }
 }
