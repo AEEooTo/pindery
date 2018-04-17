@@ -4,15 +4,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'theme.dart';
 import 'package:pindery/home_page/home_page.dart';
+import 'package:pindery/first_actions/welcome.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-const loggedIn = true;
-
 void main() => runApp(new Pindery());
 
 class Pindery extends StatelessWidget {

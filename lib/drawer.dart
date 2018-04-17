@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 import 'theme.dart';
-import 'package:pindery/first_actions/welcome.dart';
 
 final String name = "Edoardo Debenedetti";
 final String coverImagePath = "assets/img/movingParty.jpeg";
@@ -59,9 +58,9 @@ class PinderyDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new DrawerBlock(icon: Icons.star ,data: 'Parties', widgetBuilder: (context) => new WelcomePage(),),
-                new DrawerBlock(icon: Icons.face, data: 'My parties', widgetBuilder: (context) => new WelcomePage(),),
-                new DrawerBlock(icon: Icons.settings ,data: 'Settings', widgetBuilder: (context) => new WelcomePage(),)
+                new DrawerBlock(icon: Icons.star ,data: 'Parties', /*widgetBuilder: (context) => new WelcomePage(),*/),
+                new DrawerBlock(icon: Icons.face, data: 'My parties',),
+                new DrawerBlock(icon: Icons.settings ,data: 'Settings',)
                 ]
             )
           )

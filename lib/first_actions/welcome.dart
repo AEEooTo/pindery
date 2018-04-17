@@ -6,9 +6,12 @@ import '../drawer.dart';
 import '../theme.dart';
 import 'package:pindery/first_actions/login.dart';
 import 'package:pindery/first_actions/signup.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class WelcomePage extends StatelessWidget{
+  WelcomePage(this.firebaseAuth);
   static const routeName = '/welcome-page';
+  FirebaseAuth firebaseAuth;
 
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -68,7 +71,7 @@ class WelcomePage extends StatelessWidget{
                       child: new WelcomeButton(
                         text: 'SIGN UP',
                         color: secondary,
-                        widgetBuilder: (context) => new SignupPage(),
+                        widgetBuilder: (context) => new SignupPage(firebaseAuth: firebaseAuth,),
                       ),
                     )
                   ],
