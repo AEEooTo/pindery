@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'theme.dart';
-import 'home_page.dart';
+import 'package:pindery/home_page/home_page.dart';
 
 const loggedIn = true;
 

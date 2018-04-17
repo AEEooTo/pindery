@@ -4,7 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'theme.dart';
-import 'welcome.dart';
+import 'package:pindery/first_actions/welcome.dart';
 
 final String name = "Edoardo Debenedetti";
 final String coverImagePath = "assets/img/movingParty.jpeg";

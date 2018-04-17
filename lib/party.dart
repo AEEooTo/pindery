@@ -34,7 +34,7 @@ class Party {
     privacy = snapshot['privacy'];
     id = snapshot.documentID;
 
-    //TODO: implement the rest of the function after standardizing datetime
+    // TODO: implement the user and the Pinder-points
     organiser = 'Anna ovviamente';
     rating = 1;
     ratingNumber = 23;
