@@ -6,28 +6,38 @@ import 'package:flutter/material.dart';
 import '../drawer.dart';
 import '../theme.dart';
 import 'package:validator/validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 
 String _password;
 TextEditingController _passwordController = new TextEditingController();
 String _cpassword;
 TextEditingController _confirmPasswordController = new TextEditingController();
+String _email;
+TextEditingController emailController = new TextEditingController();
+final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
+String _name;
+TextEditingController nameController = new TextEditingController();
+String _surname;
+TextEditingController surnameController = new TextEditingController();
 
 class SignupPage extends StatefulWidget {
-  static const routeName = '/login-page';
+  SignupPage({
+    this.firebaseAuth,
+  });
+
+  static final routeName = '/login-page';
+  final FirebaseAuth firebaseAuth;
 
   @override
-  _SignUpPageState createState() => new _SignUpPageState();
+  _SignUpPageState createState() =>
+      new _SignUpPageState(firebaseAuth: firebaseAuth);
 }
 
 class _SignUpPageState extends State<SignupPage> {
-  //final GlobalKey formKey = new GlobalKey<FormState>();
+  _SignUpPageState({this.firebaseAuth});
 
-  String _name;
-  TextEditingController nameController = new TextEditingController();
-  String _surname;
-  TextEditingController surnameController = new TextEditingController();
-  String _email;
-  TextEditingController emailController = new TextEditingController();
+  final FirebaseAuth firebaseAuth;
 
   Widget build(BuildContext context) {
     return new Theme(
@@ -47,7 +57,7 @@ class _SignUpPageState extends State<SignupPage> {
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: new Form(
-            //key: formKey,
+            key: formKey,
             autovalidate: true,
             child: DropdownButtonHideUnderline(
               child: new SafeArea(
@@ -69,10 +79,9 @@ class _SignUpPageState extends State<SignupPage> {
                         ),
                       ),
                       new Container(
-                        decoration: new BoxDecoration(
-                          border: Border.all(color: dividerColor),
-                          shape: BoxShape.circle
-                        ),
+                          decoration: new BoxDecoration(
+                              border: Border.all(color: dividerColor),
+                              shape: BoxShape.circle),
                           padding: EdgeInsets.all(15.0),
                           child: new IconButton(
                             icon: new Icon(
@@ -88,7 +97,8 @@ class _SignUpPageState extends State<SignupPage> {
                             new InformationField(
                               labelText: 'Name',
                               controller: nameController,
-                              validator: (val) => !isAlpha(val) && val.isNotEmpty
+                              validator: (val) =>
+                              !isAlpha(val) && val.isNotEmpty
                                   ? 'You must insert a name'
                                   : null,
                               onSaved: (val) => _name = val,
@@ -101,7 +111,8 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new InformationField(
                               labelText: 'Surname',
-                              validator: (val) => !isAlpha(val) && val.isNotEmpty
+                              validator: (val) =>
+                              !isAlpha(val) && val.isNotEmpty
                                   ? 'You must insert a surname'
                                   : null,
                               controller: surnameController,
@@ -115,15 +126,20 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new InformationField(
                               labelText: 'E-mail',
-                              validator: (val) => !isEmail(val) && val.isNotEmpty
-                                  ? 'You mus insert a vald email'
+                              validator: (val) =>
+                              !isEmail(val) && val.isNotEmpty
+                                  ? 'You must insert a valid email'
                                   : null,
                               textInputType: TextInputType.emailAddress,
                               controller: emailController,
-                              onSaved: (val) => _email = val,
+                              onSaved: (val) {
+                                _email = val;
+                                print("dopo onSaved è : $_email");
+                              },
                               onFieldSubmitted: (String value) {
                                 setState(() {
                                   _email = value;
+                                  print("dopo il primo setstate $_email");
                                 });
                               },
                             ),
@@ -140,9 +156,10 @@ class _SignUpPageState extends State<SignupPage> {
                             new PasswordField(
                               labelText: 'Confirm password',
                               validator: (val) =>
-                                  val != _passwordController.text && val.isNotEmpty
-                                      ? 'The passwords must be equal'
-                                      : null,
+                              val != _passwordController.text &&
+                                  val.isNotEmpty
+                                  ? 'The passwords must be equal'
+                                  : null,
                               controller: _confirmPasswordController,
                               onSaved: (val) => _cpassword = val,
                               onFieldSubmitted: (String value) {
@@ -157,7 +174,7 @@ class _SignUpPageState extends State<SignupPage> {
                               child: new SignUpButton(
                                 text: '  SIGN UP  ',
                                 color: secondary,
-                                //formKey: formKey,
+                                firebaseAuth: firebaseAuth,
                               ),
                             ),
                           ],
@@ -176,13 +193,15 @@ class _SignUpPageState extends State<SignupPage> {
 }
 
 class SignUpButton extends StatelessWidget {
-  SignUpButton({this.text, this.color, /*this.formKey*/});
+  SignUpButton({this.text, this.color, this.firebaseAuth
+  });
 
   final String text;
   final Color color;
-  //final GlobalKey formKey;
+  final FirebaseAuth firebaseAuth;
 
   Widget build(BuildContext context) {
+    print("inizio build : " + _email.toString());
     return new RaisedButton(
       padding: EdgeInsets.symmetric(horizontal: 100.0),
       color: color,
@@ -190,36 +209,69 @@ class SignUpButton extends StatelessWidget {
         text,
         style: new TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
       ),
-      onPressed: () {
-        //final FormState formState = formKey.currentState;
-        if (_confirmPasswordController.text==_passwordController.text) {
-          //formState.save();
-          Navigator.push(
-            context,
-            new MaterialPageRoute(builder: (context) => new SigninUpPage()),
-          );
+      onPressed: () async {
+        final FormState formState = formKey.currentState;
+        formState.save();
+        if (_confirmPasswordController.text == _passwordController.text) {
+          await _handleSignUp(firebaseAuth, context);
+          Navigator.pop(context);
+          Navigator.pop(context);
+          Navigator.pop(context);
         } else {
           Scaffold.of(context).showSnackBar(new SnackBar(
-                content: new Text(
-                  "The two passwords are different!",
-                  textAlign: TextAlign.center,
-                ),
-              ));
+            content: new Text(
+              "The two passwords are different!",
+              textAlign: TextAlign.center,
+            ),
+          ));
         }
       },
     );
   }
+
+  Future<Null> _handleSignUp(FirebaseAuth firebaseAuth, BuildContext context) async {
+    _trulyHandleSignUp(firebaseAuth, context);
+    return showDialog<Null>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return new AlertDialog(
+          title: new Text('Signin up!'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('You\'ll be soon ready to party hard'),
+                new Center(
+                  child: new Container(
+                    height: 1.5,
+                    margin: EdgeInsets.only(top: 16.0),
+                    child: new LinearProgressIndicator(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _trulyHandleSignUp(FirebaseAuth firebaseAuth, BuildContext context) async {
+    FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
+        email: _email, password: _password);
+    print("created user : $user");
+    Navigator.pop(context);
+  }
 }
 
 class PasswordField extends StatefulWidget {
-  const PasswordField(
-      {this.hintText,
-      this.labelText,
-      this.helperText,
-      this.onSaved,
-      this.validator,
-      this.onFieldSubmitted,
-      this.controller});
+  const PasswordField({this.hintText,
+    this.labelText,
+    this.helperText,
+    this.onSaved,
+    this.validator,
+    this.onFieldSubmitted,
+    this.controller});
 
   final String hintText;
   final String labelText;
@@ -268,15 +320,14 @@ class _PasswordFieldState extends State<PasswordField> {
 }
 
 class InformationField extends StatefulWidget {
-  const InformationField(
-      {this.hintText,
-      this.labelText,
-      this.helperText,
-      this.onSaved,
-      this.validator,
-      this.onFieldSubmitted,
-      this.textInputType,
-      this.controller});
+  const InformationField({this.hintText,
+    this.labelText,
+    this.helperText,
+    this.onSaved,
+    this.validator,
+    this.onFieldSubmitted,
+    this.textInputType,
+    this.controller});
 
   final String hintText;
   final String labelText;
@@ -286,7 +337,6 @@ class InformationField extends StatefulWidget {
   final ValueChanged<String> onFieldSubmitted;
   final TextInputType textInputType;
   final TextEditingController controller;
-
 
   @override
   _InformationFieldState createState() => new _InformationFieldState();
@@ -325,7 +375,7 @@ class _InformationFieldState extends State<InformationField> {
 
 ///////
 class SigninUpPage extends StatelessWidget {
-  SigninUpPage({Contex});
+  SigninUpPage({Context});
 
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -346,9 +396,9 @@ class SigninUpPage extends StatelessWidget {
                 width: 214.0,
                 decoration: new BoxDecoration(
                     image: new DecorationImage(
-                  image: new AssetImage('assets/img/logo_v_2_rosso.png'),
-                  fit: BoxFit.fitHeight,
-                )),
+                      image: new AssetImage('assets/img/logo_v_2_rosso.png'),
+                      fit: BoxFit.fitHeight,
+                    )),
               ),
             ),
             new Padding(

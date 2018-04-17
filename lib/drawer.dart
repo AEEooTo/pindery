@@ -59,7 +59,7 @@ class PinderyDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new DrawerBlock(icon: Icons.star ,data: 'Parties', widgetBuilder: (context) => new WelcomePage(),),
+                new DrawerBlock(icon: Icons.star ,data: 'Parties', /*widgetBuilder: (context) => new WelcomePage(),*/),
                 new DrawerBlock(icon: Icons.face, data: 'My parties',),
                 new DrawerBlock(icon: Icons.settings ,data: 'Settings',)
                 ]
