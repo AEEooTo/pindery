@@ -12,6 +12,9 @@ TextEditingController _passwordController = new TextEditingController();
 String _cpassword;
 TextEditingController _confirmPasswordController = new TextEditingController();
 
+String _name;
+String _surname;
+String _email;
 class SignupPage extends StatefulWidget {
   static const routeName = '/login-page';
 
@@ -23,11 +26,8 @@ class _SignUpPageState extends State<SignupPage> {
 
   final formKey = new GlobalKey<FormState>();
 
-  String _name;
   TextEditingController nameController = new TextEditingController();
-  String _surname;
   TextEditingController surnameController = new TextEditingController();
-  String _email;
   TextEditingController emailController = new TextEditingController();
 
   Widget build(BuildContext context) {
@@ -77,21 +77,28 @@ class _SignUpPageState extends State<SignupPage> {
                             Icons.photo_camera,
                             size: 32.0,
                           ),
-                          onPressed: () {},
+                          //TODO: actually implement photo upload
+                          onPressed: () {
+                            Scaffold.of(formKey.currentContext).showSnackBar(new SnackBar(
+                              content: new Text(
+                                "Should still be implemented",
+                                textAlign: TextAlign.center,
+                              ),
+                            ));
+                          },
                           splashColor: secondary,
                         )),
                     new Container(
                       child: new Form(
                         key: formKey,
-                        autovalidate: true,
                         child: new Column(
                           children: <Widget>[
                             new InformationField(
                               labelText: 'Name',
                               controller: nameController,
-                              validator: (val) => !isAlpha(val) && val.isNotEmpty
-                                  ? 'You must insert a name'
-                                  : null,
+                              validator: (val) => (!isAlpha(val)&& val.isEmpty
+                                  ? 'You must a valid username'
+                                  : null) ,
                               onSaved: (val) => _name = val,
                               onFieldSubmitted: (String value) {
                                 setState(() {
@@ -102,8 +109,8 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new InformationField(
                               labelText: 'Surname',
-                              validator: (val) => !isAlpha(val) && val.isNotEmpty
-                                  ? 'You must insert a surname'
+                              validator: (val) => !isAlpha(val) && val.isEmpty
+                                  ? 'You must insert a valid surname'
                                   : null,
                               controller: surnameController,
                               onSaved: (val) => _surname = val,
@@ -116,8 +123,8 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new InformationField(
                               labelText: 'E-mail',
-                              validator: (val) => !isEmail(val) && val.isNotEmpty
-                                  ? 'You mus insert a vald email'
+                              validator: (val) => !isEmail(val) && val.isEmpty
+                                  ? 'You must insert a valid email'
                                   : null,
                               textInputType: TextInputType.emailAddress,
                               controller: emailController,
@@ -130,6 +137,7 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new PasswordField(
                               labelText: 'Password',
+                              validator: (val) => val.isEmpty ? '' : null,
                               controller: _passwordController,
                               onSaved: (val) => _password = val,
                               onFieldSubmitted: (String value) {
@@ -192,7 +200,6 @@ class SignUpButton extends StatelessWidget {
         style: new TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
       ),
       onPressed: () {
-        print('e');
         final formState = formKey.currentState;
         if (formState.validate()) {
           formState.save();
