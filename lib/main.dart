@@ -11,7 +11,6 @@ import 'theme.dart';
 import 'package:pindery/home_page/home_page.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final GoogleSignIn _googleSignIn = new GoogleSignIn();
 const loggedIn = true;
 
 void main() => runApp(new Pindery());
@@ -27,7 +26,7 @@ class Pindery extends StatelessWidget {
       supportedLocales: pinderySupportedLocales,
       title: 'Pindery',
       theme: pinderyTheme,
-      home: (loggedIn == true ? new PinderyHomePage() : null/*todo add pre-auth*/),
+      home: new PinderyHomePage(_auth),
     );
   }
 }
