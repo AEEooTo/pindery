@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'party_card.dart';
-import 'party.dart';
+import 'package:pindery/home_page/party_card.dart';
+import '../party.dart';
 
 const String testCity = "shanghai";
 

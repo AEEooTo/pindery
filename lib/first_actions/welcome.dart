@@ -3,16 +3,17 @@
 ///
 
 import 'package:flutter/material.dart';
-import 'drawer.dart';
-import 'theme.dart';
-import 'login.dart';
-import 'signup.dart';
+import '../drawer.dart';
+import '../theme.dart';
+import 'package:pindery/first_actions/login.dart';
+import 'package:pindery/first_actions/signup.dart';
 
 class WelcomePage extends StatelessWidget{
   static const routeName = '/welcome-page';
 
   Widget build(BuildContext context) {
     return new Scaffold(
+      // TODO: why the drawer here?
       drawer: new Drawer(
         child: new PinderyDrawer(),
       ),

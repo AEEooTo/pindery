@@ -1,8 +1,7 @@
 /// This file contains the code for Pindery's homepage's structure.
 ///
 import 'package:flutter/material.dart';
-import 'theme.dart';
-import 'drawer.dart' show PinderyDrawer;
+import '../drawer.dart' show PinderyDrawer;
 import 'package:pindery/party_creation_editing/create_party.dart';
 import 'party_cardlist.dart';
 

@@ -8,7 +8,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'theme.dart';
-import 'home_page.dart';
+import 'package:pindery/home_page/home_page.dart';
 
 const loggedIn = true;
 

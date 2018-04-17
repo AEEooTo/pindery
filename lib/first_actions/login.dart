@@ -3,8 +3,8 @@
 ///
 
 import 'package:flutter/material.dart';
-import 'drawer.dart';
-import 'theme.dart';
+import '../drawer.dart';
+import '../theme.dart';
 import 'package:validator/validator.dart';
 
 
@@ -271,6 +271,7 @@ class LogingInPage extends StatelessWidget{
   LogingInPage({Contex});
   Widget build(BuildContext context){
     return new Scaffold(
+      // TODO: Why the drawer here?
       drawer: new Drawer(
         child: new PinderyDrawer(),
       ),
