@@ -231,17 +231,6 @@ Future<File> compressImage(File imageFull) async {
     ..writeAsBytesSync(Im.encodeJpg(image, quality: 50));
 }
 
-/// Function to parse a time from a TimeOfDay object to obtain a string
-/// // TODO: delete this method if [dateTimeParser] works
-/* String hourStringParser(TimeOfDay time) {
-  String hours = time.hour.toString();
-  String minutes = time.minute.toString();
-  if (time.minute < 10) {
-    minutes = '0' + time.minute.toString();
-  }
-  return hours + ':' + minutes;
-} */
-
 /// Function to parse a DateTime from a TimeOfDay object and DateTime object to obtain a string
 DateTime dateTimeParser(TimeOfDay time, DateTime date) {
   int _minutes = time.minute;
@@ -251,4 +240,17 @@ DateTime dateTimeParser(TimeOfDay time, DateTime date) {
   int _year = date.year;
   print(DateTime(_year, _month, _day, _hours, _minutes));
   return DateTime(_year, _month, _day, _hours, _minutes);
+}
+
+bool isNumericAndPositive(String s) {
+  int parsedInt;
+  if (s == null) {
+    return false;
+  }
+  if (int.parse(s, onError: (e) => null) == null) {
+    return false;
+  } else {
+    parsedInt = int.parse(s);
+  }
+  return parsedInt > 0;
 }

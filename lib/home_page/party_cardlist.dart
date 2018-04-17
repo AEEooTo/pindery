@@ -42,7 +42,6 @@ class PartyCardList extends StatelessWidget {
               padding: new EdgeInsets.all(8.0),
               reverse: false,
               itemBuilder: (_, int index) {
-                // TODO: invert the order of the parties (from newer to older)
                 List<DocumentSnapshot> documentsList = snapshot.data.documents;
                 documentsList.sort(
                     (DocumentSnapshot documentA, DocumentSnapshot documentB) {

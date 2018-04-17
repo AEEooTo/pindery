@@ -1,6 +1,5 @@
 /// This page contains the code for the welcoming page of the app.
 ///
-///
 
 import 'package:flutter/material.dart';
 import '../drawer.dart';

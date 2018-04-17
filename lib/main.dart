@@ -36,4 +36,3 @@ List<Locale> pinderySupportedLocales = [
   const Locale('en', ''), // English
 ];
 
-

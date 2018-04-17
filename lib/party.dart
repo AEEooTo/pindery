@@ -6,6 +6,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
+import 'catalogue_element.dart';
+
 /// Class that defines every Party object in the app.
 class Party {
   Party({this.name,
@@ -22,6 +24,7 @@ class Party {
     this.imageUrl,
     this.imageLocalPath,
     this.maxPeople,
+    this.catalogue,
   });
 
   Party.fromJSON(DocumentSnapshot snapshot) {
@@ -56,6 +59,7 @@ class Party {
   String description;
   String id;
   int maxPeople;
+  List<CatalogueElement> catalogue;
 
   static const List<String> privacyOptions = ['Public', 'Closed', 'Secret'];
   static const List<IconData> privacyOptionsIcons = [

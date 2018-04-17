@@ -1,4 +1,4 @@
-/// create_party.dart
+/// step_1_create.dart
 /// contains the code for the first step of creating a party
 
 // TODO: abstract the form
@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'party_details_utils.dart';
 import '../theme.dart';
 import '../party.dart';
-import 'catalogue_choosing.dart';
+import 'step_2_catalogue.dart';
 
 /// Page used to create a new party
 class CreatePartyPage extends StatefulWidget {
@@ -168,7 +168,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                                     child: new TextFormField(
                                       controller: maxPeopleController,
                                       keyboardType: TextInputType.number,
-                                      validator: (val) => !isNumeric(val)
+                                      validator: (val) => !isNumericAndPositive(val)
                                           ? 'You must insert the maximum\n number of people'
                                           : null,
                                       onSaved: (val) =>
@@ -245,18 +245,11 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     );
   }
 
-  bool isNumeric(String s) {
-    if (s == null) {
-      return false;
-    }
-    return int.parse(s, onError: (e) => null) != null;
-  }
-
   bool _validateFields() {
     return nameController.text.trim().isNotEmpty &&
         locationController.text.trim().isNotEmpty &&
         descriptionController.text.trim().isNotEmpty &&
-        isNumeric(maxPeopleController.text) &&
+        isNumericAndPositive(maxPeopleController.text) &&
         party.imageLocalPath != null;
   }
 
