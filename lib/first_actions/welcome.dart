@@ -26,7 +26,7 @@ class WelcomePage extends StatelessWidget{
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 33.0),
           child: new Column(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.only( top: 96.0),
@@ -64,7 +64,7 @@ class WelcomePage extends StatelessWidget{
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(bottom:73.0),
+                      padding: const EdgeInsets.only(bottom:0.0),
                       child: new WelcomeButton(
                         text: 'SIGN UP',
                         color: secondary,

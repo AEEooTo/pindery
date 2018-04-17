@@ -22,7 +22,7 @@ class _LoginPageState extends State<LoginPage> {
 
   String _email;
   String _password;
-
+  final formKey = new GlobalKey<FormState>();
 
   Widget build(BuildContext context) {
     return new Theme(
@@ -62,36 +62,52 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         new Container(
                           child: new Column(
-                            children: <Widget>[
-                              new Padding(
-                                padding: const EdgeInsets.only(bottom: 16.0),
-                                child: new EmailField(labelText: 'E-mail',
-                                  validator: (val) => !isEmail(val) && val.isNotEmpty
-                                      ? 'You mus insert a vald email'
-                                      : null,
-                                  helperText: 'Insert your e-mail',
-                                  onFieldSubmitted: (String value) {
-                                    setState(() {
-                                      _email = value;
-                                    });
-                                  },
-                                ),
-                              ),
-                              new PasswordField(
-                                labelText: 'Password',
-                                helperText: 'Insert your password',
-                                onFieldSubmitted: (String value) {
-                                  setState(() {
-                                    _password = value;
-                                  });
-                                },
-
-                              ),
-                              new Padding(
-                                padding: const EdgeInsets.only(top: 80.0),
-                                child: new LogInButton(
-                                  text: '  LOG IN  ',
-                                  color: primary,
+                            children: [
+                              new Form(
+                                key: formKey,
+                                child: new Column(
+                                  children: <Widget>[
+                                    new Padding(
+                                      padding: const EdgeInsets.only(bottom: 16.0),
+                                      child: new EmailField(labelText: 'E-mail',
+                                        validator: (val) => !isEmail(val)
+                                            ? 'You must insert a valid email'
+                                            : null,
+                                        helperText: 'Insert your e-mail',
+                                        onSaved: (String value){
+                                          _email = value;
+                                        },
+                                        onFieldSubmitted: (String value) {
+                                          setState(() {
+                                            _email = value;
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    new PasswordField(
+                                      validator: (val) => val.isEmpty
+                                          ? 'You must insert a password'
+                                          : null,
+                                      labelText: 'Password',
+                                      helperText: 'Insert your password',
+                                      onSaved: (String value){
+                                        _password = value;
+                                      },
+                                      onFieldSubmitted: (String value) {
+                                        setState(() {
+                                          _password = value;
+                                        });
+                                      },
+                                    ),
+                                    new Padding(
+                                      padding: const EdgeInsets.only(top: 80.0),
+                                      child: new LogInButton(
+                                        text: '  LOG IN  ',
+                                        color: primary,
+                                        formKey: formKey,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -111,10 +127,11 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 class LogInButton extends StatelessWidget{
-  LogInButton({this.text, this.color});
+  LogInButton({this.text, this.color, this.formKey});
 
   final String text;
   final Color color;
+  final formKey;
 
   Widget build (BuildContext context){
     return new RaisedButton(
@@ -127,12 +144,17 @@ class LogInButton extends StatelessWidget{
             color: Colors.white
         ),),
       onPressed: (){
-        
-        Navigator.push(
-          context,
-          new MaterialPageRoute(
-              builder: (context) => new LogingInPage()),
-        );
+        final formState = formKey.currentState;
+        if (formState.validate())
+          {
+            formState.save();
+            Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => new LogingInPage()),
+            );
+          }
+
       },
     );
   }
