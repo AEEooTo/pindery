@@ -30,13 +30,13 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
       if (_hideButtonController.position.userScrollDirection ==
           ScrollDirection.reverse) {
         setState(() {
-          _isVisible = true;
+          _isVisible = false;
         });
       }
       if (_hideButtonController.position.userScrollDirection ==
           ScrollDirection.forward) {
         setState(() {
-          _isVisible = false;
+          _isVisible = true;
         });
       }
     });
@@ -54,17 +54,19 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
       ),
       body: new PartyCardList(hideButtonController: _hideButtonController,),
     floatingActionButton: new Opacity(
-        opacity: !_isVisible ? 1.0 : 0.0,
+        opacity: _isVisible ? 0.0 : 1.0,
         child: new FloatingActionButton(
           onPressed: () async {
-            await Navigator.push(
-              context,
-              new MaterialPageRoute(
-                  builder: (context) =>
-                  new CreatePartyPage(
-                    homePageKey: homeScaffoldKey,
-                  )),
-            );
+            if (_isVisible==false) {
+              await Navigator.push(
+                context,
+                new MaterialPageRoute(
+                    builder: (context) =>
+                    new CreatePartyPage(
+                      homePageKey: homeScaffoldKey,
+                    )),
+              );
+            }
           },
           child: new Icon(Icons.add),
         ),
