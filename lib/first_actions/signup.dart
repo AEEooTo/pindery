@@ -55,9 +55,6 @@ class _SignUpPageState extends State<SignupPage> {
         brightness: Brightness.light,
       ),
       child: new Scaffold(
-        drawer: new Drawer(
-          child: new PinderyDrawer(),
-        ),
         backgroundColor: Colors.white,
         body: new Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -246,7 +243,12 @@ class SignUpButton extends StatelessWidget {
       Navigator.of(context).popAndPushNamed('/home-page');
     } else {
       Navigator.pop(context);
-      print('This name exists already');
+      Scaffold.of(context).showSnackBar(new SnackBar(
+        content: new Text(
+          "This name already exists",
+          textAlign: TextAlign.center,
+        ),
+      ));
     }
   }
 }
@@ -259,7 +261,7 @@ Future<bool> _trulyHandleSignUp(
     print('Trying to signup');
     FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
         email: _email, password: _password);
-    print("created user inside signup: $user");
+    //todo: implement user (as our proprietary object) creation
   } catch (error) {
     hasSucceeded = false;
   }

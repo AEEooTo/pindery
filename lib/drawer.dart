@@ -4,6 +4,7 @@
 
 import 'package:flutter/material.dart';
 import 'theme.dart';
+import 'settings.dart';
 
 final String name = "Edoardo Debenedetti";
 final String coverImagePath = "assets/img/movingParty.jpeg";
@@ -60,7 +61,7 @@ class PinderyDrawer extends StatelessWidget {
               children: <Widget>[
                 new DrawerBlock(icon: Icons.star ,data: 'Parties', /*widgetBuilder: (context) => new WelcomePage(),*/),
                 new DrawerBlock(icon: Icons.face, data: 'My parties',),
-                new DrawerBlock(icon: Icons.settings ,data: 'Settings',)
+                new DrawerBlock(icon: Icons.settings ,data: 'Settings',widgetBuilder: (context) => new Settings(),)
                 ]
             )
           )
@@ -101,6 +102,7 @@ class DrawerBlock extends StatelessWidget {
                 ),
             ),
             onTap: (){
+              //todo : change push with popandpushnamed
               Navigator.push(
                 context,
                 new MaterialPageRoute(
