@@ -54,7 +54,7 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
       ),
       body: new PartyCardList(hideButtonController: _hideButtonController,),
     floatingActionButton: new Opacity(
-        opacity: !_isVisible ? 0.0 : 1.0,
+        opacity: _isVisible ? 0.0 : 1.0,
         child: new FloatingActionButton(
           onPressed: () async {
             if (_isVisible==false) {
@@ -69,7 +69,7 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
             }
           },
           child: new Icon(Icons.add),
-          mini: !_isVisible? true : false,
+          mini: _isVisible? true : false,
           heroTag: null,
         ),
       ),
