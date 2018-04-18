@@ -28,7 +28,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
 
   // keys
   final GlobalKey scaffoldKey = new GlobalKey<ScaffoldState>();
-  final GlobalKey formKey = new GlobalKey<FormState>();
+  final formKey = new GlobalKey<FormState>();
 
   // To be filled party instance
   Party party = new Party();
@@ -77,7 +77,6 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                   new Padding(
                     padding: const EdgeInsets.only(left: 16.0, right: 16.0),
                     child: new Form(
-                      autovalidate: true,
                       key: formKey,
                       child: new Column(
                         children: <Widget>[
@@ -232,8 +231,12 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                         style: new TextStyle(color: Colors.white),
                       ),
                       // TODO: add party catalogue screen
-                      onPressed:
-                          _validateFields() ? () => _handleSubmitted() : null,
+                      onPressed: () {
+                        final formState = formKey.currentState;
+                        if (formState.validate()) {
+                          _handleSubmitted();
+                        }
+                      }
                     ),
                   ),
                 ],
@@ -243,14 +246,6 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
         ),
       ),
     );
-  }
-
-  bool _validateFields() {
-    return nameController.text.trim().isNotEmpty &&
-        locationController.text.trim().isNotEmpty &&
-        descriptionController.text.trim().isNotEmpty &&
-        isNumericAndPositive(maxPeopleController.text) &&
-        party.imageLocalPath != null;
   }
 
   void _handleSubmitted() {

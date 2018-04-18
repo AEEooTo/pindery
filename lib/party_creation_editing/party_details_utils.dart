@@ -58,16 +58,16 @@ class PartyImageContainerState extends State<PartyImageContainer> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           new Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
+            padding: const EdgeInsets.only(bottom: 14.0),
             child: new Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 new Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 8.0),
                   child: new IconButton(
                     icon: new Icon(
                       Icons.photo,
-                      color: Theme.of(context).accentColor,
+                      color: primary,
                       size: 45.0,
                     ),
                     tooltip: 'Choose a picture from the gallery',
@@ -79,11 +79,11 @@ class PartyImageContainerState extends State<PartyImageContainer> {
                   ),
                 ),
                 new Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
                   child: new IconButton(
                     icon: new Icon(
                       Icons.camera,
-                      color: Theme.of(context).accentColor,
+                      color: primary,
                       size: 45.0,
                     ),
                     onPressed: () async {
@@ -98,10 +98,11 @@ class PartyImageContainerState extends State<PartyImageContainer> {
             ),
           ),
           new Text(
-            'Add a picture!',
+            'Add a picture',
             style: new TextStyle(
-              color: Theme.of(context).accentColor,
+              color: primary,
               fontSize: 26.0,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],
