@@ -13,8 +13,12 @@ String _cpassword;
 TextEditingController _confirmPasswordController = new TextEditingController();
 
 String _name;
+TextEditingController nameController = new TextEditingController();
 String _surname;
+TextEditingController surnameController = new TextEditingController();
 String _email;
+TextEditingController emailController = new TextEditingController();
+
 class SignupPage extends StatefulWidget {
   static const routeName = '/login-page';
 
@@ -25,10 +29,6 @@ class SignupPage extends StatefulWidget {
 class _SignUpPageState extends State<SignupPage> {
 
   final formKey = new GlobalKey<FormState>();
-
-  TextEditingController nameController = new TextEditingController();
-  TextEditingController surnameController = new TextEditingController();
-  TextEditingController emailController = new TextEditingController();
 
   Widget build(BuildContext context) {
     return new Theme(
@@ -96,7 +96,7 @@ class _SignUpPageState extends State<SignupPage> {
                             new InformationField(
                               labelText: 'Name',
                               controller: nameController,
-                              validator: (val) => (!isAlpha(val)&& val.isEmpty
+                              validator: (val) => (!isAlpha(val)|| val.isEmpty
                                   ? 'You must a valid username'
                                   : null) ,
                               onSaved: (val) => _name = val,
@@ -109,7 +109,7 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new InformationField(
                               labelText: 'Surname',
-                              validator: (val) => !isAlpha(val) && val.isEmpty
+                              validator: (val) => !isAlpha(val) || val.isEmpty
                                   ? 'You must insert a valid surname'
                                   : null,
                               controller: surnameController,
@@ -123,7 +123,7 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new InformationField(
                               labelText: 'E-mail',
-                              validator: (val) => !isEmail(val) && val.isEmpty
+                              validator: (val) => !isEmail(val) || val.isEmpty
                                   ? 'You must insert a valid email'
                                   : null,
                               textInputType: TextInputType.emailAddress,
@@ -136,6 +136,7 @@ class _SignUpPageState extends State<SignupPage> {
                               },
                             ),
                             new PasswordField(
+                              activateIcon: true,
                               labelText: 'Password',
                               validator: (val) => val.isEmpty ? '' : null,
                               controller: _passwordController,
@@ -147,6 +148,7 @@ class _SignUpPageState extends State<SignupPage> {
                               },
                             ),
                             new PasswordField(
+                              activateIcon: false,
                               labelText: 'Confirm password',
                               validator: (val) =>
                                   val != _passwordController.text
@@ -221,7 +223,8 @@ class PasswordField extends StatefulWidget {
       this.onSaved,
       this.validator,
       this.onFieldSubmitted,
-      this.controller});
+      this.controller,
+      this.activateIcon});
 
   final String hintText;
   final String labelText;
@@ -230,13 +233,14 @@ class PasswordField extends StatefulWidget {
   final FormFieldValidator<String> validator;
   final ValueChanged<String> onFieldSubmitted;
   final TextEditingController controller;
+  final bool activateIcon;
 
   @override
   _PasswordFieldState createState() => new _PasswordFieldState();
 }
 
 class _PasswordFieldState extends State<PasswordField> {
-  bool _obscureText = false;
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -262,23 +266,31 @@ class _PasswordFieldState extends State<PasswordField> {
         helperText: widget.helperText,
         helperStyle: new TextStyle(
           color: dividerColor,
-          fontSize: 14.0,
-        ),
+          fontSize: 14.0,),
+        suffixIcon: widget.activateIcon ? new GestureDetector(
+            onTap: () {
+              setState(() {
+                _obscureText = !_obscureText;
+              });
+            },
+            child: new Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+          ): null,
       ),
     );
   }
 }
 
-class InformationField extends StatefulWidget {
-  const InformationField(
-      {this.hintText,
-      this.labelText,
-      this.helperText,
-      this.onSaved,
-      this.validator,
-      this.onFieldSubmitted,
-      this.textInputType,
-      this.controller});
+class InformationField extends StatelessWidget {
+  InformationField({
+  this.hintText,
+  this.labelText,
+  this.helperText,
+  this.onSaved,
+  this.validator,
+  this.onFieldSubmitted,
+  this.controller,
+  this.activateIcon,
+  this.textInputType});
 
   final String hintText;
   final String labelText;
@@ -286,36 +298,32 @@ class InformationField extends StatefulWidget {
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String> validator;
   final ValueChanged<String> onFieldSubmitted;
-  final TextInputType textInputType;
   final TextEditingController controller;
+  final bool activateIcon;
+  final TextInputType textInputType;
 
 
-  @override
-  _InformationFieldState createState() => new _InformationFieldState();
-}
-
-class _InformationFieldState extends State<InformationField> {
   @override
   Widget build(BuildContext context) {
     return new TextFormField(
-      controller: widget.controller,
-      keyboardType: widget.textInputType,
-      onSaved: widget.onSaved,
-      validator: widget.validator,
-      onFieldSubmitted: widget.onFieldSubmitted,
+      controller: controller,
+      keyboardType: textInputType,
+      onSaved: onSaved,
+      validator: validator,
+      onFieldSubmitted: onFieldSubmitted,
       decoration: new InputDecoration(
         fillColor: Colors.white,
         border: const UnderlineInputBorder(),
         filled: true,
-        hintText: widget.hintText,
+        hintText: hintText,
         hintStyle: new TextStyle(
           color: dividerColor,
           fontSize: 30.0,
         ),
-        labelText: widget.labelText,
+        labelText: labelText,
         labelStyle: new TextStyle(
             color: dividerColor, fontSize: 20.0, fontWeight: FontWeight.w300),
-        helperText: widget.helperText,
+        helperText: helperText,
         helperStyle: new TextStyle(
           color: dividerColor,
           fontSize: 14.0,
@@ -324,17 +332,11 @@ class _InformationFieldState extends State<InformationField> {
     );
   }
 }
-
 ///////
 class SigninUpPage extends StatelessWidget {
-  SigninUpPage({Contex});
 
   Widget build(BuildContext context) {
     return new Scaffold(
-      // TODO: Why the drawer here?
-      drawer: new Drawer(
-        child: new PinderyDrawer(),
-      ),
       body: Container(
         alignment: Alignment.center,
         decoration: new BoxDecoration(color: Colors.white),

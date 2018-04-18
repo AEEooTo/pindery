@@ -7,7 +7,6 @@ import '../drawer.dart';
 import '../theme.dart';
 import 'package:validator/validator.dart';
 
-
 TextEditingController usernameController = new TextEditingController();
 TextEditingController passwordController = new TextEditingController();
 
@@ -35,9 +34,6 @@ class _LoginPageState extends State<LoginPage> {
         brightness: Brightness.light,
       ),
       child: new Scaffold(
-        drawer: new Drawer(
-          child: new PinderyDrawer(),
-        ),
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -229,8 +225,9 @@ class _PasswordFieldState extends State<PasswordField> {
   }
 }
 
-class EmailField extends StatefulWidget {
-  const EmailField({
+class EmailField extends StatelessWidget {
+
+  EmailField({
 
     this.hintText,
     this.labelText,
@@ -240,7 +237,6 @@ class EmailField extends StatefulWidget {
     this.onFieldSubmitted,
   });
 
-
   final String hintText;
   final String labelText;
   final String helperText;
@@ -249,36 +245,30 @@ class EmailField extends StatefulWidget {
   final ValueChanged<String> onFieldSubmitted;
 
   @override
-  _EmailFieldState createState() => new _EmailFieldState();
-}
-
-class _EmailFieldState extends State<EmailField> {
-
-  @override
   Widget build(BuildContext context) {
     return new TextFormField(
       controller: usernameController,
       keyboardType: TextInputType.emailAddress,
       maxLength: 30,
-      onSaved: widget.onSaved,
-      validator: widget.validator,
-      onFieldSubmitted: widget.onFieldSubmitted,
+      onSaved: onSaved,
+      validator: validator,
+      onFieldSubmitted: onFieldSubmitted,
       decoration: new InputDecoration(
         fillColor: Colors.white,
         border: const UnderlineInputBorder(),
         filled: true,
-        hintText: widget.hintText,
+        hintText: hintText,
         hintStyle: new TextStyle(
           color: dividerColor,
           fontSize: 30.0,
         ),
-        labelText: widget.labelText,
+        labelText: labelText,
         labelStyle: new TextStyle(
             color: dividerColor,
             fontSize: 30.0,
             fontWeight: FontWeight.w300
         ),
-        helperText: widget.helperText,
+        helperText: helperText,
         helperStyle: new TextStyle(
           color: dividerColor,
           fontSize: 14.0,
