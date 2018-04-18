@@ -6,8 +6,8 @@ import '../party.dart';
 const String testCity = "shanghai";
 
 class PartyCardList extends StatelessWidget {
-  PartyCardList({this.city});
-
+  PartyCardList({this.city, this.hideButtonController});
+  final ScrollController hideButtonController;
   final String city;
 
   CollectionReference _getReference(String city) {
@@ -39,6 +39,7 @@ class PartyCardList extends StatelessWidget {
             );
           }
           return new ListView.builder(
+            controller: hideButtonController,
               padding: new EdgeInsets.all(8.0),
               reverse: false,
               itemBuilder: (_, int index) {
@@ -53,7 +54,8 @@ class PartyCardList extends StatelessWidget {
                 Party party = new Party.fromJSON(document);
                 return new PartyCard(party: party);
               },
-              itemCount: snapshot.data.documents.length);
+              itemCount: snapshot.data.documents.length,
+          scrollDirection: Axis.vertical,);
         });
   }
 }
