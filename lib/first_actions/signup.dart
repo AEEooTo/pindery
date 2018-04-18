@@ -237,27 +237,17 @@ class SignUpButton extends StatelessWidget {
     );
   }
 
-  Widget _handleSignUp(BuildContext context) {
-    return new FutureBuilder(
-        future: _trulyHandleSignUp(firebaseAuth, context),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            print('Waiting for signin up');
-            Navigator.push(
-              context,
-              new MaterialPageRoute(builder: (context) => new SigninUpPage()),
-            );
-          }
-          if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.data == false) {
-              Navigator.pop(context);
-              print('This name exists already');
-            } else {
-              print(snapshot.data);
-              Navigator.popAndPushNamed(context, '/welcome-page');
-            }
-          }
-        });
+  Future<Null> _handleSignUp(BuildContext context) async {
+    Navigator
+        .of(context)
+        .push(new MaterialPageRoute(builder: (context) => new SigninUpPage()));
+    bool result = await _trulyHandleSignUp(firebaseAuth, context);
+    if (result) {
+      Navigator.of(context).popAndPushNamed('/home-page');
+    } else {
+      Navigator.pop(context);
+      print('This name exists already');
+    }
   }
 }
 

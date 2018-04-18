@@ -10,7 +10,6 @@ import 'theme.dart';
 import 'package:pindery/home_page/home_page.dart';
 import 'package:pindery/first_actions/welcome.dart';
 
-
 void main() => runApp(new Pindery());
 
 class Pindery extends StatelessWidget {
@@ -26,7 +25,8 @@ class Pindery extends StatelessWidget {
       theme: pinderyTheme,
       home: new PinderyHomePage(),
       routes: <String, WidgetBuilder>{
-        '/welcome-page' : (BuildContext context) => new WelcomePage(),
+        '/welcome-page': (BuildContext context) => new WelcomePage(),
+        '/home-page': (BuildContext context) => new HomePage(),
       },
     );
   }
@@ -35,4 +35,3 @@ class Pindery extends StatelessWidget {
 List<Locale> pinderySupportedLocales = [
   const Locale('en', ''), // English
 ];
-
