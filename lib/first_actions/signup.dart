@@ -77,15 +77,13 @@ class _SignUpPageState extends State<SignupPage> {
                           fontSize: 35.0,
                           color: primary,
                           fontWeight: FontWeight.w800,
-
                         ),
                       ),
                     ),
                     new Container(
-                      decoration: new BoxDecoration(
-                        border: Border.all(color: dividerColor),
-                        shape: BoxShape.circle
-                      ),
+                        decoration: new BoxDecoration(
+                            border: Border.all(color: dividerColor),
+                            shape: BoxShape.circle),
                         padding: EdgeInsets.all(15.0),
                         child: new IconButton(
                           icon: new Icon(
@@ -94,27 +92,28 @@ class _SignUpPageState extends State<SignupPage> {
                           ),
                           //TODO: actually implement photo upload
                           onPressed: () {
-                            Scaffold.of(formKey.currentContext).showSnackBar(new SnackBar(
-                              content: new Text(
-                                "Should still be implemented",
-                                textAlign: TextAlign.center,
-                              ),
-                            ));
+                            Scaffold
+                                .of(formKey.currentContext)
+                                .showSnackBar(new SnackBar(
+                                  content: new Text(
+                                    "Should still be implemented",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ));
                           },
                           splashColor: secondary,
                         )),
                     new Container(
                       child: new Form(
                         key: formKey,
-
                         child: new Column(
                           children: <Widget>[
                             new InformationField(
                               labelText: 'Name',
                               controller: nameController,
-                              validator: (val) => (!isAlpha(val)&& val.isEmpty
+                              validator: (val) => (!isAlpha(val) && val.isEmpty
                                   ? 'You must a valid username'
-                                  : null) ,
+                                  : null),
                               onSaved: (val) => _name = val,
                               onFieldSubmitted: (String value) {
                                 setState(() {
@@ -187,7 +186,6 @@ class _SignUpPageState extends State<SignupPage> {
                                 text: '  SIGN UP  ',
                                 color: secondary,
                                 formKey: formKey,
-                                firebaseAuth: firebaseAuth,
                               ),
                             ),
                           ],
@@ -206,12 +204,12 @@ class _SignUpPageState extends State<SignupPage> {
 }
 
 class SignUpButton extends StatelessWidget {
-  SignUpButton({this.text, this.color, this.formKey, this.firebaseAuth});
+  SignUpButton({this.text, this.color, this.formKey});
 
   final String text;
   final Color color;
   final formKey;
-  final FirebaseAuth firebaseAuth;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   Widget build(BuildContext context) {
     print("inizio build : " + _email.toString());
@@ -222,79 +220,71 @@ class SignUpButton extends StatelessWidget {
         text,
         style: new TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
       ),
-      /*onPressed: () {
-        final formState = formKey.currentState;
-        if (formState.validate()) {
-          formState.save();
-          Navigator.push(
-            context,
-            new MaterialPageRoute(builder: (context) => new SigninUpPage()),
-          );*/
       onPressed: () async {
         final FormState formState = formKey.currentState;
         formState.save();
         if (_confirmPasswordController.text == _passwordController.text) {
-          await _handleSignUp(firebaseAuth, context);
-          Navigator.popAndPushNamed(context, '/welcome-page');
+          _handleSignUp(context);
         } else {
           Scaffold.of(context).showSnackBar(new SnackBar(
-            content: new Text(
-              "The two passwords are different!",
-              textAlign: TextAlign.center,
-            ),
-          ));
+                content: new Text(
+                  "The two passwords are different!",
+                  textAlign: TextAlign.center,
+                ),
+              ));
         }
       },
     );
   }
 
-  Future<Null> _handleSignUp(FirebaseAuth firebaseAuth, BuildContext context) async {
-    _trulyHandleSignUp(firebaseAuth, context);
-    return showDialog<Null>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return new AlertDialog(
-          title: new Text('Signin up!'),
-          content: new SingleChildScrollView(
-            child: new ListBody(
-              children: <Widget>[
-                new Text('You\'ll be soon ready to party hard'),
-                new Center(
-                  child: new Container(
-                    height: 1.5,
-                    margin: EdgeInsets.only(top: 16.0),
-                    child: new LinearProgressIndicator(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _trulyHandleSignUp(FirebaseAuth firebaseAuth, BuildContext context) async {
-    FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
-        email: _email, password: _password);
-    print("Still ${firebaseAuth.currentUser()}");
-    firebaseAuth.signInWithEmailAndPassword(email: _email, password: _password);
-    firebaseAuth.onAuthStateChanged
-    print("Now ${firebaseAuth.currentUser()}");
-    print("created user : $user");
-    Navigator.pop(context);
+  Widget _handleSignUp(BuildContext context) {
+    return new FutureBuilder(
+        future: _trulyHandleSignUp(firebaseAuth, context),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            print('Waiting for signin up');
+            Navigator.push(
+              context,
+              new MaterialPageRoute(builder: (context) => new SigninUpPage()),
+            );
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.data == false) {
+              Navigator.pop(context);
+              print('This name exists already');
+            } else {
+              print(snapshot.data);
+              Navigator.popAndPushNamed(context, '/welcome-page');
+            }
+          }
+        });
   }
 }
 
+Future<bool> _trulyHandleSignUp(
+    FirebaseAuth firebaseAuth, BuildContext context) async {
+  print('Entered _trulyHandleSignUp()');
+  bool hasSucceeded = true;
+  try {
+    print('Trying to signup');
+    FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
+        email: _email, password: _password);
+    print("created user inside signup: $user");
+  } catch (error) {
+    hasSucceeded = false;
+  }
+  return hasSucceeded;
+}
+
 class PasswordField extends StatefulWidget {
-  const PasswordField({this.hintText,
-    this.labelText,
-    this.helperText,
-    this.onSaved,
-    this.validator,
-    this.onFieldSubmitted,
-    this.controller});
+  const PasswordField(
+      {this.hintText,
+      this.labelText,
+      this.helperText,
+      this.onSaved,
+      this.validator,
+      this.onFieldSubmitted,
+      this.controller});
 
   final String hintText;
   final String labelText;
@@ -343,14 +333,15 @@ class _PasswordFieldState extends State<PasswordField> {
 }
 
 class InformationField extends StatefulWidget {
-  const InformationField({this.hintText,
-    this.labelText,
-    this.helperText,
-    this.onSaved,
-    this.validator,
-    this.onFieldSubmitted,
-    this.textInputType,
-    this.controller});
+  const InformationField(
+      {this.hintText,
+      this.labelText,
+      this.helperText,
+      this.onSaved,
+      this.validator,
+      this.onFieldSubmitted,
+      this.textInputType,
+      this.controller});
 
   final String hintText;
   final String labelText;
@@ -402,10 +393,6 @@ class SigninUpPage extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return new Scaffold(
-      // TODO: Why the drawer here?
-      drawer: new Drawer(
-        child: new PinderyDrawer(),
-      ),
       body: Container(
         alignment: Alignment.center,
         decoration: new BoxDecoration(color: Colors.white),
@@ -419,9 +406,9 @@ class SigninUpPage extends StatelessWidget {
                 width: 214.0,
                 decoration: new BoxDecoration(
                     image: new DecorationImage(
-                      image: new AssetImage('assets/img/logo_v_2_rosso.png'),
-                      fit: BoxFit.fitHeight,
-                    )),
+                  image: new AssetImage('assets/img/logo_v_2_rosso.png'),
+                  fit: BoxFit.fitHeight,
+                )),
               ),
             ),
             new Padding(

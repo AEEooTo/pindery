@@ -10,7 +10,7 @@ import 'theme.dart';
 import 'package:pindery/home_page/home_page.dart';
 import 'package:pindery/first_actions/welcome.dart';
 
-final FirebaseAuth _auth = FirebaseAuth.instance;
+
 void main() => runApp(new Pindery());
 
 class Pindery extends StatelessWidget {
@@ -24,9 +24,9 @@ class Pindery extends StatelessWidget {
       supportedLocales: pinderySupportedLocales,
       title: 'Pindery',
       theme: pinderyTheme,
-      home: new PinderyHomePage(firebaseAuth: _auth,),
+      home: new PinderyHomePage(),
       routes: <String, WidgetBuilder>{
-        '/welcome-page' : (BuildContext context) => new WelcomePage(_auth),
+        '/welcome-page' : (BuildContext context) => new WelcomePage(),
       },
     );
   }
