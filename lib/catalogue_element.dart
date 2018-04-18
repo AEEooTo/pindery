@@ -8,7 +8,7 @@ class CatalogueElement {
   int chosenQuantity = 0;
   int get remainingQuantity => elementQuantity - chosenQuantity;
 
-  CatalogueElement.fromFirestore(DocumentSnapshot snapshot) {
+  CatalogueElement.fromFirestore(Map snapshot) {
     elementName = snapshot['name'];
     elementValue = snapshot['value'];
     elementQuantity = 1;

@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../catalogue_element.dart';
 import '../theme.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 const String partyStuffCollection = "party_stuff";
 
@@ -94,53 +97,63 @@ class CategoryTilesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("Entered the main list builder");
-    return new ListView.builder(
-      shrinkWrap: true,
-      itemBuilder: (_, int index) {
-        return new CategoryTilesSublist(
-          category: category,
-          subcategory: categoryTypes[index],
-          catalogue: catalogue,
-        );
-      },
-      itemCount: categoryTypes.length,
+    return _catalogueListBuilder();
+  }
+
+  Widget _catalogueListBuilder() {
+    List<Widget> catalogueList = new List<Widget>();
+    for (String categoryType in categoryTypes) {
+      catalogueList.add(_categorySubListBuilder(categoryType, categoryTypes.indexOf(categoryType)));
+    }
+    return new Column(
+      children: catalogueList,
     );
   }
-}
 
-class CategoryTilesSublist extends StatelessWidget {
-  CategoryTilesSublist({this.category, this.subcategory, this.catalogue});
-
-  final String category;
-  final String subcategory;
-  final List<CatalogueElement> catalogue;
-
-  @override
-  Widget build(BuildContext context) {
-    return new StreamBuilder(
-      stream: _getReference().snapshots,
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (!snapshot.hasData) {
-          return new Container();
-        }
-        return new ListView.builder(
-          shrinkWrap: true,
-          itemBuilder: (_, int index) {
-            List<DocumentSnapshot> documentsList = snapshot.data.documents;
-            final DocumentSnapshot document = documentsList[index];
-            CatalogueElement element =
-                new CatalogueElement.fromFirestore(document);
-            if (isNotPresentInCatalogue(element))
-            return new CatalogueTile(
-              element: element,
-              catalogue: catalogue,
+  Widget _categorySubListBuilder(String categoryType, int index) {
+    CollectionReference reference = Firestore.instance
+        .collection(partyStuffCollection)
+        .document(category)
+        .collection(categoryType);
+    return new FutureBuilder(
+      future: _getDocuments(reference),
+        builder: (BuildContext context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
+          if(!snapshot.hasData) {
+            print('snapshot is'+ snapshot.hasData.toString());
+            if (index != 0) {
+              return Container();
+            }
+            return new Container(
+              child: new Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: new Text('Loading...'),
+              ),
             );
-          },
-          itemCount: snapshot.data.documents.length,
-        );
-      },
+          }
+          List<DocumentSnapshot> documents = snapshot.data;
+          print("Wow, documents is not empty!");
+          print('The length of documents is ' + documents.length.toString());
+          List<CatalogueTile> catalogueSubList = new List<CatalogueTile>();
+          for (DocumentSnapshot document in documents) {
+            CatalogueElement element = new CatalogueElement.fromFirestore(document.data);
+            if (isNotPresentInCatalogue(element)) {
+              catalogueSubList.add(new CatalogueTile(element: element, catalogue: catalogue));
+            }
+          }
+          return new Column(
+            children: catalogueSubList,
+          );
+        },
     );
+  }
+  Future<List<DocumentSnapshot>> _getDocuments(CollectionReference reference) async {
+    QuerySnapshot documentsQuery = await reference.getDocuments();
+    List<DocumentSnapshot> documents = documentsQuery.documents;
+    for (DocumentSnapshot document in documents) {
+      print('the element name is ' + document.data['name']);
+    }
+    print('In _getDocuments the documents length is: ' + documents.length.toString());
+    return documents;
   }
 
   bool isNotPresentInCatalogue(CatalogueElement element) {
@@ -153,10 +166,6 @@ class CategoryTilesSublist extends StatelessWidget {
     return isNotPresent;
   }
 
-  CollectionReference _getReference() => Firestore.instance
-      .collection(partyStuffCollection)
-      .document(category)
-      .collection(subcategory);
 }
 
 class CatalogueTile extends StatelessWidget {
