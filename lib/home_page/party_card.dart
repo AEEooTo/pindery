@@ -36,24 +36,26 @@ class PartyCard extends StatelessWidget {
             new Container(
               margin: new EdgeInsets.only(top: 90.0),
               decoration: new BoxDecoration(color: new Color(0x59000000)),
-              child: new Row(
+              child: new Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  new Expanded(
-                    child: new Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        new Container(
-                          padding: const EdgeInsets.only(
-                              left: 16.0, top: 16.0, bottom: 8.0),
-                          child: new Text(
-                            party.name,
-                            overflow: TextOverflow.ellipsis,
-                            style: new TextStyle(
-                                fontSize: 30.0, color: Colors.white),
-                          ),
-                        ),
-                        new Container(
+                  new Container(
+                    padding: const EdgeInsets.only(
+                        left: 16.0, top: 16.0, bottom: 8.0),
+                    child: new Text(
+                      party.name,
+                      overflow: TextOverflow.ellipsis,
+                      style: new TextStyle(
+                          fontSize: 28.0, color: Colors.white),
+                    ),
+                  ),
+                  new Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Expanded(
+                        child: new Container(
                           padding: const EdgeInsets.only(left: 16.0),
                           child: new Text(
                             party.fromDayTime.day.toString() +
@@ -66,14 +68,8 @@ class PartyCard extends StatelessWidget {
                                 fontSize: 17.0, color: Colors.white),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  new Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      new Container(
+                      ),
+                      new Container( //button
                         padding: new EdgeInsets.all(8.0),
                         child: new FlatButton(
                           onPressed: () {
@@ -88,8 +84,10 @@ class PartyCard extends StatelessWidget {
                           child: new Text(
                             'JOIN',
                             style: new TextStyle(
+                              fontSize: 15.0,
                                 color: secondaryLight,
-                                fontWeight: FontWeight.w900),
+                                fontWeight: FontWeight.w700,
+                            letterSpacing: 0.75)
                           ),
                         ),
                       ),
