@@ -80,12 +80,12 @@ class SettingsPage extends StatelessWidget {
             color: Colors.white,
           ),
           title: new Text('Logout'),
-          onTap: () {
+          /*onTap: () {
             Navigator.push(
               context,
               new MaterialPageRoute(builder: (context) => new WelcomePage()),
             );
-          },
+          },*/
         )
       ]),
     );

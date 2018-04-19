@@ -4,15 +4,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'theme.dart';
 import 'package:pindery/home_page/home_page.dart';
-
-final FirebaseAuth _auth = FirebaseAuth.instance;
-final GoogleSignIn _googleSignIn = new GoogleSignIn();
-const loggedIn = true;
+import 'package:pindery/first_actions/welcome.dart';
 
 void main() => runApp(new Pindery());
 
@@ -27,7 +23,11 @@ class Pindery extends StatelessWidget {
       supportedLocales: pinderySupportedLocales,
       title: 'Pindery',
       theme: pinderyTheme,
-      home: (loggedIn == true ? new PinderyHomePage() : null/*todo add pre-auth*/),
+      home: new PinderyHomePage(),
+      routes: <String, WidgetBuilder>{
+        '/welcome-page': (BuildContext context) => new WelcomePage(),
+        '/home-page': (BuildContext context) => new HomePage(),
+      },
     );
   }
 }
@@ -35,4 +35,3 @@ class Pindery extends StatelessWidget {
 List<Locale> pinderySupportedLocales = [
   const Locale('en', ''), // English
 ];
-
