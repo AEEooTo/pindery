@@ -67,7 +67,7 @@ class PartyImageContainerState extends State<PartyImageContainer> {
                   child: new IconButton(
                     icon: new Icon(
                       Icons.photo,
-                      color: primary,
+                      color: primaryLight,
                       size: 45.0,
                     ),
                     tooltip: 'Choose a picture from the gallery',
@@ -83,7 +83,7 @@ class PartyImageContainerState extends State<PartyImageContainer> {
                   child: new IconButton(
                     icon: new Icon(
                       Icons.camera,
-                      color: primary,
+                      color: primaryLight,
                       size: 45.0,
                     ),
                     onPressed: () async {
@@ -100,7 +100,7 @@ class PartyImageContainerState extends State<PartyImageContainer> {
           new Text(
             'Add a picture',
             style: new TextStyle(
-              color: primary,
+              color: primaryLight,
               fontSize: 26.0,
               fontWeight: FontWeight.w600,
             ),

@@ -40,7 +40,7 @@ class PartyCardList extends StatelessWidget {
           }
           return new ListView.builder(
             controller: hideButtonController,
-              padding: new EdgeInsets.all(8.0),
+              padding: new EdgeInsets.only(top:8.0, right:8.0,left: 8.0,bottom: 80.0),
               reverse: false,
               itemBuilder: (_, int index) {
                 List<DocumentSnapshot> documentsList = snapshot.data.documents;

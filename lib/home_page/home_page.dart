@@ -21,7 +21,7 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
   ScrollController _hideButtonController;
   var _isVisible;
 
-  @override
+/*  @override
   initState() {
     super.initState();
     _isVisible = true;
@@ -40,7 +40,7 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
         });
       }
     });
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -53,29 +53,43 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
         child: new PinderyDrawer(),
       ),
       body: new PartyCardList(hideButtonController: _hideButtonController,),
-    floatingActionButton: new Opacity(
-        opacity: _isVisible ? 0.0 : 1.0,
-        child: new FloatingActionButton(
-          onPressed: () async {
-            if (_isVisible==false) {
-              await Navigator.push(
-                context,
-                new MaterialPageRoute(
-                    builder: (context) =>
-                    new CreatePartyPage(
-                      homePageKey: homeScaffoldKey,
-                    )),
-              );
-            }
-          },
-          child: new Icon(Icons.add),
-          mini: _isVisible? true : false,
-          heroTag: null,
-        ),
-      ),
+    floatingActionButton: new FloatingActionButton(
+      onPressed: () async {
+          await Navigator.push(
+            context,
+            new MaterialPageRoute(
+                builder: (context) =>
+                new CreatePartyPage(
+                  homePageKey: homeScaffoldKey,
+                )),
+          );
+      },
+      child: new Icon(Icons.add),
+      heroTag: null,
+    ),
 
     );
   }
 
 }
+
+/*
+child: new FloatingActionButton(
+onPressed: () async {
+if (_isVisible==false) {
+await Navigator.push(
+context,
+new MaterialPageRoute(
+builder: (context) =>
+new CreatePartyPage(
+homePageKey: homeScaffoldKey,
+)),
+);
+}
+},
+child: new Icon(Icons.add),
+mini: _isVisible? true : false,
+heroTag: null,
+),
+*/
 
