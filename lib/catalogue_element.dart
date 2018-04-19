@@ -1,17 +1,29 @@
-import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot;
+/// Is the class that defines an element in the party catalogue
 
 class CatalogueElement {
-  CatalogueElement({this.elementName, this.elementQuantity, this.chosenQuantity});
+  CatalogueElement({this.elementName, this.elementQuantity, this.chosenQuantity, this.elementValue});
   String elementName;
   int elementQuantity;
   int elementValue;
   int chosenQuantity = 0;
+  String elementId;
   int get remainingQuantity => elementQuantity - chosenQuantity;
 
-  CatalogueElement.fromFirestore(Map snapshot) {
+  CatalogueElement.fromFirestore(Map snapshot, String id) {
+    elementId = id;
     elementName = snapshot['name'];
     elementValue = snapshot['value'];
     elementQuantity = 1;
+  }
+
+  catalogueMapper() {
+    return <String, dynamic> {
+      'elementName': elementName,
+      'elementValue': elementValue,
+      'elementQuantity': elementQuantity,
+      'chosenQuantity': chosenQuantity,
+      'documentId': elementId,
+    };
   }
 
 }

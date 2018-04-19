@@ -8,12 +8,13 @@ import 'party_details_utils.dart';
 import '../theme.dart';
 import '../party.dart';
 import 'step_2_catalogue.dart';
+import '../catalogue_element.dart';
 
 /// Page used to create a new party
 class CreatePartyPage extends StatefulWidget {
   CreatePartyPage({this.homePageKey});
 
-  static const String routeName = '/create-party';
+  static const String routeName = '/create-party/step-1';
   final GlobalKey homePageKey;
 
   @override
@@ -32,6 +33,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
 
   // To be filled party instance
   Party party = new Party();
+  List<CatalogueElement> catalogue = <CatalogueElement>[];
 
   // Text editing controllers
   TextEditingController nameController = new TextEditingController();
@@ -81,25 +83,29 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                       child: new Column(
                         children: <Widget>[
                           new TextFormField(
+                            onFieldSubmitted: (val) =>
+                                formKey.currentState.validate(),
                             controller: nameController,
                             validator: (val) => val.isEmpty
                                 ? 'You must insert a name for this party.'
                                 : null,
                             onSaved: (val) => party.name = val,
                             decoration: const InputDecoration(
-                                labelText: 'Party name',
-                                labelStyle: labelStyle,
-                                border: const UnderlineInputBorder(
-                                    borderSide: const BorderSide(
+                              labelText: 'Party name',
+                              labelStyle: labelStyle,
+                              border: const UnderlineInputBorder(
+                                borderSide: const BorderSide(
                                   color: const Color(0xFFE52059),
-                                ))),
+                                ),
+                              ),
+                            ),
                             style:
                                 Theme.of(context).textTheme.headline.copyWith(
                                       fontSize: 38.0,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
                                     ),
-                            maxLength: 20,
+                            maxLength: 30,
                           ),
                           new TextFormField(
                             controller: locationController,
@@ -112,7 +118,9 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                               labelStyle: labelStyle,
                             ),
                             style: inputTextStyle,
-                            maxLength: 50,
+                            maxLength: 100,
+                            onFieldSubmitted: (val) =>
+                                formKey.currentState.validate(),
                           ),
                           new TextFormField(
                             controller: descriptionController,
@@ -127,6 +135,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                             maxLength: 300,
                             maxLines: 5,
                             style: inputTextStyle,
+                            onFieldSubmitted: (val) =>
+                                formKey.currentState.validate(),
                           ),
                           new Column(
                             children: <Widget>[
@@ -167,7 +177,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                                     child: new TextFormField(
                                       controller: maxPeopleController,
                                       keyboardType: TextInputType.number,
-                                      validator: (val) => !isNumericAndPositive(val)
+                                      validator: (val) => !isNumericAndPositive(
+                                              val)
                                           ? 'You must insert the maximum\n number of people'
                                           : null,
                                       onSaved: (val) =>
@@ -230,13 +241,11 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                         'NEXT',
                         style: new TextStyle(color: Colors.white),
                       ),
-                      // TODO: add party catalogue screen
                       onPressed: () {
-                        final formState = formKey.currentState;
-                        if (formState.validate()) {
-                          _handleSubmitted();
-                        }
-                      }
+                        formKey.currentState.validate() && party.imageLocalPath != null
+                          ? _handleSubmitted()
+                          : null;
+                      },
                     ),
                   ),
                 ],
@@ -260,6 +269,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
         builder: (context) => new ChooseCataloguePage(
               homePageKey: homePageKey,
               party: party,
+              catalogue: catalogue,
             ),
       ),
     );
