@@ -12,6 +12,8 @@ class CatalogueChoosingList extends StatelessWidget {
   CatalogueChoosingList(
       {this.catalogue});
 
+  static const String routeName = '/create-party/catalogue-choosing';
+
   final GlobalKey scaffoldKey = new GlobalKey<ScaffoldState>();
 
   final List<CatalogueElement> catalogue;
@@ -101,7 +103,7 @@ class CategoryTilesList extends StatelessWidget {
   }
 
   Widget _catalogueListBuilder() {
-    List<Widget> catalogueList = new List<Widget>();
+    List<Widget> catalogueList = <Widget>[];
     for (String categoryType in categoryTypes) {
       catalogueList.add(_categorySubListBuilder(categoryType, categoryTypes.indexOf(categoryType)));
     }
@@ -119,7 +121,6 @@ class CategoryTilesList extends StatelessWidget {
       future: _getDocuments(reference),
         builder: (BuildContext context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
           if(!snapshot.hasData) {
-            print('snapshot is'+ snapshot.hasData.toString());
             if (index != 0) {
               return Container();
             }
@@ -131,11 +132,9 @@ class CategoryTilesList extends StatelessWidget {
             );
           }
           List<DocumentSnapshot> documents = snapshot.data;
-          print("Wow, documents is not empty!");
-          print('The length of documents is ' + documents.length.toString());
-          List<CatalogueTile> catalogueSubList = new List<CatalogueTile>();
+          List<CatalogueTile> catalogueSubList = <CatalogueTile>[];
           for (DocumentSnapshot document in documents) {
-            CatalogueElement element = new CatalogueElement.fromFirestore(document.data);
+            CatalogueElement element = new CatalogueElement.fromFirestore(document.data, document.documentID);
             if (isNotPresentInCatalogue(element)) {
               catalogueSubList.add(new CatalogueTile(element: element, catalogue: catalogue));
             }

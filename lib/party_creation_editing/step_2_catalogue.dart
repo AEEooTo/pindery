@@ -5,24 +5,27 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
 import '../catalogue_element.dart';
 import '../party.dart';
 import 'catalogue_choosing_list.dart';
 import 'party_details_utils.dart';
 
 class ChooseCataloguePage extends StatefulWidget {
-  ChooseCataloguePage({this.homePageKey, this.party});
+  static const String routeName = '/create-party/step-2';
+
+  ChooseCataloguePage({this.homePageKey, this.party, this.catalogue});
+
   final GlobalKey homePageKey;
 
+  final List<CatalogueElement> catalogue;
   final Party party;
 
-  _ChooseCataloguePageState createState() =>
-      new _ChooseCataloguePageState(party: party, homePageKey: homePageKey);
+  _ChooseCataloguePageState createState() => new _ChooseCataloguePageState(
+      party: party, homePageKey: homePageKey, catalogue: catalogue);
 }
 
 class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
-  _ChooseCataloguePageState({this.party, this.homePageKey});
+  _ChooseCataloguePageState({this.party, this.homePageKey, this.catalogue});
 
   final GlobalKey homePageKey;
 
@@ -30,18 +33,17 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
   Party party;
 
   /// to-be filled [List] of [CatalogueElement]s
-  List<CatalogueElement> catalogue = new List<CatalogueElement>();
+  List<CatalogueElement> catalogue;
 
-  /// the list of the chosen [CatalogueElement]s
+  /// variable to check whether the user cancelled the uploading process or not
+  bool cancelled = false;
 
-  bool cancelled =
-      false; // variable to check whether the user cancelled the uploading process or not
-  final GlobalKey scaffoldKey = new GlobalKey<ScaffoldState>();
-  final GlobalKey chosenListStateKey = new GlobalKey<_ChooseCataloguePageState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
+  final chosenListStateKey = new GlobalKey<_ChooseCataloguePageState>();
+  final GlobalKey<FormState> chosenListFormKey = new GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement catalogue
     return new Theme(
       data: Theme.of(context),
       child: new Scaffold(
@@ -55,6 +57,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 new ChosenList(
+                  formKey: chosenListFormKey,
                   catalogue: catalogue,
                   key: chosenListStateKey,
                 ),
@@ -63,9 +66,10 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                   onPressed: () => Navigator.push(
                         context,
                         new MaterialPageRoute(
-                            builder: (context) => new CatalogueChoosingList(
-                                  catalogue: catalogue,
-                                )),
+                          builder: (context) => new CatalogueChoosingList(
+                                catalogue: catalogue,
+                              ),
+                        ),
                       ),
                 ),
               ],
@@ -78,29 +82,40 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                   'NEXT',
                   style: new TextStyle(color: Colors.white),
                 ),
-                onPressed: _validateCatalogue()
-                    ? () async {
-                        final ScaffoldState scaffoldState =
-                            scaffoldKey.currentState;
-                        final ScaffoldState homePageState =
-                            homePageKey.currentState;
-                        cancelled = false;
-                        await _uploadingDialog();
-                        print('cancelled = ' + cancelled.toString());
-                        if (!cancelled) {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                          homePageState.showSnackBar(new SnackBar(
-                            content: new Text("Great! The party was created!"),
-                          ));
-                        } else {
-                          scaffoldState.showSnackBar(new SnackBar(
-                            // TODO: really cancel the party
-                            content: new Text("Party creation cancelled"),
-                          ));
-                        }
-                      }
-                    : null,
+                onPressed: () async {
+                  if (catalogue.isNotEmpty &&
+                      chosenListFormKey.currentState.validate()) {
+                    print('entered the async');
+                    final ScaffoldState scaffoldState =
+                        scaffoldKey.currentState;
+                    final ScaffoldState homePageState =
+                        homePageKey.currentState;
+                    cancelled = false;
+                    await _uploadingDialog(chosenListFormKey.currentState);
+                    print('cancelled = ' + cancelled.toString());
+                    if (!cancelled) {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      homePageState.showSnackBar(new SnackBar(
+                        content: new Text("Great! The party was created!"),
+                      ));
+                    } else {
+                      scaffoldState.showSnackBar(new SnackBar(
+                        // TODO: really cancel the party
+                        content: new Text("Party creation cancelled"),
+                      ));
+                    }
+                  } else {
+                    if (catalogue.isEmpty) {
+                      scaffoldKey.currentState.showSnackBar(
+                        new SnackBar(
+                          // TODO: really cancel the party
+                          content: new Text("The catalogue is empty"),
+                        ),
+                      );
+                    }
+                  }
+                },
               ),
             ),
           ],
@@ -109,8 +124,20 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
     );
   }
 
-  Future<Null> _uploadingDialog() async {
-    _handleSubmitted();
+  /// Method to assign the different collected fields to the [Party] instance
+  void _handleSubmitted(FormState formState) async {
+    formState.save();
+    print('saved form');
+    party.catalogue = catalogue;
+    await party.uploadImage(party.imageLocalPath);
+    if (!cancelled) {
+      party.sendParty();
+      Navigator.of(context).pop();
+    }
+  }
+
+  Future<Null> _uploadingDialog(FormState formState) async {
+    _handleSubmitted(formState);
     return showDialog<Null>(
       context: context,
       barrierDismissible: false,
@@ -145,40 +172,37 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
       },
     );
   }
-
-  /// Method to assign the different collected fields to the Party instance
-  void _handleSubmitted() async {
-    await party.uploadImage(party.imageLocalPath);
-    if (!cancelled) {
-      party.sendParty();
-      Navigator.of(context).pop();
-    }
-  }
-
-  bool _validateCatalogue() {
-    return catalogue.isNotEmpty;
-  }
 }
 
 class ChosenList extends StatefulWidget {
-  ChosenList({this.catalogue, Key key}) :super(key: key);
+  ChosenList({this.catalogue, Key key, this.formKey}) : super(key: key);
 
   final List<CatalogueElement> catalogue;
+  final formKey;
 
-  _ChosenListState createState() => new _ChosenListState(catalogue: catalogue, chosenListKey: key);
+  _ChosenListState createState() => new _ChosenListState(
+      catalogue: catalogue, chosenListKey: key, formKey: formKey);
 }
 
 class _ChosenListState extends State<ChosenList> {
-  _ChosenListState({this.catalogue, this.chosenListKey});
+  _ChosenListState({this.catalogue, this.chosenListKey, this.formKey});
 
   final List<CatalogueElement> catalogue;
-  final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
-  final GlobalKey<_ChooseCataloguePageState> chosenListKey;
+  final formKey;
+  final chosenListKey;
 
   @override
   Widget build(BuildContext context) {
-    print(chosenListKey);
-    print(chosenListKey.currentState);
+    if (catalogue.isEmpty) {
+      return new Center(
+        child: new Padding(
+          padding: const EdgeInsets.all(30.0),
+          child: new Text(
+            'Tap the + to begin choosing what the participants will need to bring!',
+          ),
+        ),
+      );
+    }
     return new Padding(
       padding: EdgeInsets.all(8.0),
       child: new Column(
@@ -188,7 +212,8 @@ class _ChosenListState extends State<ChosenList> {
             child: new ListView.builder(
               shrinkWrap: true,
               itemBuilder: (_, int index) {
-                print('In itemBuilder '+ chosenListKey.currentState.toString());
+                print(
+                    'In itemBuilder ' + chosenListKey.currentState.toString());
                 return new CatalogueElementRow(
                   element: catalogue[index],
                   catalogue: catalogue,
@@ -208,17 +233,23 @@ class _ChosenListState extends State<ChosenList> {
 }
 
 class CatalogueElementRow extends StatelessWidget {
-  CatalogueElementRow({this.element, this.catalogue, this.index, this.chosenListStateKey, this.chosenListState});
+  CatalogueElementRow(
+      {this.element,
+      this.catalogue,
+      this.index,
+      this.chosenListStateKey,
+      this.chosenListState,
+      this.controller});
 
   final CatalogueElement element;
   final List<CatalogueElement> catalogue;
   final int index;
   final GlobalKey chosenListStateKey;
   final _ChosenListState chosenListState;
+  final TextEditingController controller;
 
   @override
   Widget build(BuildContext context) {
-    print('In catalogueElementRow '+ chosenListStateKey.currentState.toString());
     return Column(
       children: <Widget>[
         new Row(
@@ -234,16 +265,20 @@ class CatalogueElementRow extends StatelessWidget {
               flex: 2,
               child: new TextFormField(
                 keyboardType: TextInputType.number,
-                validator: (val) => isNumericAndPositive(val)
-                    ? 'You must insert a valid number, bigger than 0'
-                    : null,
+                validator: (val) =>
+                    !isNumericAndPositive(val) ? 'Not valid' : null,
+                controller: controller,
+                onSaved: (val) =>
+                    catalogue[index].elementQuantity = int.parse(val),
+                initialValue: catalogue[index].elementQuantity.toString(),
+                decoration: new InputDecoration(labelText: 'Quantity'),
               ),
             ),
             new Expanded(
               flex: 2,
               child: new IconButton(
                 icon: new Icon(Icons.cancel),
-                onPressed: () =>_deleteElement(chosenListStateKey),
+                onPressed: () => _deleteElement(chosenListStateKey),
               ),
             )
           ],
@@ -254,13 +289,11 @@ class CatalogueElementRow extends StatelessWidget {
 
   void _deleteElement(GlobalKey listStateKey) {
     // TODO: find a better way to setState()
-    print('In _deleteleElement '+ listStateKey.currentState.toString());
+    print('In _deleteleElement ' + listStateKey.currentState.toString());
     final _ChosenListState listState = listStateKey.currentState;
     print(listState);
     chosenListState.setState(() {
       catalogue.removeAt(index);
     });
   }
-
-
 }

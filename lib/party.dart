@@ -71,6 +71,7 @@ class Party {
   /// Method to push the party on the DB
   Future<Null> sendParty() async {
     // Firebase Firestore reference
+    print('Sending party');
     final reference = Firestore.instance
         .collection('cities')
         .document(city.toLowerCase())
@@ -89,8 +90,17 @@ class Party {
       "imageUrl": imageUrl,
       "maxPeople": maxPeople,
       "privacy": privacy,
+      "catalogue": catalogueMapper()
     };
     return partyMap;
+  }
+
+  List<Map<String, dynamic>> catalogueMapper() {
+    List<Map<String, dynamic>> catalogueMap = <Map<String, dynamic>>[];
+    for (CatalogueElement element in catalogue) {
+      catalogueMap.add(element.catalogueMapper());
+    }
+    return catalogueMap;
   }
 
   Future<Null> uploadImage(File imageFile) async {

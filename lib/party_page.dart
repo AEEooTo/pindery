@@ -12,7 +12,7 @@ enum AppBarBehavior { normal, pinned, floating, snapping }
 class PartyPage extends StatelessWidget {
   final Party party;
 
-  static String routeName = '/party-page';
+  final String routeName = '/party-page/';
 
   final AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
   final double _appBarHeight = 256.0;
