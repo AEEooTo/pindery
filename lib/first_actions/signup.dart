@@ -6,27 +6,34 @@ import 'package:flutter/material.dart';
 import '../drawer.dart';
 import '../theme.dart';
 import 'package:validator/validator.dart';
-
-String _password;
-TextEditingController _passwordController = new TextEditingController();
-String _cpassword;
-TextEditingController _confirmPasswordController = new TextEditingController();
+import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:async';
 
 String _name;
-TextEditingController nameController = new TextEditingController();
 String _surname;
-TextEditingController surnameController = new TextEditingController();
 String _email;
+String _password;
+String _cpassword;
+TextEditingController nameController = new TextEditingController();
+TextEditingController surnameController = new TextEditingController();
 TextEditingController emailController = new TextEditingController();
+TextEditingController _passwordController = new TextEditingController();
+TextEditingController _confirmPasswordController = new TextEditingController();
+final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
+
 
 class SignupPage extends StatefulWidget {
-  static const routeName = '/login-page';
+
+
+  static final routeName = '/login-page';
 
   @override
-  _SignUpPageState createState() => new _SignUpPageState();
+  _SignUpPageState createState() =>
+      new _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignupPage> {
+  _SignUpPageState();
 
   final formKey = new GlobalKey<FormState>();
 
@@ -41,9 +48,6 @@ class _SignUpPageState extends State<SignupPage> {
         brightness: Brightness.light,
       ),
       child: new Scaffold(
-        drawer: new Drawer(
-          child: new PinderyDrawer(),
-        ),
         backgroundColor: Colors.white,
         body: new Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -67,10 +71,9 @@ class _SignUpPageState extends State<SignupPage> {
                       ),
                     ),
                     new Container(
-                      decoration: new BoxDecoration(
-                        border: Border.all(color: dividerColor),
-                        shape: BoxShape.circle
-                      ),
+                        decoration: new BoxDecoration(
+                            border: Border.all(color: dividerColor),
+                            shape: BoxShape.circle),
                         padding: EdgeInsets.all(15.0),
                         child: new IconButton(
                           icon: new Icon(
@@ -79,12 +82,14 @@ class _SignUpPageState extends State<SignupPage> {
                           ),
                           //TODO: actually implement photo upload
                           onPressed: () {
-                            Scaffold.of(formKey.currentContext).showSnackBar(new SnackBar(
-                              content: new Text(
-                                "Should still be implemented",
-                                textAlign: TextAlign.center,
-                              ),
-                            ));
+                            Scaffold
+                                .of(formKey.currentContext)
+                                .showSnackBar(new SnackBar(
+                                  content: new Text(
+                                    "Should still be implemented",
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ));
                           },
                           splashColor: secondary,
                         )),
@@ -97,8 +102,9 @@ class _SignUpPageState extends State<SignupPage> {
                               labelText: 'Name',
                               controller: nameController,
                               validator: (val) => (!isAlpha(val)|| val.isEmpty
+
                                   ? 'You must a valid username'
-                                  : null) ,
+                                  : null),
                               onSaved: (val) => _name = val,
                               onFieldSubmitted: (String value) {
                                 setState(() {
@@ -128,10 +134,14 @@ class _SignUpPageState extends State<SignupPage> {
                                   : null,
                               textInputType: TextInputType.emailAddress,
                               controller: emailController,
-                              onSaved: (val) => _email = val,
+                              onSaved: (val) {
+                                _email = val;
+                                print("dopo onSaved è : $_email");
+                              },
                               onFieldSubmitted: (String value) {
                                 setState(() {
                                   _email = value;
+                                  print("dopo il primo setstate $_email");
                                 });
                               },
                             ),
@@ -192,8 +202,10 @@ class SignUpButton extends StatelessWidget {
   final String text;
   final Color color;
   final formKey;
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   Widget build(BuildContext context) {
+    print("inizio build : " + _email.toString());
     return new RaisedButton(
       padding: EdgeInsets.symmetric(horizontal: 100.0),
       color: color,
@@ -201,18 +213,55 @@ class SignUpButton extends StatelessWidget {
         text,
         style: new TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
       ),
-      onPressed: () {
-        final formState = formKey.currentState;
-        if (formState.validate()) {
-          formState.save();
-          Navigator.push(
-            context,
-            new MaterialPageRoute(builder: (context) => new SigninUpPage()),
-          );
+      onPressed: () async {
+        final FormState formState = formKey.currentState;
+        formState.save();
+        if (_confirmPasswordController.text == _passwordController.text) {
+          _handleSignUp(context);
+        } else {
+          Scaffold.of(context).showSnackBar(new SnackBar(
+                content: new Text(
+                  "The two passwords are different!",
+                  textAlign: TextAlign.center,
+                ),
+              ));
         }
       },
     );
   }
+
+  Future<Null> _handleSignUp(BuildContext context) async {
+    Navigator
+        .of(context)
+        .push(new MaterialPageRoute(builder: (context) => new SigninUpPage()));
+    bool result = await _trulyHandleSignUp(firebaseAuth, context);
+    if (result) {
+      Navigator.popUntil(context, ModalRoute.withName('/'));
+    } else {
+      Navigator.pop(context);
+      Scaffold.of(context).showSnackBar(new SnackBar(
+        content: new Text(
+          "A user with this e-mail already exists",
+          textAlign: TextAlign.center,
+        ),
+      ));
+    }
+  }
+}
+
+Future<bool> _trulyHandleSignUp(
+    FirebaseAuth firebaseAuth, BuildContext context) async {
+  print('Entered _trulyHandleSignUp()');
+  bool hasSucceeded = true;
+  try {
+    print('Trying to signup');
+    FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
+        email: _email, password: _password);
+    //todo: implement user (as our proprietary object) creation
+  } catch (error) {
+    hasSucceeded = false;
+  }
+  return hasSucceeded;
 }
 
 class PasswordField extends StatefulWidget {
@@ -301,7 +350,6 @@ class InformationField extends StatelessWidget {
   final TextEditingController controller;
   final bool activateIcon;
   final TextInputType textInputType;
-
 
   @override
   Widget build(BuildContext context) {

@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'theme.dart';
 import 'package:pindery/first_actions/welcome.dart';
 import 'package:pindery/settings.dart';
+import 'package:pindery/first_actions/welcome.dart';
+
 
 final String name = "Edoardo Debenedetti";
 final String coverImagePath = "assets/img/movingParty.jpeg";
@@ -15,7 +17,7 @@ final String avatarPath = "assets/img/avatar.jpg";
 class PinderyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       decoration: new BoxDecoration(
         color: Colors.white,
       ),
@@ -54,7 +56,6 @@ class PinderyDrawer extends StatelessWidget {
           ),
           //end container  with pics
           new Container(
-
             width: 305.0,
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -66,6 +67,7 @@ class PinderyDrawer extends StatelessWidget {
                 ]
             )
           )
+
         ],
       ),
     );
@@ -84,35 +86,30 @@ class DrawerBlock extends StatelessWidget {
       height: 60.0,
       padding: const EdgeInsets.symmetric(vertical: 16.0),
       decoration: new BoxDecoration(
-          border: new Border(bottom: new BorderSide(color: dividerColor))
-      ),
+          border: new Border(bottom: new BorderSide(color: dividerColor))),
       child: new DefaultTextStyle(
         style: Theme.of(context).textTheme.subhead,
         child: new SafeArea(
-          top: false,
-          bottom: false,
-          child: new ListTile(
-            leading: new Icon(icon,color: secondary, size: 24.0),
-            title: new Text(
+            top: false,
+            bottom: false,
+            child: new ListTile(
+              leading: new Icon(icon, color: secondary, size: 24.0),
+              title: new Text(
                 data,
                 textAlign: TextAlign.start,
                 style: new TextStyle(
                     fontSize: 14.0,
                     color: primaryLight,
-                    fontWeight: FontWeight.w600
-                ),
-            ),
-            onTap: (){
-              Navigator.push(
-                context,
-                new MaterialPageRoute(
-                    builder: widgetBuilder),
-              );
-            },
-          )
-        ),
+                    fontWeight: FontWeight.w600),
+              ),
+              onTap: () {
+                //todo : change push with pushnamed
+                Navigator.of(context).push(
+                      MaterialPageRoute(builder: widgetBuilder),
+                    );
+              },
+            )),
       ),
     );
   }
-
 }
