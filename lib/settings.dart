@@ -12,9 +12,8 @@ class Settings extends StatelessWidget {
     return new Scaffold(
         body: new Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.0),
-      child: new Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
+      child: new Center(
+        child:
           //todo: use proper button
           new FlatButton(
             color : primary,
@@ -23,12 +22,11 @@ class Settings extends StatelessWidget {
                   builder: (context) => new SigninOutPage()));
               await _auth.signOut();
               //todo: more checkful control
-              Navigator.popAndPushNamed(context, '/welcome-page');
+              Navigator.popUntil(context, ModalRoute.withName('/'));
             },
             child: new Text("Logout"),
             textColor: Colors.white,
           )
-        ],
       ),
     ));
   }

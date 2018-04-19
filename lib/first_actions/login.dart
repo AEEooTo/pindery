@@ -161,9 +161,8 @@ class LogInButton extends StatelessWidget {
         .push(new MaterialPageRoute(builder: (context) => new LoggingInPage()));
     bool resultGood = await _trulyHandleLogin(_auth, context);
     if (resultGood) {
-      Navigator.of(context).popAndPushNamed('/home-page');
+      Navigator.popUntil(context, ModalRoute.withName('/'));
     } else {
-      Navigator.pop(context);
       Navigator.pop(context);
       Scaffold.of(context).showSnackBar(new SnackBar(
             content: new Text(

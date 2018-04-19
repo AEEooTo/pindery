@@ -240,12 +240,12 @@ class SignUpButton extends StatelessWidget {
         .push(new MaterialPageRoute(builder: (context) => new SigninUpPage()));
     bool result = await _trulyHandleSignUp(firebaseAuth, context);
     if (result) {
-      Navigator.of(context).popAndPushNamed('/home-page');
+      Navigator.popUntil(context, ModalRoute.withName('/'));
     } else {
       Navigator.pop(context);
       Scaffold.of(context).showSnackBar(new SnackBar(
         content: new Text(
-          "This name already exists",
+          "A user with this e-mail already exists",
           textAlign: TextAlign.center,
         ),
       ));
