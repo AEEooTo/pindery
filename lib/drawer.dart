@@ -61,8 +61,8 @@ class PinderyDrawer extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                new DrawerBlock(icon: Icons.star ,data: 'Parties', widgetBuilder: (context) => new WelcomePage(),),
-                new DrawerBlock(icon: Icons.face, data: 'My parties', widgetBuilder: (context) => new WelcomePage(),),
+                new DrawerBlock(icon: Icons.star ,data: 'Parties', /*widgetBuilder: (context) => new WelcomePage(),*/),
+                new DrawerBlock(icon: Icons.face, data: 'My parties', /*widgetBuilder: (context) => new WelcomePage(),*/),
                 new DrawerBlock(icon: Icons.settings ,data: 'Settings', widgetBuilder: (context) => new SettingsPage(),)
                 ]
             )
@@ -103,7 +103,6 @@ class DrawerBlock extends StatelessWidget {
                     fontWeight: FontWeight.w600),
               ),
               onTap: () {
-                //todo : change push with pushnamed
                 Navigator.of(context).push(
                       MaterialPageRoute(builder: widgetBuilder),
                     );

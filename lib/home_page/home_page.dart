@@ -25,18 +25,16 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
         future: _getUser(),
         builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            print('Snapshot has no data');
             return Center(
                 child: new Container(
               child: new Text('Loading...'),
             ));
           }
-          print('Snapshot has data!');
           if (snapshot.data == null) {
-            print("All'inizio del FutureBuilder ${snapshot.data}");
+            print("No user, ${snapshot.data}");
             return new WelcomePage();
           } else {
-            print("WTF!?!? User !!11!1!!");
+            print("User logged, ${snapshot.data}");
             return new HomePage();
           }
           // loading
@@ -46,7 +44,6 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
 
   Future<FirebaseUser> _getUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-    print("ricalcolato in getuser: $user");
     return user;
   }
 }

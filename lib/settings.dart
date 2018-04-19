@@ -1,9 +1,10 @@
 /// This file contains the code for Pindery's settings page.
 ///
 import 'package:flutter/material.dart';
-import 'user.dart';
-import 'theme.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'first_actions/welcome.dart';
+import 'theme.dart';
+import 'user.dart';
 
 class SettingsPage extends StatelessWidget {
   @override
@@ -80,12 +81,11 @@ class SettingsPage extends StatelessWidget {
             color: Colors.white,
           ),
           title: new Text('Logout'),
-          /*onTap: () {
-            Navigator.push(
-              context,
-              new MaterialPageRoute(builder: (context) => new WelcomePage()),
-            );
-          },*/
+          onTap: () async{
+            Navigator.push(context, MaterialPageRoute(builder: (context) => new SigninOutPage()));
+            await FirebaseAuth.instance.signOut();
+            Navigator.popUntil(context, ModalRoute.withName('/'));
+          },
         )
       ]),
     );
@@ -131,6 +131,53 @@ class SettingsBlock extends StatelessWidget {
 
               },
             )),
+      ),
+    );
+  }
+}
+
+class SigninOutPage extends StatelessWidget {
+
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      body: Container(
+        alignment: Alignment.center,
+        decoration: new BoxDecoration(color: Colors.white),
+        child: new Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(top: 96.0),
+              child: new Container(
+                height: 214.0,
+                width: 214.0,
+                decoration: new BoxDecoration(
+                    image: new DecorationImage(
+                      image: new AssetImage('assets/img/logo_v_2_rosso.png'),
+                      fit: BoxFit.fitHeight,
+                    )),
+              ),
+            ),
+            new Padding(
+              padding: const EdgeInsets.only(bottom: 81.0),
+              child: new Text(
+                'Signing Out!',
+                style: new TextStyle(
+                    fontSize: 40.0,
+                    color: primary,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            new Padding(
+              padding: EdgeInsets.all(16.0),
+              child: new Container(
+                height: 1.5,
+                margin: EdgeInsets.only(top: 16.0),
+                child: new LinearProgressIndicator(),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

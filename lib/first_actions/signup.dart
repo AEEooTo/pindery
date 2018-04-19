@@ -21,7 +21,7 @@ TextEditingController _passwordController = new TextEditingController();
 TextEditingController _confirmPasswordController = new TextEditingController();
 final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
 
-
+//todo: make it stateless
 class SignupPage extends StatefulWidget {
 
 

@@ -17,7 +17,6 @@ class PartyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(party.imageUrl);
     return new Card(
       child: new Container(
         height: cardHeight,

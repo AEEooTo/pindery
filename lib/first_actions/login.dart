@@ -14,6 +14,7 @@ String _email;
 String _password;
 FirebaseAuth _auth = FirebaseAuth.instance;
 
+//todo: make it stateless
 class LoginPage extends StatefulWidget {
   static const routeName = '/login-page';
 
@@ -51,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                       new Container(
                         padding: const EdgeInsets.all(80.0),
                         child: new Text(
-                          'Log in!',
+                          'Log In!',
                           style: new TextStyle(
                               fontSize: 40.0,
                               color: secondary,
@@ -102,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                                   new Padding(
                                     padding: const EdgeInsets.only(top: 80.0),
                                     child: new LogInButton(
-                                      text: '  LOG IN  ',
+                                      text: '  LOGIN  ',
                                       color: primary,
                                       formKey: formKey,
                                     ),
