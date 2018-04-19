@@ -43,6 +43,7 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
         });
   }
 
+
   Future<FirebaseUser> _getUser() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     print("ricalcolato in getuser: $user");
@@ -84,9 +85,28 @@ class HomePage extends StatelessWidget {
           heroTag: null,
         ),
       ),
-
     );
   }
 
 }
+
+/*
+child: new FloatingActionButton(
+onPressed: () async {
+if (_isVisible==false) {
+await Navigator.push(
+context,
+new MaterialPageRoute(
+builder: (context) =>
+new CreatePartyPage(
+homePageKey: homeScaffoldKey,
+)),
+);
+}
+},
+child: new Icon(Icons.add),
+mini: _isVisible? true : false,
+heroTag: null,
+),
+*/
 
