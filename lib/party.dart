@@ -1,10 +1,12 @@
 import 'dart:async';
-import 'dart:math';
+import 'dart:math' ;
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as Im;
+import 'package:path_provider/path_provider.dart';
 
 import 'catalogue_element.dart';
 
@@ -104,12 +106,33 @@ class Party {
   }
 
   Future<Null> uploadImage(File imageFile) async {
+    print("uploading image"); //todo: remove debug print
     int random = new Random().nextInt(100000);
     StorageReference ref = FirebaseStorage.instance
         .ref()
         .child("/partyImages/party_image_$random.jpg");
-    StorageUploadTask uploadTask = ref.put(imageFile);
+    File compressedImage = await compressImage(imageLocalPath);
+    StorageUploadTask uploadTask = ref.put(compressedImage);
     Uri downloadUrl = (await uploadTask.future).downloadUrl;
     imageUrl = downloadUrl.toString();
+  }
+  Future<File> compressImage(File imageFull) async {
+    print("compressing image"); //todo: remove debug print
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    int rand = new Random().nextInt(10000);
+
+    Im.Image image = Im.decodeImage(imageFull.readAsBytesSync());
+
+    int widthFinal;
+    if(image.height > image.width){
+      widthFinal = 1080;
+    }else{
+      widthFinal = ((image.width * 1080)/image.height).round();
+    }
+    image = Im.copyResize(image, widthFinal); // choose the size here, it will maintain aspect ratio
+    print("image compressed");
+    return new File('$path/img_$rand.jpg')
+      ..writeAsBytesSync(Im.encodeJpg(image, quality: 50));
   }
 }

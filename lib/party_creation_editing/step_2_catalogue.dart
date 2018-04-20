@@ -1,6 +1,6 @@
 /// step_2_catalogue.dart
 /// contains the code for choosing the party catalogue
-
+/// ///
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -125,7 +125,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
   }
 
   /// Method to assign the different collected fields to the [Party] instance
-  void _handleSubmitted(FormState formState) async {
+  Future<Null> _handleSubmitted(FormState formState) async {
     formState.save();
     print('saved form');
     party.catalogue = catalogue;
