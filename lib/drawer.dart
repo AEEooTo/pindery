@@ -26,7 +26,6 @@ class PinderyDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Drawer(
       key: drawerKey,
-      elevation: 100.0,
       child: new Container(
         decoration: new BoxDecoration(
           color: Colors.white,
@@ -34,18 +33,16 @@ class PinderyDrawer extends StatelessWidget {
         child: new Column(
           children: <Widget>[
             new UserAccountsDrawerHeader(
+              margin: null,
               accountName: new Text('${user.name} ${user.surname}'),
               accountEmail: new Text(user.email),
               currentAccountPicture: new PinderyCircleAvatar(user: user),
               decoration: new BoxDecoration(
-                  image: new DecorationImage(
-                      image: new AssetImage(coverImagePath),
-                      fit: BoxFit.cover)),
+                image: new DecorationImage(
+                    image: new AssetImage(coverImagePath), fit: BoxFit.cover),
+              ),
             ),
-            //end container  with pics
             new Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 // TODO: understand how to make the drawer close is the user is already on the selected page
                 new DrawerBlock(
@@ -84,7 +81,6 @@ class DrawerBlock extends StatelessWidget {
   final GlobalKey<DrawerControllerState> drawerKey;
 
   Widget build(BuildContext context) {
-    print(drawerKey.currentState);
     return new Container(
       height: 60.0,
       padding: const EdgeInsets.symmetric(vertical: 16.0),

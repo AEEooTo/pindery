@@ -162,8 +162,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
   }
 
   Future<Null> _uploadingDialog(FormState formState) async {
-    _compressImage();
-    _handleSubmitted(formState);
+    _compressImage().then((randomVariables) => _handleSubmitted(formState));
     print("past the futures");
     return showDialog<Null>(
       context: context,

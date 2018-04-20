@@ -76,7 +76,17 @@ class Party {
         .collection('cities')
         .document(city.toLowerCase())
         .collection('parties');
-    reference.add(partyMapper());
+    Duration timeoutDuration = new Duration(seconds: 30);
+    try {
+      reference.add(partyMapper())
+      .catchError(() => throw new Exception('UPLOAD ERROR'))
+      .timeout(timeoutDuration, onTimeout: () => throw new TimeoutException('TIMEOUT', timeoutDuration));
+    } on TimeoutException {
+      print(TimeoutException);
+    } on Exception catch (e) {
+      print('Error uploading the party, $e');
+    }
+
   }
 
   /// Method to create a map from the Party instance to be pushed to Firestore
@@ -110,7 +120,17 @@ class Party {
         .ref()
         .child("/partyImages/party_image_$random.jpg");
     StorageUploadTask uploadTask = ref.put(imageLocalPath);
-    Uri downloadUrl = (await uploadTask.future).downloadUrl;
+    Duration timeoutDuration = new Duration(seconds: 30);
+    try {
+      UploadTaskSnapshot task = await uploadTask.future
+      .timeout(timeoutDuration, onTimeout: () => throw new TimeoutException('TIMEOUT', timeoutDuration))
+      .catchError(() => throw new Exception('UPLOAD ERROR'));
+      Uri downloadUrl = task.downloadUrl;
     imageUrl = downloadUrl.toString();
+    } on TimeoutException {
+      print(TimeoutException);
+    } on Exception catch (e) {
+      print('Image uplad exception, $e');
+    }
   }
 }
