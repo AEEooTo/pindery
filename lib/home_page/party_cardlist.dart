@@ -47,30 +47,34 @@ class PartyCardList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   new Container(
-                    width: 250.0,
-                    child: new Text('Whoops, it seems that nobody is organising new parties nearby.\nBecome an organiser, tapping the plus!',
-                    style: new TextStyle(),)),
+                    width: 270.0,
+                    child: new Text(
+                      'Whoops, it seems that nobody is organising new parties nearby.\nBecome an organiser, tap the plus!',
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 ],
               ),
             );
           }
           return new ListView.builder(
             controller: hideButtonController,
-              padding: new EdgeInsets.only(top:8.0, right:8.0,left: 8.0,bottom: 80.0),
-              reverse: false,
-              itemBuilder: (_, int index) {
-                documentsList.sort(
-                    (DocumentSnapshot documentA, DocumentSnapshot documentB) {
-                      return documentA['fromDayTime'].compareTo(documentB['fromDayTime']);
-                    }
-                );
-                final DocumentSnapshot document =
-                    documentsList[index];
-                Party party = new Party.fromJSON(document);
-                return new PartyCard(party: party);
-              },
-              itemCount: snapshot.data.documents.length,
-          scrollDirection: Axis.vertical,);
+            padding: new EdgeInsets.only(
+                top: 8.0, right: 8.0, left: 8.0, bottom: 80.0),
+            reverse: false,
+            itemBuilder: (_, int index) {
+              documentsList.sort(
+                  (DocumentSnapshot documentA, DocumentSnapshot documentB) {
+                return documentA['fromDayTime']
+                    .compareTo(documentB['fromDayTime']);
+              });
+              final DocumentSnapshot document = documentsList[index];
+              Party party = new Party.fromJSON(document);
+              return new PartyCard(party: party);
+            },
+            itemCount: snapshot.data.documents.length,
+            scrollDirection: Axis.vertical,
+          );
         });
   }
 }

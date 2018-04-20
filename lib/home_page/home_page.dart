@@ -36,6 +36,9 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
         builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return new Scaffold(
+              appBar: new AppBar(
+                title: new Text('Pindery'),
+              ),
               body: new Theme(
                 data: pinderyTheme,
                 child: new Column(
@@ -56,10 +59,8 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
             );
           }
           if (snapshot.data == null) {
-            print("No user, ${snapshot.data}");
             return new WelcomePage();
           } else {
-            print("User logged, ${snapshot.data}");
             return new HomePage(user);
           }
           // loading

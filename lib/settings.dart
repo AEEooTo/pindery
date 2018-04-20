@@ -9,6 +9,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'theme.dart';
 import 'user.dart';
 import 'utils.dart';
+import 'drawer.dart';
 
 class SettingsPage extends StatelessWidget {
   SettingsPage({this.user});
@@ -20,51 +21,52 @@ class SettingsPage extends StatelessWidget {
       appBar: new AppBar(
         title: new Text('Settings'),
       ),
+      drawer: new PinderyDrawer(user: user),
       body: new Column(children: <Widget>[
         new Container(
-            //TODO: fix width problem
-            height: 175.0,
-            width: 400.0,
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: new AssetImage("assets/img/movingParty.jpeg"),
-                fit: BoxFit.cover,
-              ),
+          height: 175.0,
+          width: 400.0,
+          decoration: new BoxDecoration(
+            image: new DecorationImage(
+              image: new AssetImage("assets/img/movingParty.jpeg"),
+              fit: BoxFit.cover,
             ),
-            child: new Column(
-              children: <Widget>[
-                new Expanded(
-                  flex: 2,
-                  child: new Container(
-                    height: 72.0,
-                    width: 72.0,
-                    child: new PinderyCircleAvatar(user: user),
-                  ),
+          ),
+          child: new Column(
+            children: <Widget>[
+              new Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: new SizedBox(
+                  height: 72.0,
+                  width: 72.0,
+                  child: new PinderyCircleAvatar(user: user),
                 ),
-                new Expanded(
-                  flex: 1,
-                  child: new Column(
-                    children: <Widget>[
-                      new Text(
-                        '${user.name} ${user.surname}',
-                        style: new TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w500),
-                      ),
-                      new Text(
-                        user.email,
-                        style: new TextStyle(
-                          fontSize: 18.0,
+              ),
+              new Expanded(
+                flex: 1,
+                child: new Column(
+                  children: <Widget>[
+                    new Text(
+                      '${user.name} ${user.surname}',
+                      style: new TextStyle(
                           color: Colors.white,
-                          fontWeight: FontWeight.w300,
-                        ),
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w500),
+                    ),
+                    new Text(
+                      user.email,
+                      style: new TextStyle(
+                        fontSize: 18.0,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w300,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            )),
+              ),
+            ],
+          ),
+        ),
         new Expanded(
           child: new Column(
             children: <Widget>[

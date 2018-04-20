@@ -84,7 +84,6 @@ class DrawerBlock extends StatelessWidget {
   final GlobalKey<DrawerControllerState> drawerKey;
 
   Widget build(BuildContext context) {
-    print(drawerKey.currentState);
     return new Container(
       height: 60.0,
       padding: const EdgeInsets.symmetric(vertical: 16.0),

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'user.dart';
 import 'theme.dart';
 
+/// A [CircleAvatar] which checks whether the user has a profile picture or not
 class PinderyCircleAvatar extends StatelessWidget{
   PinderyCircleAvatar({this.user});
   final User user;
