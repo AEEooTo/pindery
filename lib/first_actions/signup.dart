@@ -415,7 +415,7 @@ class SigninUpPage extends StatelessWidget {
               ),
             ),
             new Padding(
-              padding: const EdgeInsets.only(bottom: 81.0),
+              padding: const EdgeInsets.only(top: 20.0, bottom: 60.0),
               child: new Text(
                 'Signing up!',
                 style: new TextStyle(
@@ -428,7 +428,7 @@ class SigninUpPage extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: new Container(
                 height: 1.5,
-                margin: EdgeInsets.only(top: 16.0),
+                margin: EdgeInsets.only(left: 40.0, right: 40.0, top: 16.0),
                 child: new LinearProgressIndicator(),
               ),
             )

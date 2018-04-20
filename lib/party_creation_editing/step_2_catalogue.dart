@@ -2,8 +2,12 @@
 /// contains the code for choosing the party catalogue
 /// ///
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:image/image.dart' as Im;
+import 'package:path_provider/path_provider.dart';
 
 import '../catalogue_element.dart';
 import '../party.dart';
@@ -96,6 +100,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                     if (!cancelled) {
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
+                      //Navigator.popUntil(context, ModalRoute.withName('/home-page')); //to implement after the user becomes stored in a redux
                       homePageState.showSnackBar(new SnackBar(
                         content: new Text("Great! The party was created!"),
                       ));
@@ -136,8 +141,30 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
     }
   }
 
+  Future<Null> _compressImage() async {
+    print("compressing image"); //todo: remove debug print
+    final tempDir = await getTemporaryDirectory();
+    final path = tempDir.path;
+    int rand = new Random().nextInt(10000);
+
+    Im.Image image = Im.decodeImage(party.imageLocalPath.readAsBytesSync());
+
+    int widthFinal;
+    if(image.height > image.width){
+      widthFinal = 1080;
+    }else{
+      widthFinal = ((image.width * 1080)/image.height).round();
+    }
+    image = Im.copyResize(image, widthFinal); // choose the size here, it will maintain aspect ratio
+    print("image compressed");
+    party.imageLocalPath = new File('$path/img_$rand.jpg')
+      ..writeAsBytesSync(Im.encodeJpg(image, quality: 50));
+  }
+
   Future<Null> _uploadingDialog(FormState formState) async {
+    _compressImage();
     _handleSubmitted(formState);
+    print("past the futures");
     return showDialog<Null>(
       context: context,
       barrierDismissible: false,

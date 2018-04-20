@@ -325,7 +325,7 @@ class LoggingInPage extends StatelessWidget {
               ),
             ),
             new Padding(
-              padding: const EdgeInsets.only(bottom: 81.0),
+              padding: const EdgeInsets.only(top: 20.0, bottom: 60.0),
               child: new Text(
                 'Logging in!',
                 style: new TextStyle(
@@ -338,7 +338,7 @@ class LoggingInPage extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: new Container(
                 height: 1.5,
-                margin: EdgeInsets.only(top: 16.0),
+                margin: EdgeInsets.only(top: 16.0, left: 40.0, right: 40.0),
                 child: new LinearProgressIndicator(),
               ),
             )
