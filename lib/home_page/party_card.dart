@@ -7,7 +7,6 @@ import 'package:transparent_image/transparent_image.dart';
 import '../party.dart';
 import '../party_page.dart';
 import '../theme.dart';
-import 'package:pindery/first_actions/welcome.dart';
 
 class PartyCard extends StatelessWidget {
   PartyCard({this.party});
@@ -22,7 +21,6 @@ class PartyCard extends StatelessWidget {
         height: cardHeight,
         child: new Stack(
           children: <Widget>[
-            // TODO: fix image size in stack
             new Center(child: new CircularProgressIndicator()),
             new ConstrainedBox(
               constraints: BoxConstraints.expand(),

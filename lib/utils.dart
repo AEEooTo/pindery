@@ -25,6 +25,7 @@ class PinderyCircleAvatar extends StatelessWidget{
     }
     return new CircleAvatar(
       backgroundImage: new NetworkImage(user.profilePictureUrl),
+      backgroundColor: secondary,
     );
   }
 }

@@ -15,6 +15,7 @@ import 'package:flutter/rendering.dart';
 import '../drawer.dart' show PinderyDrawer;
 import 'party_cardlist.dart';
 import '../user.dart';
+import '../theme.dart';
 
 /// This file contains the code for Pindery's homepage's structure.
 
@@ -34,10 +35,25 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
         future: _getUser(),
         builder: (BuildContext context, AsyncSnapshot<FirebaseUser> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-                child: new Container(
-              child: new Text('Loading...'),
-            ));
+            return new Scaffold(
+              body: new Theme(
+                data: pinderyTheme,
+                child: new Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    new Center(child: new CircularProgressIndicator()),
+                    const SizedBox(
+                      height: 12.0,
+                    ),
+                    new Text(
+                      "Loading...",
+                      style: new TextStyle(fontSize: 12.0),
+                    ),
+                  ],
+                ),
+              ),
+            );
           }
           if (snapshot.data == null) {
             print("No user, ${snapshot.data}");
@@ -64,7 +80,7 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
 class HomePage extends StatelessWidget {
   HomePage(this.user);
 
-  final User user;  
+  final User user;
   final String title = 'Pindery';
   final GlobalKey<ScaffoldState> homeScaffoldKey =
       new GlobalKey<ScaffoldState>();

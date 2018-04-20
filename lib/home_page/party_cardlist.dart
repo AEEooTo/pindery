@@ -39,12 +39,26 @@ class PartyCardList extends StatelessWidget {
               ),
             );
           }
+          List<DocumentSnapshot> documentsList = snapshot.data.documents;
+          if (documentsList.isEmpty) {
+            return new Center(
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Container(
+                    width: 250.0,
+                    child: new Text('Whoops, it seems that nobody is organising new parties nearby.\nBecome an organiser, tapping the plus!',
+                    style: new TextStyle(),)),
+                ],
+              ),
+            );
+          }
           return new ListView.builder(
             controller: hideButtonController,
               padding: new EdgeInsets.only(top:8.0, right:8.0,left: 8.0,bottom: 80.0),
               reverse: false,
               itemBuilder: (_, int index) {
-                List<DocumentSnapshot> documentsList = snapshot.data.documents;
                 documentsList.sort(
                     (DocumentSnapshot documentA, DocumentSnapshot documentB) {
                       return documentA['fromDayTime'].compareTo(documentB['fromDayTime']);
