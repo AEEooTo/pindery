@@ -8,10 +8,15 @@ import 'package:flutter/material.dart';
 import 'user.dart';
 import 'theme.dart';
 
-Widget pinderyCircleAvatar(User user) {
+class PinderyCircleAvatar extends StatelessWidget{
+  PinderyCircleAvatar({this.user});
+  final User user;
+
+  @override
+  Widget build(BuildContext context) {
     if (user.profilePictureUrl == null) {
       return new CircleAvatar(
-        child: Text(
+        child: new Text(
           user.name[0],
           style: new TextStyle(color: Colors.white, fontSize: 30.0),
           ),
@@ -21,4 +26,5 @@ Widget pinderyCircleAvatar(User user) {
     return new CircleAvatar(
       backgroundImage: new NetworkImage(user.profilePictureUrl),
     );
+  }
 }
