@@ -149,13 +149,22 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
 
     Im.Image image = Im.decodeImage(party.imageLocalPath.readAsBytesSync());
 
-    int widthFinal;
-    if(image.height > image.width){
+    int widthFinal = 0;
+    if (image.height > image.width) {
       widthFinal = 1080;
-    }else{
-      widthFinal = ((image.width * 1080)/image.height).round();
+      if(image.width>1080){
+        image = Im.copyResize(image,
+            widthFinal);
+      }
+    } else {
+      widthFinal = ((image.width * 1080) / image.height).round();
+      if(image.height>1080){
+        image = Im.copyResize(image,
+            widthFinal);
+      }
     }
-    image = Im.copyResize(image, widthFinal); // choose the size here, it will maintain aspect ratio
+    // choose the width size here, it will maintain aspect ratio
+
     print("image compressed");
     party.imageLocalPath = new File('$path/img_$rand.jpg')
       ..writeAsBytesSync(Im.encodeJpg(image, quality: 50));
