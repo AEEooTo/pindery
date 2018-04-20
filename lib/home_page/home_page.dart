@@ -10,6 +10,9 @@ import 'package:pindery/party_creation_editing/step_1_create.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
+import 'party_cardlist.dart';
+import 'dart:async';
+import 'package:pindery/first_actions/welcome.dart';
 
 // Internal imports
 import '../drawer.dart' show PinderyDrawer;
@@ -79,9 +82,6 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
 }
 
 class HomePage extends StatelessWidget {
-  HomePage(this.user);
-
-  final User user;
   final String title = 'Pindery';
   final GlobalKey<ScaffoldState> homeScaffoldKey =
       new GlobalKey<ScaffoldState>();

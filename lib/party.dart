@@ -38,8 +38,8 @@ class Party {
     id = snapshot.documentID;
 
     // TODO: implement the user and the Pinder-points
-    organiser = 'Anna ovviamente';
-    rating = 1;
+    organiser = 'Anna';
+    rating = 3.5;
     ratingNumber = 23;
     pinderPoints = 6;
   }
