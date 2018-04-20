@@ -6,6 +6,7 @@ import 'package:transparent_image/transparent_image.dart';
 import 'party.dart';
 import 'drawer.dart';
 import 'theme.dart';
+import 'party_choosing/takepart_page.dart';
 
 enum AppBarBehavior { normal, pinned, floating, snapping }
 
@@ -71,6 +72,7 @@ class PartyPage extends StatelessWidget {
                   organiser: party.organiser,
                   rating: party.rating,
                   ratingNumber: party.ratingNumber,
+                  party: party,
                 ),
                 new WhitePartyBlock(
                   data: party.place,
@@ -131,8 +133,9 @@ class PartyPage extends StatelessWidget {
 }
 
 class BlackPartyHeader extends StatelessWidget {
-  BlackPartyHeader({this.organiser, this.rating, this.ratingNumber});
+  BlackPartyHeader({this.organiser, this.rating, this.ratingNumber, this.party});
 
+  final Party party;
   final String organiser;
   final num rating;
   final int ratingNumber;
@@ -198,12 +201,15 @@ class BlackPartyHeader extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: new FloatingActionButton(
                   onPressed: () {
-                    Scaffold.of(context).showSnackBar(new SnackBar(
+                    /*Scaffold.of(context).showSnackBar(new SnackBar(
                           content: new Text(
                             "Pressed mate",
                             textAlign: TextAlign.center,
                           ),
-                        ));
+                        ));*/
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => new TakePartPage(party: party,)),
+                    );
                   },
                   child: new Icon(Icons.local_bar),
                 ),
@@ -285,7 +291,6 @@ class RatingStars extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
-    number=2.5;
     starsMethod(number);
 
     return new Row(

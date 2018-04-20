@@ -58,7 +58,9 @@ flutter:
       - assets/img/kittens.jpeg
       - assets/img/demo_falsa.png
       - assets/img/logo_v_2_rosso.png
-
+      - assets/img/beer_1.jpg
+      - assets/img/beer_2.jpg
+      - assets/img/beer_3.png
 
   # To add custom fonts to your application, add a fonts section here,
   # in this "flutter" section. Each entry in this list should have a
