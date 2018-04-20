@@ -2,12 +2,18 @@
 ///
 ///
 
+// Dart core imports
+import 'dart:async';
+
+// External libraries imports
 import 'package:flutter/material.dart';
-import '../drawer.dart';
-import '../theme.dart';
 import 'package:validator/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'dart:async';
+
+// Internal imports
+import '../theme.dart';
+import '../user.dart';
+
 
 String _name;
 String _surname;
@@ -107,6 +113,7 @@ class _SignUpPageState extends State<SignupPage> {
                                   : null),
                               onSaved: (val) => _name = val,
                               onFieldSubmitted: (String value) {
+                                // TODO: Are all those setState() necessary?
                                 setState(() {
                                   _name = value;
                                 });
@@ -216,6 +223,7 @@ class SignUpButton extends StatelessWidget {
       onPressed: () async {
         final FormState formState = formKey.currentState;
         formState.save();
+        // TODO: add a decent controller, pls
         if (_confirmPasswordController.text == _passwordController.text) {
           _handleSignUp(context);
         } else {
@@ -257,8 +265,11 @@ Future<bool> _trulyHandleSignUp(
     print('Trying to signup');
     FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
         email: _email, password: _password);
-    //todo: implement user (as our proprietary object) creation
+    //TODO: implement user (as our proprietary object) creation
+    User databaseUser = new User(name: _name, surname: _surname, email: _email, uid: user.uid);
+    await databaseUser.sendUser();
   } catch (error) {
+    // TODO: check the type of error and propmt the user consequently
     hasSucceeded = false;
   }
   return hasSucceeded;
@@ -404,7 +415,7 @@ class SigninUpPage extends StatelessWidget {
               ),
             ),
             new Padding(
-              padding: const EdgeInsets.only(bottom: 81.0),
+              padding: const EdgeInsets.only(top: 20.0, bottom: 60.0),
               child: new Text(
                 'Signing up!',
                 style: new TextStyle(
@@ -417,7 +428,7 @@ class SigninUpPage extends StatelessWidget {
               padding: EdgeInsets.all(16.0),
               child: new Container(
                 height: 1.5,
-                margin: EdgeInsets.only(top: 16.0),
+                margin: EdgeInsets.only(left: 40.0, right: 40.0, top: 16.0),
                 child: new LinearProgressIndicator(),
               ),
             )

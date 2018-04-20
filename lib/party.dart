@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:math';
+import 'dart:math' ;
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -70,13 +70,23 @@ class Party {
 
   /// Method to push the party on the DB
   Future<Null> sendParty() async {
-    // Firebase Firestore reference
     print('Sending party');
-    final reference = Firestore.instance
+    // Firebase Firestore reference
+    final CollectionReference reference = Firestore.instance
         .collection('cities')
         .document(city.toLowerCase())
         .collection('parties');
-    reference.add(partyMapper());
+    Duration timeoutDuration = new Duration(seconds: 30);
+    try {
+      reference.add(partyMapper())
+      .catchError(() => throw new Exception('UPLOAD ERROR'))
+      .timeout(timeoutDuration, onTimeout: () => throw new TimeoutException('TIMEOUT', timeoutDuration));
+    } on TimeoutException {
+      print(TimeoutException);
+    } on Exception catch (e) {
+      print('Error uploading the party, $e');
+    }
+
   }
 
   /// Method to create a map from the Party instance to be pushed to Firestore
@@ -104,12 +114,23 @@ class Party {
   }
 
   Future<Null> uploadImage(File imageFile) async {
+    print("uploading image"); //todo: remove debug print
     int random = new Random().nextInt(100000);
     StorageReference ref = FirebaseStorage.instance
         .ref()
         .child("/partyImages/party_image_$random.jpg");
-    StorageUploadTask uploadTask = ref.put(imageFile);
-    Uri downloadUrl = (await uploadTask.future).downloadUrl;
+    StorageUploadTask uploadTask = ref.put(imageLocalPath);
+    Duration timeoutDuration = new Duration(seconds: 30);
+    try {
+      UploadTaskSnapshot task = await uploadTask.future
+      .timeout(timeoutDuration, onTimeout: () => throw new TimeoutException('TIMEOUT', timeoutDuration))
+      .catchError(() => throw new Exception('UPLOAD ERROR'));
+      Uri downloadUrl = task.downloadUrl;
     imageUrl = downloadUrl.toString();
+    } on TimeoutException {
+      print(TimeoutException);
+    } on Exception catch (e) {
+      print('Image uplad exception, $e');
+    }
   }
 }

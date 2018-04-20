@@ -8,9 +8,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:math' as Math;
-import 'package:image/image.dart' as Im;
-import 'package:path_provider/path_provider.dart';
 
 import '../theme.dart';
 import '../party.dart';
@@ -18,7 +15,6 @@ import '../party.dart';
 class PinderyDetailsUtils {
   static Future<File> pickImage(ImageSource source) async {
     File imageFile = await ImagePicker.pickImage(source: source);
-    imageFile = await compressImage(imageFile);
     return imageFile;
   }
 }
@@ -218,18 +214,6 @@ class InputDropdown extends StatelessWidget {
       ),
     );
   }
-}
-
-Future<File> compressImage(File imageFull) async {
-  final tempDir = await getTemporaryDirectory();
-  final path = tempDir.path;
-  int rand = new Math.Random().nextInt(10000);
-
-  Im.Image image = Im.decodeImage(imageFull.readAsBytesSync());
-
-  // Im.Image smallerImage = Im.copyResize(image, 500); // choose the size here, it will maintain aspect ratio
-  return new File('$path/img_$rand.jpg')
-    ..writeAsBytesSync(Im.encodeJpg(image, quality: 50));
 }
 
 /// Function to parse a DateTime from a TimeOfDay object and DateTime object to obtain a string

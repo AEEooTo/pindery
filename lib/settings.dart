@@ -1,59 +1,72 @@
 /// This file contains the code for Pindery's settings page.
 ///
+
+// External libraries imports
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'first_actions/welcome.dart';
+
+// Internal imports
 import 'theme.dart';
 import 'user.dart';
+import 'utils.dart';
+import 'drawer.dart';
 
 class SettingsPage extends StatelessWidget {
+  SettingsPage({this.user});
+
+  final User user;
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Settings'),
       ),
+      drawer: new PinderyDrawer(user: user),
       body: new Column(children: <Widget>[
         new Container(
-          //TODO: fix width problem
-            height: 175.0,
-            width: 400.0,
-            decoration: new BoxDecoration(
-                image: new DecorationImage(
+          height: 175.0,
+          width: 400.0,
+          decoration: new BoxDecoration(
+            image: new DecorationImage(
               image: new AssetImage("assets/img/movingParty.jpeg"),
               fit: BoxFit.cover,
-            ),),
-            child: new Column(
-              children: <Widget>[
-                new Container(
-                  margin: new EdgeInsets.only(top: 25.0),
-                  child: new CircleAvatar(
-                    child: new Center(
-                      child: new Text('A'),
+            ),
+          ),
+          child: new Column(
+            children: <Widget>[
+              new Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: new SizedBox(
+                  height: 72.0,
+                  width: 72.0,
+                  child: new PinderyCircleAvatar(user: user),
+                ),
+              ),
+              new Expanded(
+                flex: 1,
+                child: new Column(
+                  children: <Widget>[
+                    new Text(
+                      '${user.name} ${user.surname}',
+                      style: new TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w500),
                     ),
-                    maxRadius: 32.0,
-                  ),
-                ),
-                new Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: new Text(
-                    'Edoardo Debenedetti',
-                    style: new TextStyle(
+                    new Text(
+                      user.email,
+                      style: new TextStyle(
+                        fontSize: 18.0,
                         color: Colors.white,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w600),
-                  ),
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ],
                 ),
-                new Text(
-                  'edoardo.debenedetti@gmail.com',
-                  style: new TextStyle(
-                    fontSize: 14.0,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
-            )),
+              ),
+            ],
+          ),
+        ),
         new Expanded(
           child: new Column(
             children: <Widget>[
@@ -81,8 +94,9 @@ class SettingsPage extends StatelessWidget {
             color: Colors.white,
           ),
           title: new Text('Logout'),
-          onTap: () async{
-            Navigator.push(context, MaterialPageRoute(builder: (context) => new SigninOutPage()));
+          onTap: () async {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => new SigninOutPage()));
             await FirebaseAuth.instance.signOut();
             Navigator.popUntil(context, ModalRoute.withName('/'));
           },
@@ -121,14 +135,12 @@ class SettingsBlock extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                if (widgetBuilder!=null)
-                  {
-                    Navigator.push(
-                      context,
-                      new MaterialPageRoute(builder: widgetBuilder),
-                    );
-                  }
-
+                if (widgetBuilder != null) {
+                  Navigator.push(
+                    context,
+                    new MaterialPageRoute(builder: widgetBuilder),
+                  );
+                }
               },
             )),
       ),
@@ -137,7 +149,6 @@ class SettingsBlock extends StatelessWidget {
 }
 
 class SigninOutPage extends StatelessWidget {
-
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
@@ -153,9 +164,9 @@ class SigninOutPage extends StatelessWidget {
                 width: 214.0,
                 decoration: new BoxDecoration(
                     image: new DecorationImage(
-                      image: new AssetImage('assets/img/logo_v_2_rosso.png'),
-                      fit: BoxFit.fitHeight,
-                    )),
+                  image: new AssetImage('assets/img/logo_v_2_rosso.png'),
+                  fit: BoxFit.fitHeight,
+                )),
               ),
             ),
             new Padding(

@@ -2,84 +2,83 @@
 /// This file contains the code for Pindery's drawer
 ///
 
+// External libraries imports
 import 'package:flutter/material.dart';
+
+// Internal imports
 import 'theme.dart';
-import 'package:pindery/first_actions/welcome.dart';
-import 'package:pindery/settings.dart';
-import 'package:pindery/first_actions/welcome.dart';
+import 'user.dart';
+import 'utils.dart';
+import 'home_page/home_page.dart';
+import 'settings.dart';
 
-
-final String name = "Edoardo Debenedetti";
-final String coverImagePath = "assets/img/movingParty.jpeg";
-final String avatarPath = "assets/img/avatar.jpg";
+const String coverImagePath = "assets/img/movingParty.jpeg";
 
 /// Default drawer for Pindery app
 class PinderyDrawer extends StatelessWidget {
+  PinderyDrawer({this.user});
+
+  final User user;
+  final GlobalKey<DrawerControllerState> drawerKey =
+      new GlobalKey<DrawerControllerState>();
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: new BoxDecoration(
-        color: Colors.white,
-      ),
-      child: new Column(
-        children: <Widget>[
-          new Container(
-            height: 172.0,
-            width: 305.0,
-            decoration: new BoxDecoration(
-              image: new DecorationImage(
-                image: new AssetImage(coverImagePath),
-                fit: BoxFit.cover,
+    return new Drawer(
+      key: drawerKey,
+      child: new Container(
+        decoration: new BoxDecoration(
+          color: Colors.white,
+        ),
+        child: new Column(
+          children: <Widget>[
+            new UserAccountsDrawerHeader(
+              margin: null,
+              accountName: new Text('${user.name} ${user.surname}'),
+              accountEmail: new Text(user.email),
+              currentAccountPicture: new PinderyCircleAvatar(user: user),
+              decoration: new BoxDecoration(
+                image: new DecorationImage(
+                    image: new AssetImage(coverImagePath), fit: BoxFit.cover),
               ),
             ),
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
+            new Column(
               children: <Widget>[
-                new Container(
-                  margin: new EdgeInsets.all(16.0),
-                  height: 64.0,
-                  width: 64.0,
-                  child: new CircleAvatar(
-                    backgroundImage: new AssetImage(avatarPath),
-                  ),
+                // TODO: understand how to make the drawer close is the user is already on the selected page
+                new DrawerBlock(
+                  icon: Icons.star,
+                  data: 'Parties',
+                  widgetBuilder: (context) => new HomePage(user),
+                  drawerKey: drawerKey,
                 ),
-                new Container(
-                  padding: new EdgeInsets.only(left: 16.0),
-                  child: new Text(
-                    name,
-                    style: new TextStyle(color: Colors.white, fontSize: 16.0),
-                  ),
+                new DrawerBlock(
+                  icon: Icons.face,
+                  data: 'My parties',
+                  // widgetBuilder: (context) => new WelcomePage(),
+                  drawerKey: drawerKey,
+                ),
+                new DrawerBlock(
+                  icon: Icons.settings,
+                  data: 'Settings',
+                  widgetBuilder: (context) => new SettingsPage(user: user),
+                  drawerKey: drawerKey,
                 ),
               ],
             ),
-          ),
-          //end container  with pics
-          new Container(
-            width: 305.0,
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new DrawerBlock(icon: Icons.star ,data: 'Parties', /*widgetBuilder: (context) => new WelcomePage(),*/),
-                new DrawerBlock(icon: Icons.face, data: 'My parties', /*widgetBuilder: (context) => new WelcomePage(),*/),
-                new DrawerBlock(icon: Icons.settings ,data: 'Settings', widgetBuilder: (context) => new SettingsPage(),)
-                ]
-            )
-          )
-
-        ],
+          ],
+        ),
       ),
     );
   }
 }
 
 class DrawerBlock extends StatelessWidget {
-  DrawerBlock({this.data, this.icon, this.widgetBuilder});
+  DrawerBlock({this.data, this.icon, this.widgetBuilder, this.drawerKey});
 
   final String data;
   final IconData icon;
   final WidgetBuilder widgetBuilder;
+  final GlobalKey<DrawerControllerState> drawerKey;
 
   Widget build(BuildContext context) {
     return new Container(
@@ -90,24 +89,26 @@ class DrawerBlock extends StatelessWidget {
       child: new DefaultTextStyle(
         style: Theme.of(context).textTheme.subhead,
         child: new SafeArea(
-            top: false,
-            bottom: false,
-            child: new ListTile(
-              leading: new Icon(icon, color: secondary, size: 24.0),
-              title: new Text(
-                data,
-                textAlign: TextAlign.start,
-                style: new TextStyle(
-                    fontSize: 14.0,
-                    color: primaryLight,
-                    fontWeight: FontWeight.w600),
-              ),
-              onTap: () {
-                Navigator.of(context).push(
-                      MaterialPageRoute(builder: widgetBuilder),
-                    );
-              },
-            )),
+          top: false,
+          bottom: false,
+          child: new ListTile(
+            leading: new Icon(icon, color: secondary, size: 24.0),
+            title: new Text(
+              data,
+              textAlign: TextAlign.start,
+              style: new TextStyle(
+                  fontSize: 14.0,
+                  color: primaryLight,
+                  fontWeight: FontWeight.w600),
+            ),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.of(context).push(
+                    MaterialPageRoute(builder: widgetBuilder),
+                  );
+            },
+          ),
+        ),
       ),
     );
   }

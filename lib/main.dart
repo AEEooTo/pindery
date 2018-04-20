@@ -4,7 +4,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'theme.dart';
 import 'package:pindery/home_page/home_page.dart';
@@ -26,7 +25,7 @@ class Pindery extends StatelessWidget {
       home: new PinderyHomePage(),
       routes: <String, WidgetBuilder>{
         '/welcome-page': (BuildContext context) => new WelcomePage(),
-        '/home-page': (BuildContext context) => new HomePage(),
+        // '/home-page': (BuildContext context) => new HomePage(),
       },
     );
   }
