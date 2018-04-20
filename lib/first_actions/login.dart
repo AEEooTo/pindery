@@ -178,6 +178,7 @@ Future<bool> _trulyHandleLogin(
     FirebaseUser user = await _auth.signInWithEmailAndPassword(
         email: _email, password: _password);
   } catch (error) {
+    // TODO: check the type of error and prompt the user consequently
     hasSucceeded = false;
   }
   return hasSucceeded;

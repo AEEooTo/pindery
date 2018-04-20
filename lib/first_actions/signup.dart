@@ -257,8 +257,9 @@ Future<bool> _trulyHandleSignUp(
     print('Trying to signup');
     FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
         email: _email, password: _password);
-    //todo: implement user (as our proprietary object) creation
+    //TODO: implement user (as our proprietary object) creation
   } catch (error) {
+    // TODO: check the type of error and propmt the user consequently
     hasSucceeded = false;
   }
   return hasSucceeded;
