@@ -72,9 +72,9 @@ class Party {
 
   /// Method to push the party on the DB
   Future<Null> sendParty() async {
-    // Firebase Firestore reference
     print('Sending party');
-    final reference = Firestore.instance
+    // Firebase Firestore reference
+    final CollectionReference reference = Firestore.instance
         .collection('cities')
         .document(city.toLowerCase())
         .collection('parties');
