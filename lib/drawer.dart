@@ -2,20 +2,25 @@
 /// This file contains the code for Pindery's drawer
 ///
 
+// External libraries imports
 import 'package:flutter/material.dart';
-import 'theme.dart';
-import 'package:pindery/first_actions/welcome.dart';
 import 'package:pindery/settings.dart';
-import 'package:pindery/first_actions/welcome.dart';
 
+// Internal imports
+import 'theme.dart';
+import 'user.dart';
+import 'utils.dart';
+import 'home_page/home_page.dart';
 
-const String name = "Edoardo Debenedetti";
-const String email = "e@pindery.com";
 const String coverImagePath = "assets/img/movingParty.jpeg";
-const String avatarPath = "assets/img/avatar.jpg";
 
 /// Default drawer for Pindery app
 class PinderyDrawer extends StatelessWidget {
+  PinderyDrawer({this.user});
+
+  final User user;
+  DrawerControllerState drawerControllerState = new DrawerControllerState();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,9 +30,9 @@ class PinderyDrawer extends StatelessWidget {
       child: new Column(
         children: <Widget>[
           new UserAccountsDrawerHeader(
-            accountName: new Text(name),
-            accountEmail: new Text(email),
-            currentAccountPicture: new CircleAvatar(backgroundImage: new AssetImage(avatarPath),),
+            accountName: new Text('${user.name} ${user.surname}'),
+            accountEmail: new Text(user.email),
+            currentAccountPicture: pinderyCircleAvatar(user),
             decoration: new BoxDecoration(
               image: new DecorationImage(
                 image: new AssetImage(coverImagePath),
@@ -36,17 +41,15 @@ class PinderyDrawer extends StatelessWidget {
             ),
           ),
           //end container  with pics
-          new Container(
-            width: 305.0,
-            child: new Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                new DrawerBlock(icon: Icons.star ,data: 'Parties', /*widgetBuilder: (context) => new WelcomePage(),*/),
-                new DrawerBlock(icon: Icons.face, data: 'My parties', /*widgetBuilder: (context) => new WelcomePage(),*/),
-                new DrawerBlock(icon: Icons.settings ,data: 'Settings', widgetBuilder: (context) => new SettingsPage(),)
-                ]
-            )
+          new Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              // TODO: understand how to make the drawer close is the user is already on the selected page
+              new DrawerBlock(icon: Icons.star ,data: 'Parties', widgetBuilder: (context) => new HomePage(user)),
+              new DrawerBlock(icon: Icons.face, data: 'My parties', /*widgetBuilder: (context) => new WelcomePage(),*/),
+              new DrawerBlock(icon: Icons.settings ,data: 'Settings', widgetBuilder: (context) => new SettingsPage(),)
+              ]
           )
 
         ],
