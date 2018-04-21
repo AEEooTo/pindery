@@ -49,7 +49,6 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
 
   @override
   Widget build(BuildContext context) {
-    catalogue.printCatalogue();
     return new Theme(
       data: Theme.of(context),
       child: new Scaffold(
@@ -103,6 +102,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
                       //Navigator.popUntil(context, ModalRoute.withName('/home-page')); //to implement after the user becomes stored in a redux
+                      // TODO: fix that snackbar
                       homePageState.showSnackBar(new SnackBar(
                         content: new Text("Great! The party was created!"),
                       ));
@@ -116,7 +116,6 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                     if (catalogue.catalogue.isEmpty) {
                       scaffoldKey.currentState.showSnackBar(
                         new SnackBar(
-                          // TODO: really cancel the party
                           content: new Text("The catalogue is empty"),
                         ),
                       );

@@ -9,7 +9,6 @@ import '../theme.dart';
 import '../party.dart';
 import 'step_2_catalogue.dart';
 import '../catalogue/catalogue.dart';
-import '../catalogue/catalogue_element.dart';
 
 /// Page used to create a new party
 class CreatePartyPage extends StatefulWidget {

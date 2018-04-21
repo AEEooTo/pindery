@@ -35,6 +35,7 @@ class Party {
     fromDayTime = snapshot['fromDayTime'];
     toDayTime = snapshot['toDayTime'];
     privacy = snapshot['privacy'];
+    catalogue = new Catalogue.fromFirestore(snapshot['catalogue']);
     id = snapshot.documentID;
 
     // TODO: implement the user and the Pinder-points
@@ -105,6 +106,7 @@ class Party {
     return partyMap;
   }
 
+  /// Uploads the image reauested by the user
   Future<Null> uploadImage(File imageFile) async {
     print("uploading image"); //todo: remove debug print
     int random = new Random().nextInt(100000);

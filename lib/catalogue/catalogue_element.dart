@@ -16,13 +16,21 @@ class CatalogueElement {
     elementQuantity = 1;
   }
 
+  CatalogueElement.fromMap(Map map) {
+    elementName = map['elementName'];
+    elementValue = map['elementValue'];
+    elementQuantity = map['elementQuantity'];
+    elementId = map['elementId'];
+    chosenQuantity = map['chosenQuantity'];
+  }
+
   catalogueElementMapper() {
     return <String, dynamic> {
       'elementName': elementName,
       'elementValue': elementValue,
       'elementQuantity': elementQuantity,
       'chosenQuantity': chosenQuantity,
-      'documentId': elementId,
+      'elementId': elementId,
     };
   }
 
