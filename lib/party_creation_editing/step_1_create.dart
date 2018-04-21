@@ -34,7 +34,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
 
   // To be filled party instance
   Party party = new Party();
-  Catalogue catalogue = new Catalogue(catalogue: <List<CatalogueElement>>[]);
+  final Catalogue catalogue = new Catalogue.initialization();
 
   // Text editing controllers
   TextEditingController nameController = new TextEditingController();
@@ -56,9 +56,6 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   String _privacyOption = Party.privacyOptions[0];
   
   Widget build(BuildContext context) {
-    for (int i = 0; i < Catalogue.names.length; ++i) {
-      catalogue.catalogue.add([]);
-    }
     return new Theme(
       data: Theme.of(context),
       child: new Scaffold(
@@ -262,11 +259,9 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   }
 
   void _handleSubmitted() {
-    printPartyInfo();
     final FormState form = formKey.currentState;
     form.save();
     assignPartyFields();
-    printPartyInfo();
     Navigator.push(
       context,
       new MaterialPageRoute(
@@ -285,14 +280,5 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     party.fromDayTime = dateTimeParser(_fromTime, _fromDate);
     party.toDayTime = dateTimeParser(_toTime, _toDate);
     party.privacy = _allPrivacyOptions.indexOf(_privacyOption);
-  }
-
-  /// Just for debugging purpose
-  void printPartyInfo() {
-    print(party.name);
-    print(party.description);
-    print(party.place);
-    print(party.fromDayTime);
-    print(party.toDayTime);
   }
 }

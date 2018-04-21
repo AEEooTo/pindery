@@ -49,6 +49,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
 
   @override
   Widget build(BuildContext context) {
+    catalogue.printCatalogue();
     return new Theme(
       data: Theme.of(context),
       child: new Scaffold(
@@ -133,7 +134,6 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
   /// Method to assign the different collected fields to the [Party] instance
   Future<Null> _handleSubmitted(FormState formState) async {
     formState.save();
-    print('saved form');
     party.catalogue = catalogue;
     await party.uploadImage(party.imageLocalPath);
     if (!cancelled) {
@@ -255,6 +255,9 @@ class _ChosenListState extends State<ChosenList> {
                     index: index,
                     chosenListState: this,
                   );
+                }
+                else {
+                  return new Container();
                 }
               },
               itemCount: catalogue.catalogue.length,

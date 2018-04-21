@@ -26,6 +26,7 @@ class CatalogueChoosingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text('Choose something'),
@@ -44,7 +45,7 @@ class CatalogueChoosingList extends StatelessWidget {
             ),
             new CategoryTilesBlock(
               category: utilitiesCategory,
-              catalogue: catalogue.catalogue[Categories.food.index],
+              catalogue: catalogue.catalogue[Categories.utilities.index],
             ),
           ],
         ),
@@ -139,11 +140,6 @@ class CategoryTilesList extends StatelessWidget {
       CollectionReference reference) async {
     QuerySnapshot documentsQuery = await reference.getDocuments();
     List<DocumentSnapshot> documents = documentsQuery.documents;
-    for (DocumentSnapshot document in documents) {
-      print('the element name is ' + document.data['name']);
-    }
-    print('In _getDocuments the documents length is: ' +
-        documents.length.toString());
     return documents;
   }
 
@@ -185,9 +181,6 @@ class CatalogueTile extends StatelessWidget {
       onTap: () {
         if (!catalogue.contains(element)) {
           catalogue.add(element);
-        }
-        for (CatalogueElement item in catalogue) {
-          print(item.elementName);
         }
         Navigator.of(context).pop();
       },

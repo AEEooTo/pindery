@@ -6,6 +6,12 @@ enum Categories { drinks, food, utilities }
 
 class Catalogue {
   Catalogue({this.catalogue});
+  Catalogue.initialization() {
+    catalogue = <List<CatalogueElement>>[];
+    for (int i = 0; i < Catalogue.names.length; ++i) {
+      catalogue.add(<CatalogueElement>[]);
+    }
+  }
 
   List<List<CatalogueElement>> catalogue;
 
@@ -24,19 +30,20 @@ class Catalogue {
   static const List<List<String>> dbSubCategories = [
     ['alcohol', 'soft_drinks'],
     ['simple_food'],
-    ['to_eat'],
+    ['to_eat', 'to_drink'],
   ];
 
   static const List<IconData> icons = [Icons.local_bar,Icons.local_pizza, Icons.settings];
 
   int get numberOfCategories => catalogue.length;
 
-  int ppp(int numerOfPeople) => (totalPoints / numerOfPeople).ceil();
-  // TODO: write methods for the class
+  /// Returns the number of Pinder-points for the current [Catalogue] instance
+  int ppp(int numberOfPeople) => (totalPoints / numberOfPeople).ceil();
 
   /// Creates a matrix of Maps representing each [CatalogueElement]
   Map<String, Map<String, Map<String, dynamic>>> catalogueMatrixMapper() {
     Map<String, Map<String, Map<String, dynamic>>> catalogueMatrixMap = {};
+    print(catalogue.length);
     for (int i = 0; i < catalogue.length; ++i) {
       catalogueMatrixMap[i.toString()] = catalogueListMapper(catalogue[i]);
     }
@@ -52,10 +59,10 @@ class Catalogue {
     return catalogueListMap;
   }
 
-
+  /// Checks if the [catalogue] and its [List]s are empty
   bool get isEmpty => _isEmpty();
   
-  /// Checks if the [catalogue] and its [List]s are empty
+  /// implementation of [isEmpty]
   bool _isEmpty() {
     for (int i = 0; i < Catalogue.names.length; ++i) {
       if (catalogue[i].isNotEmpty) {
@@ -63,6 +70,15 @@ class Catalogue {
       }
     }
     return true;
+  }
+
+  void printCatalogue() {
+    for(int i = 0; i < catalogue.length; ++i) {
+      print(i);
+      for (int j = 0; j < catalogue[i].length; ++j){
+        print(catalogue[i][j].elementName);
+      }
+    }
   }
     
 }
