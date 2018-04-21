@@ -11,7 +11,6 @@ import 'user.dart';
 import 'utils.dart';
 import 'home_page/home_page.dart';
 import 'settings.dart';
-import 'package:pindery/settings.dart';
 
 const String coverImagePath = "assets/img/movingParty.jpeg";
 
@@ -53,7 +52,7 @@ class PinderyDrawer extends StatelessWidget {
                 new DrawerBlock(
                   icon: Icons.star,
                   data: 'Parties',
-                  widgetBuilder: (context) => new HomePage(user),
+                  widgetBuilder: (context) => new HomePage(user: user),
                   drawerKey: drawerKey,
                 ),
                 new DrawerBlock(

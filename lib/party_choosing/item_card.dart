@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import '../party.dart';
-import 'dart:async';
 import 'item_cardlist.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../catalogue_element.dart';
 
 const String partyStuffCollection = "party_stuff";
 

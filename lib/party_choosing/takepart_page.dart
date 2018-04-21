@@ -2,8 +2,8 @@
 ///
 import 'package:flutter/material.dart';
 import 'item_card.dart';
-import 'package:pindery/party.dart';
-import 'package:pindery/theme.dart';
+import '../party.dart';
+import '../theme.dart';
 
 final String beveragesCoverImagePath = "assets/img/beer_2.jpg";
 final String foodCoverImagePath = "assets/img/pasta.jpeg";

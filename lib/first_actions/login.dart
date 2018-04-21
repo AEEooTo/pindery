@@ -302,7 +302,6 @@ class EmailField extends StatelessWidget {
 
 ///////
 class LoggingInPage extends StatelessWidget {
-  LoggingInPage({Context});
 
   Widget build(BuildContext context) {
     return new Scaffold(
