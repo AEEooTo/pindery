@@ -17,7 +17,6 @@ const String coverImagePath = "assets/img/movingParty.jpeg";
 
 
 final String name = "Edoardo Debenedetti";
-final String coverImagePath = "assets/img/movingParty.jpeg";
 final String avatarPath = "assets/img/avatar.jpg";
 
 /// Default drawer for Pindery app

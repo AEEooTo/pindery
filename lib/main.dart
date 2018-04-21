@@ -25,7 +25,7 @@ class Pindery extends StatelessWidget {
       home: new PinderyHomePage(),
       routes: <String, WidgetBuilder>{
         '/welcome-page': (BuildContext context) => new WelcomePage(),
-        '/home-page': (BuildContext context) => new HomePage(),
+        //'/home-page': (BuildContext context) => new HomePage(),
       },
     );
   }
