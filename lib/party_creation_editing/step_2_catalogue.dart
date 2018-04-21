@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as Im;
 import 'package:path_provider/path_provider.dart';
 
-import '../catalogue_element.dart';
+import '../catalogue/catalogue_element.dart';
 import '../party.dart';
 import 'catalogue_choosing_list.dart';
 import 'party_details_utils.dart';

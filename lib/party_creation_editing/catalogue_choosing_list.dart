@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../catalogue_element.dart';
+import '../catalogue/catalogue_element.dart';
 import '../theme.dart';
+import '../catalogue/catalogue.dart';
 
 const String partyStuffCollection = "party_stuff";
 
 class CatalogueChoosingList extends StatelessWidget {
-  CatalogueChoosingList(
-      {this.catalogue});
+  CatalogueChoosingList({this.catalogue});
 
   static const String routeName = '/create-party/catalogue-choosing';
 
@@ -18,26 +18,11 @@ class CatalogueChoosingList extends StatelessWidget {
 
   final List<CatalogueElement> catalogue;
 
-  final Category drinksCategory = new Category(
-    title: 'Drinks',
-    dbName: 'drinks',
-    dbSubcategories: ['alcohol', 'soft_drinks'],
-    icon: Icons.local_bar,
-  );
+  final Category drinksCategory = new Category(Categories.drinks.index);
 
-  final Category foodCategory = new Category(
-    title: 'Food',
-    dbName: 'food',
-    dbSubcategories: ['simple_food'],
-    icon: Icons.local_pizza,
-  );
+  final Category foodCategory = new Category(Categories.food.index);
 
-  final Category utilitiesCategory = new Category(
-    title: 'Utilities',
-    dbName: 'utilities',
-    dbSubcategories: ['to_eat'],
-    icon: Icons.settings,
-  );
+  final Category utilitiesCategory = new Category(Categories.utilities.index);
 
   @override
   Widget build(BuildContext context) {
@@ -105,7 +90,8 @@ class CategoryTilesList extends StatelessWidget {
   Widget _catalogueListBuilder() {
     List<Widget> catalogueList = <Widget>[];
     for (String categoryType in categoryTypes) {
-      catalogueList.add(_categorySubListBuilder(categoryType, categoryTypes.indexOf(categoryType)));
+      catalogueList.add(_categorySubListBuilder(
+          categoryType, categoryTypes.indexOf(categoryType)));
     }
     return new Column(
       children: catalogueList,
@@ -119,39 +105,45 @@ class CategoryTilesList extends StatelessWidget {
         .collection(categoryType);
     return new FutureBuilder(
       future: _getDocuments(reference),
-        builder: (BuildContext context, AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
-          if(!snapshot.hasData) {
-            if (index != 0) {
-              return Container();
-            }
-            return new Container(
-              child: new Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: new Text('Loading...'),
-              ),
-            );
+      builder: (BuildContext context,
+          AsyncSnapshot<List<DocumentSnapshot>> snapshot) {
+        if (!snapshot.hasData) {
+          if (index != 0) {
+            return Container();
           }
-          List<DocumentSnapshot> documents = snapshot.data;
-          List<CatalogueTile> catalogueSubList = <CatalogueTile>[];
-          for (DocumentSnapshot document in documents) {
-            CatalogueElement element = new CatalogueElement.fromFirestore(document.data, document.documentID);
-            if (isNotPresentInCatalogue(element)) {
-              catalogueSubList.add(new CatalogueTile(element: element, catalogue: catalogue));
-            }
-          }
-          return new Column(
-            children: catalogueSubList,
+          return new Container(
+            child: new Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: new Text('Loading...'),
+            ),
           );
-        },
+        }
+        List<DocumentSnapshot> documents = snapshot.data;
+        List<CatalogueTile> catalogueSubList = <CatalogueTile>[];
+        for (DocumentSnapshot document in documents) {
+          CatalogueElement element = new CatalogueElement.fromFirestore(
+              document.data, document.documentID);
+          if (isNotPresentInCatalogue(element)) {
+            catalogueSubList.add(
+                new CatalogueTile(element: element, catalogue: catalogue));
+          }
+        }
+        return new Column(
+          children: catalogueSubList,
+        );
+      },
     );
   }
-  Future<List<DocumentSnapshot>> _getDocuments(CollectionReference reference) async {
+
+  Future<List<DocumentSnapshot>> _getDocuments(
+      CollectionReference reference) async {
     QuerySnapshot documentsQuery = await reference.getDocuments();
     List<DocumentSnapshot> documents = documentsQuery.documents;
     for (DocumentSnapshot document in documents) {
       print('the element name is ' + document.data['name']);
     }
-    print('In _getDocuments the documents length is: ' + documents.length.toString());
+    print('In _getDocuments the documents length is: ' +
+        documents.length.toString());
     return documents;
   }
 
@@ -230,7 +222,9 @@ class CategoryTilesBlock extends StatelessWidget {
                         child: new Text(
                           'Name',
                           style: new TextStyle(
-                              color: Theme.of(context).accentColor,
+                              color: Theme
+                                  .of(context)
+                                  .accentColor,
                               fontSize: 13.0),
                         ),
                       ),
@@ -239,7 +233,9 @@ class CategoryTilesBlock extends StatelessWidget {
                         child: new Text(
                           'Value',
                           style: new TextStyle(
-                              color: Theme.of(context).accentColor,
+                              color: Theme
+                                  .of(context)
+                                  .accentColor,
                               fontSize: 13.0),
                         ),
                       )
@@ -261,10 +257,17 @@ class CategoryTilesBlock extends StatelessWidget {
 }
 
 class Category {
-  Category({this.title, this.icon, this.dbName, this.dbSubcategories});
+  Category(this.index) {
+    title = Catalogue.names[index];
+    icon = Catalogue.icons[index];
+    dbName = Catalogue.dbNames[index];
+    dbSubcategories = Catalogue.dbSubCategories[index];
+  }
 
-  final String title;
-  final IconData icon;
-  final String dbName;
-  final List<String> dbSubcategories;
+  final int index;
+  String title;
+  IconData icon;
+  String dbName;
+
+  List<String> dbSubcategories;
 }

@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import 'catalogue_element.dart';
+import 'package:pindery/catalogue/catalogue_element.dart';
 
 /// Class that defines every Party object in the app.
 class Party {
