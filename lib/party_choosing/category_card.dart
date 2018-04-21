@@ -1,6 +1,9 @@
+// External imports
 import 'package:flutter/material.dart';
+
+// Internal imports
 import '../party.dart';
-import 'item_cardlist.dart';
+import 'category_card_list.dart';
 
 const String partyStuffCollection = "party_stuff";
 

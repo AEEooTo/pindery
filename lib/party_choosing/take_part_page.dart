@@ -1,7 +1,11 @@
 /// This file contains the code for Pindery's page where to choose what to bring to a party.
 ///
+
+// External imports
 import 'package:flutter/material.dart';
-import 'item_card.dart';
+
+// Internal imports
+import 'category_card.dart';
 import '../party.dart';
 import '../theme.dart';
 
