@@ -16,7 +16,7 @@ class CatalogueElement {
     elementQuantity = 1;
   }
 
-  catalogueMapper() {
+  catalogueElementMapper() {
     return <String, dynamic> {
       'elementName': elementName,
       'elementValue': elementValue,

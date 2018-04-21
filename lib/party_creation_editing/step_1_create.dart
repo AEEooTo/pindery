@@ -8,6 +8,7 @@ import 'party_details_utils.dart';
 import '../theme.dart';
 import '../party.dart';
 import 'step_2_catalogue.dart';
+import '../catalogue/catalogue.dart';
 import '../catalogue/catalogue_element.dart';
 
 /// Page used to create a new party
@@ -33,7 +34,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
 
   // To be filled party instance
   Party party = new Party();
-  List<CatalogueElement> catalogue = <CatalogueElement>[];
+  Catalogue catalogue = new Catalogue(catalogue: <List<CatalogueElement>>[]);
 
   // Text editing controllers
   TextEditingController nameController = new TextEditingController();
@@ -53,8 +54,11 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   // Privacy options
   final List<String> _allPrivacyOptions = Party.privacyOptions;
   String _privacyOption = Party.privacyOptions[0];
-
+  
   Widget build(BuildContext context) {
+    for (int i = 0; i < Catalogue.names.length; ++i) {
+      catalogue.catalogue.add([]);
+    }
     return new Theme(
       data: Theme.of(context),
       child: new Scaffold(

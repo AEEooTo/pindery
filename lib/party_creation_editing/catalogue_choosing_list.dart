@@ -16,7 +16,7 @@ class CatalogueChoosingList extends StatelessWidget {
 
   final GlobalKey scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  final List<CatalogueElement> catalogue;
+  final Catalogue catalogue;
 
   final Category drinksCategory = new Category(Categories.drinks.index);
 
@@ -36,15 +36,15 @@ class CatalogueChoosingList extends StatelessWidget {
           children: <Widget>[
             new CategoryTilesBlock(
               category: drinksCategory,
-              catalogue: catalogue,
+              catalogue: catalogue.catalogue[Categories.drinks.index],
             ),
             new CategoryTilesBlock(
               category: foodCategory,
-              catalogue: catalogue,
+              catalogue: catalogue.catalogue[Categories.food.index],
             ),
             new CategoryTilesBlock(
               category: utilitiesCategory,
-              catalogue: catalogue,
+              catalogue: catalogue.catalogue[Categories.food.index],
             ),
           ],
         ),
@@ -123,7 +123,7 @@ class CategoryTilesList extends StatelessWidget {
         for (DocumentSnapshot document in documents) {
           CatalogueElement element = new CatalogueElement.fromFirestore(
               document.data, document.documentID);
-          if (isNotPresentInCatalogue(element)) {
+          if (_isNotPresentInCatalogue(element)) {
             catalogueSubList.add(
                 new CatalogueTile(element: element, catalogue: catalogue));
           }
@@ -147,7 +147,7 @@ class CategoryTilesList extends StatelessWidget {
     return documents;
   }
 
-  bool isNotPresentInCatalogue(CatalogueElement element) {
+  bool _isNotPresentInCatalogue(CatalogueElement element) {
     bool isNotPresent = true;
     for (CatalogueElement item in catalogue) {
       if (element.elementName == item.elementName) {

@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import 'package:pindery/catalogue/catalogue_element.dart';
+import 'catalogue/catalogue.dart';
 
 /// Class that defines every Party object in the app.
 class Party {
@@ -59,7 +59,7 @@ class Party {
   String description;
   String id;
   int maxPeople;
-  List<CatalogueElement> catalogue;
+  Catalogue catalogue;
 
   static const List<String> privacyOptions = ['Public', 'Closed', 'Secret'];
   static const List<IconData> privacyOptionsIcons = [
@@ -100,17 +100,9 @@ class Party {
       "imageUrl": imageUrl,
       "maxPeople": maxPeople,
       "privacy": privacy,
-      "catalogue": catalogueMapper()
+      "catalogue": catalogue.catalogueMatrixMapper(),
     };
     return partyMap;
-  }
-
-  List<Map<String, dynamic>> catalogueMapper() {
-    List<Map<String, dynamic>> catalogueMap = <Map<String, dynamic>>[];
-    for (CatalogueElement element in catalogue) {
-      catalogueMap.add(element.catalogueMapper());
-    }
-    return catalogueMap;
   }
 
   Future<Null> uploadImage(File imageFile) async {
