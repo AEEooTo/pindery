@@ -130,7 +130,7 @@ class Party {
     } on TimeoutException {
       print(TimeoutException);
     } on Exception catch (e) {
-      print('Image uplad exception, $e');
+      print('Image upload exception, $e');
     }
   }
 }

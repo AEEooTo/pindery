@@ -82,6 +82,9 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
 }
 
 class HomePage extends StatelessWidget {
+  HomePage(this.user);
+  final User user;
+
   final String title = 'Pindery';
   final GlobalKey<ScaffoldState> homeScaffoldKey =
       new GlobalKey<ScaffoldState>();

@@ -150,6 +150,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
     Im.Image image = Im.decodeImage(party.imageLocalPath.readAsBytesSync());
 
     int widthFinal = 0;
+    //algorithm to decide the image width
     if (image.height > image.width) {
       widthFinal = 1080;
       if(image.width>1080){
@@ -163,9 +164,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
             widthFinal);
       }
     }
-    // choose the width size here, it will maintain aspect ratio
-
-    print("image compressed");
+    print("image compressed");//todo: remove debug print
     party.imageLocalPath = new File('$path/img_$rand.jpg')
       ..writeAsBytesSync(Im.encodeJpg(image, quality: 50));
   }

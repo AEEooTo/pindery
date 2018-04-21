@@ -4,16 +4,21 @@
 
 // Dart core imports
 import 'dart:async';
+import 'dart:io';
+import 'dart:math';
 
 // External libraries imports
 import 'package:flutter/material.dart';
 import 'package:validator/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image/image.dart' as Im;
+import 'package:path_provider/path_provider.dart';
 
 // Internal imports
 import '../theme.dart';
 import '../user.dart';
-
 
 String _name;
 String _surname;
@@ -25,17 +30,17 @@ TextEditingController surnameController = new TextEditingController();
 TextEditingController emailController = new TextEditingController();
 TextEditingController _passwordController = new TextEditingController();
 TextEditingController _confirmPasswordController = new TextEditingController();
+File imageLocalPath;
 final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
+
+enum Choose { gallery, camera }
 
 //todo: make it stateless
 class SignupPage extends StatefulWidget {
-
-
   static final routeName = '/login-page';
 
   @override
-  _SignUpPageState createState() =>
-      new _SignUpPageState();
+  _SignUpPageState createState() => new _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignupPage> {
@@ -80,24 +85,8 @@ class _SignUpPageState extends State<SignupPage> {
                         decoration: new BoxDecoration(
                             border: Border.all(color: dividerColor),
                             shape: BoxShape.circle),
-                        padding: EdgeInsets.all(15.0),
-                        child: new IconButton(
-                          icon: new Icon(
-                            Icons.photo_camera,
-                            size: 32.0,
-                          ),
-                          //TODO: actually implement photo upload
-                          onPressed: () {
-                            Scaffold
-                                .of(formKey.currentContext)
-                                .showSnackBar(new SnackBar(
-                                  content: new Text(
-                                    "Should still be implemented",
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ));
-                          },
-                          splashColor: secondary,
+                        child: new UserImageChooser(
+                          image: imageLocalPath,
                         )),
                     new Container(
                       child: new Form(
@@ -107,8 +96,7 @@ class _SignUpPageState extends State<SignupPage> {
                             new InformationField(
                               labelText: 'Name',
                               controller: nameController,
-                              validator: (val) => (!isAlpha(val)|| val.isEmpty
-
+                              validator: (val) => (!isAlpha(val) || val.isEmpty
                                   ? 'You must a valid username'
                                   : null),
                               onSaved: (val) => _name = val,
@@ -241,35 +229,49 @@ class SignUpButton extends StatelessWidget {
   Future<Null> _handleSignUp(BuildContext context) async {
     Navigator
         .of(context)
-        .push(new MaterialPageRoute(builder: (context) => new SigninUpPage()));
+        .push(new MaterialPageRoute(builder: (context) => new SigningUpPage()));
     bool result = await _trulyHandleSignUp(firebaseAuth, context);
     if (result) {
       Navigator.popUntil(context, ModalRoute.withName('/'));
     } else {
       Navigator.pop(context);
       Scaffold.of(context).showSnackBar(new SnackBar(
-        content: new Text(
-          "A user with this e-mail already exists",
-          textAlign: TextAlign.center,
-        ),
-      ));
+            content: new Text(
+              "A user with this e-mail already exists",
+              textAlign: TextAlign.center,
+            ),
+          ));
     }
   }
 }
 
 Future<bool> _trulyHandleSignUp(
     FirebaseAuth firebaseAuth, BuildContext context) async {
-  print('Entered _trulyHandleSignUp()');
+  print('Entered _trulyHandleSignUp()');//TODO: remove after debug
   bool hasSucceeded = true;
   try {
-    print('Trying to signup');
+    print('Trying to signup');//TODO: remove after debug
+    //user creation as a firebase auth object
     FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
         email: _email, password: _password);
-    //TODO: implement user (as our proprietary object) creation
-    User databaseUser = new User(name: _name, surname: _surname, email: _email, uid: user.uid);
+    //user creation as our proprietary object
+    int random = new Random().nextInt(100000);
+    StorageReference ref = FirebaseStorage.instance
+        .ref()
+        .child("/userProPics/dick_pic_$random.jpg");
+    await _compressImage();
+    ref.put(
+        imageLocalPath); //TODO: consider check timeout (even though the profile pic is very small)
+    String downloadUrl = ref.getDownloadURL().toString();
+    User databaseUser = new User(
+        name: _name,
+        surname: _surname,
+        email: _email,
+        uid: user.uid,
+        profilePictureUrl: downloadUrl);
     await databaseUser.sendUser();
   } catch (error) {
-    // TODO: check the type of error and propmt the user consequently
+    // TODO: check the type of error and prompt the user consequently
     hasSucceeded = false;
   }
   return hasSucceeded;
@@ -326,31 +328,35 @@ class _PasswordFieldState extends State<PasswordField> {
         helperText: widget.helperText,
         helperStyle: new TextStyle(
           color: dividerColor,
-          fontSize: 14.0,),
-        suffixIcon: widget.activateIcon ? new GestureDetector(
-            onTap: () {
-              setState(() {
-                _obscureText = !_obscureText;
-              });
-            },
-            child: new Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
-          ): null,
+          fontSize: 14.0,
+        ),
+        suffixIcon: widget.activateIcon
+            ? new GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+                child: new Icon(
+                    _obscureText ? Icons.visibility : Icons.visibility_off),
+              )
+            : null,
       ),
     );
   }
 }
 
 class InformationField extends StatelessWidget {
-  InformationField({
-  this.hintText,
-  this.labelText,
-  this.helperText,
-  this.onSaved,
-  this.validator,
-  this.onFieldSubmitted,
-  this.controller,
-  this.activateIcon,
-  this.textInputType});
+  InformationField(
+      {this.hintText,
+      this.labelText,
+      this.helperText,
+      this.onSaved,
+      this.validator,
+      this.onFieldSubmitted,
+      this.controller,
+      this.activateIcon,
+      this.textInputType});
 
   final String hintText;
   final String labelText;
@@ -391,9 +397,9 @@ class InformationField extends StatelessWidget {
     );
   }
 }
-///////
-class SigninUpPage extends StatelessWidget {
 
+///////
+class SigningUpPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(
@@ -437,4 +443,106 @@ class SigninUpPage extends StatelessWidget {
       ),
     );
   }
+}
+
+class UserImageChooser extends StatefulWidget {
+  UserImageChooser({this.image});
+
+  final File image;
+
+  @override
+  UserImageChooserState createState() => new UserImageChooserState();
+}
+
+class UserImageChooserState extends State<UserImageChooser> {
+  UserImageChooserState();
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageLocalPath != null) {
+      return new SizedBox(
+          width: 72.0,
+          height: 72.0,
+          child: new CircleAvatar(
+            backgroundImage: new FileImage(imageLocalPath),
+            backgroundColor: secondary,
+          ));
+    } else {
+      return new Container(
+        padding: EdgeInsets.all(15.0),
+        child: new IconButton(
+          icon: new Icon(
+            Icons.photo_camera,
+            size: 32.0,
+          ),
+          onPressed: () async {
+            imageLocalPath = await _imageChooser();
+            setState(() {});
+          },
+        ),
+      );
+    }
+  }
+
+  Future<File> _imageChooser() async {
+    ImageSource choose;
+    File localPath;
+    choose = await showDialog<ImageSource>(
+        context: context,
+        builder: (BuildContext context) {
+          return new SimpleDialog(
+            title: const Text('Select method'),
+            children: <Widget>[
+              new SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context, ImageSource.gallery);
+                  },
+                  child: new Container(
+                    padding: null,
+                    child: const Text("Gallery"),
+                  )),
+              new SimpleDialogOption(
+                  onPressed: () {
+                    Navigator.pop(context, ImageSource.camera);
+                  },
+                  child: new Container(
+                    padding: null,
+                    child: const Text('Camera'),
+                  )),
+            ],
+          );
+        });
+    if (choose != null) {
+      localPath = await ImagePicker.pickImage(source: choose);
+    }
+    return localPath;
+  }
+}
+
+Future<Null> _compressImage() async {
+  print("compressing image"); //todo: remove debug print
+  final tempDir = await getTemporaryDirectory();
+  final path = tempDir.path;
+  int rand = new Random().nextInt(10000);
+
+  Im.Image image = Im.decodeImage(imageLocalPath.readAsBytesSync());
+
+  int widthFinal = 0;
+  int widthSquareMin = 200;
+
+  //algorithm to decide the image width
+  if (image.height > image.width) {
+    widthFinal = widthSquareMin;
+    if (image.width > widthSquareMin) {
+      image = Im.copyResize(image, widthFinal);
+    }
+  } else {
+    widthFinal = ((image.width * widthSquareMin) / image.height).round();
+    if (image.height > widthSquareMin) {
+      image = Im.copyResize(image, widthFinal);
+    }
+  }
+  print("image compressed"); //todo: remove debug print
+  imageLocalPath = new File('$path/img_$rand.jpg')
+    ..writeAsBytesSync(Im.encodeJpg(image, quality: 10));
 }
