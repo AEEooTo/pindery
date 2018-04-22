@@ -219,7 +219,7 @@ class _PasswordFieldState extends State<PasswordField> {
       onFieldSubmitted: widget.onFieldSubmitted,
       decoration: new InputDecoration(
         fillColor: Colors.white,
-        border: const UnderlineInputBorder(),
+        border: new UnderlineInputBorder(),
         filled: true,
         hintText: widget.hintText,
         hintStyle: new TextStyle(
@@ -277,7 +277,7 @@ class EmailField extends StatelessWidget {
       onFieldSubmitted: onFieldSubmitted,
       decoration: new InputDecoration(
         fillColor: Colors.white,
-        border: const UnderlineInputBorder(),
+        border: new UnderlineInputBorder(),
         filled: true,
         hintText: hintText,
         hintStyle: new TextStyle(

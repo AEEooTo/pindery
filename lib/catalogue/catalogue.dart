@@ -27,27 +27,27 @@ class Catalogue {
   int totalPoints;
 
   /// Background images for the cards
-  static const List<String> pics = [
+  static const List<String> pics = const <String>[
     "assets/img/beer_2.jpg",
     "assets/img/pasta.jpeg",
     "assets/img/kittens.jpeg"
   ];
 
   /// Names for the different categories
-  static const List<String> names = ["Drinks", "Food", "Utilities"];
+  static const List<String> names = const <String>["Drinks", "Food", "Utilities"];
 
   /// Names on the database of the different categories paths
-  static const List<String> dbNames = ["drinks", "food", "utilities"];
+  static const List<String> dbNames = const <String>["drinks", "food", "utilities"];
 
   /// Paths for the different subcategories
-  static const List<List<String>> dbSubCategories = [
-    ['alcohol', 'soft_drinks'],
-    ['simple_food'],
-    ['to_eat', 'to_drink'],
+  static const List<List<String>> dbSubCategories = const <List<String>>[
+    const <String>['alcohol', 'soft_drinks'],
+    const <String>['simple_food'],
+    const <String>['to_eat', 'to_drink'],
   ];
 
   /// [IconData] for the different categories
-  static const List<IconData> icons = [
+  static const List<IconData> icons = const <IconData>[
     Icons.local_bar,
     Icons.local_pizza,
     Icons.settings
