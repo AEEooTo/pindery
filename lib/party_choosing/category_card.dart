@@ -2,15 +2,15 @@
 import 'package:flutter/material.dart';
 
 // Internal imports
-import '../party.dart';
+import '../catalogue/catalogue_element.dart';
 import 'category_card_list.dart';
 
 const String partyStuffCollection = "party_stuff";
 
 class ItemCard extends StatelessWidget {
-  ItemCard({this.party, this.category, this.assetImage});
+  ItemCard({this.catalogueSublist, this.category, this.assetImage});
 
-  final Party party;
+  final List<CatalogueElement> catalogueSublist;
   final String category;
   final AssetImage assetImage;
 
@@ -45,23 +45,9 @@ class ItemCard extends StatelessWidget {
                 )),
             new Container(
               decoration: new BoxDecoration(color: Colors.white),
-              child: new Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    new ListItem(
-                      name: 'ciao',
-                      maxNumber: 2,
-                    ),
-                    new ListItem(
-                      name: 'pollo',
-                      maxNumber: 15,
-                    ),
-                    new ListItem(
-                      name: 'gatto',
-                      maxNumber: 20,
-                    ),
-                  ]),
+              child: new ListItem(
+                elementsList: catalogueSublist,
+              ),
             ),
           ],
         ),

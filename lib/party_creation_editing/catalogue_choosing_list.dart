@@ -7,8 +7,6 @@ import '../catalogue/catalogue_element.dart';
 import '../theme.dart';
 import '../catalogue/catalogue.dart';
 
-const String partyStuffCollection = "party_stuff";
-
 class CatalogueChoosingList extends StatelessWidget {
   CatalogueChoosingList({this.catalogue});
 
@@ -101,7 +99,7 @@ class CategoryTilesList extends StatelessWidget {
 
   Widget _categorySubListBuilder(String categoryType, int index) {
     CollectionReference reference = Firestore.instance
-        .collection(partyStuffCollection)
+        .collection(Catalogue.cataloguePath)
         .document(category)
         .collection(categoryType);
     return new FutureBuilder(

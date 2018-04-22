@@ -46,13 +46,17 @@ class Catalogue {
     ['to_eat', 'to_drink'],
   ];
 
-  /// Icons for the different categories
+  /// [IconData] for the different categories
   static const List<IconData> icons = [
     Icons.local_bar,
     Icons.local_pizza,
     Icons.settings
   ];
 
+  /// The path to the catalogue on the Database
+  static const String cataloguePath = 'party_stuff';
+
+  /// Number of cateogries in the [Catalogue] instance
   int get numberOfCategories => catalogue.length;
 
   /// Returns the number of Pinder-points for the current [Catalogue] instance
@@ -110,6 +114,7 @@ class Catalogue {
     return true;
   }
 
+  /// Prints the [catalogue] field, for debuggng purposes
   void printCatalogue() {
     for (int i = 0; i < catalogue.length; ++i) {
       print(i);
