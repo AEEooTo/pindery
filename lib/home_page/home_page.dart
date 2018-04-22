@@ -11,12 +11,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
 import 'party_cardlist.dart';
-import 'dart:async';
-import 'package:pindery/first_actions/welcome.dart';
 
 // Internal imports
 import '../drawer.dart' show PinderyDrawer;
-import 'party_cardlist.dart';
 import '../user.dart';
 import '../theme.dart';
 
@@ -64,7 +61,7 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
           if (snapshot.data == null) {
             return new WelcomePage();
           } else {
-            return new HomePage(user);
+            return new HomePage(user: user);
           }
           // loading
         });
@@ -82,9 +79,9 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
 }
 
 class HomePage extends StatelessWidget {
-  HomePage(this.user);
-  final User user;
+  HomePage({this.user});
 
+  final User user;
   final String title = 'Pindery';
   final GlobalKey<ScaffoldState> homeScaffoldKey =
       new GlobalKey<ScaffoldState>();

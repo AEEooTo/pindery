@@ -1,12 +1,15 @@
 /// This page contains the code for the specific page of every party.
 ///
 
+// External libraries imports
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
+
+// Internal imports
 import 'party.dart';
 import 'drawer.dart';
 import 'theme.dart';
-import 'party_choosing/takepart_page.dart';
+import 'party_choosing/take_part_page.dart';
 
 enum AppBarBehavior { normal, pinned, floating, snapping }
 

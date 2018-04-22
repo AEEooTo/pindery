@@ -9,7 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:image/image.dart' as Im;
 import 'package:path_provider/path_provider.dart';
 
-import '../catalogue_element.dart';
+import '../catalogue/catalogue_element.dart';
+import '../catalogue/catalogue.dart';
 import '../party.dart';
 import 'catalogue_choosing_list.dart';
 import 'party_details_utils.dart';
@@ -21,7 +22,7 @@ class ChooseCataloguePage extends StatefulWidget {
 
   final GlobalKey homePageKey;
 
-  final List<CatalogueElement> catalogue;
+  final Catalogue catalogue;
   final Party party;
 
   _ChooseCataloguePageState createState() => new _ChooseCataloguePageState(
@@ -37,7 +38,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
   Party party;
 
   /// to-be filled [List] of [CatalogueElement]s
-  List<CatalogueElement> catalogue;
+  Catalogue catalogue;
 
   /// variable to check whether the user cancelled the uploading process or not
   bool cancelled = false;
@@ -87,7 +88,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                   style: new TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
-                  if (catalogue.isNotEmpty &&
+                  if (catalogue.catalogue.isNotEmpty &&
                       chosenListFormKey.currentState.validate()) {
                     print('entered the async');
                     final ScaffoldState scaffoldState =
@@ -101,6 +102,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
                       //Navigator.popUntil(context, ModalRoute.withName('/home-page')); //to implement after the user becomes stored in a redux
+                      // TODO: fix that snackbar
                       homePageState.showSnackBar(new SnackBar(
                         content: new Text("Great! The party was created!"),
                       ));
@@ -111,10 +113,9 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                       ));
                     }
                   } else {
-                    if (catalogue.isEmpty) {
+                    if (catalogue.catalogue.isEmpty) {
                       scaffoldKey.currentState.showSnackBar(
                         new SnackBar(
-                          // TODO: really cancel the party
                           content: new Text("The catalogue is empty"),
                         ),
                       );
@@ -132,7 +133,6 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
   /// Method to assign the different collected fields to the [Party] instance
   Future<Null> _handleSubmitted(FormState formState) async {
     formState.save();
-    print('saved form');
     party.catalogue = catalogue;
     await party.uploadImage(party.imageLocalPath);
     if (!cancelled) {
@@ -153,15 +153,13 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
     //algorithm to decide the image width
     if (image.height > image.width) {
       widthFinal = 1080;
-      if(image.width>1080){
-        image = Im.copyResize(image,
-            widthFinal);
+      if (image.width > 1080) {
+        image = Im.copyResize(image, widthFinal);
       }
     } else {
       widthFinal = ((image.width * 1080) / image.height).round();
-      if(image.height>1080){
-        image = Im.copyResize(image,
-            widthFinal);
+      if (image.height > 1080) {
+        image = Im.copyResize(image, widthFinal);
       }
     }
     print("image compressed");//todo: remove debug print
@@ -211,7 +209,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
 class ChosenList extends StatefulWidget {
   ChosenList({this.catalogue, Key key, this.formKey}) : super(key: key);
 
-  final List<CatalogueElement> catalogue;
+  final Catalogue catalogue;
   final formKey;
 
   _ChosenListState createState() => new _ChosenListState(
@@ -221,7 +219,7 @@ class ChosenList extends StatefulWidget {
 class _ChosenListState extends State<ChosenList> {
   _ChosenListState({this.catalogue, this.chosenListKey, this.formKey});
 
-  final List<CatalogueElement> catalogue;
+  final Catalogue catalogue;
   final formKey;
   final chosenListKey;
 
@@ -231,8 +229,11 @@ class _ChosenListState extends State<ChosenList> {
       return new Center(
         child: new Padding(
           padding: const EdgeInsets.all(30.0),
-          child: new Text(
-            'Tap the + to begin choosing what the participants will need to bring!',
+          child: new Center(
+            child: new Text(
+              'Tap the + to begin choosing what the participants will need to bring!',
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
       );
@@ -246,17 +247,18 @@ class _ChosenListState extends State<ChosenList> {
             child: new ListView.builder(
               shrinkWrap: true,
               itemBuilder: (_, int index) {
-                print(
-                    'In itemBuilder ' + chosenListKey.currentState.toString());
-                return new CatalogueElementRow(
-                  element: catalogue[index],
-                  catalogue: catalogue,
-                  index: index,
-                  chosenListStateKey: chosenListKey,
-                  chosenListState: this,
-                );
+                if (catalogue.catalogue[index].isNotEmpty) {
+                  return new CatalogueCategoryColumn(
+                    catalogueSubList: catalogue.catalogue[index],
+                    index: index,
+                    chosenListState: this,
+                  );
+                }
+                else {
+                  return new Container();
+                }
               },
-              itemCount: catalogue.length,
+              itemCount: catalogue.catalogue.length,
               padding: EdgeInsets.all(16.0),
             ),
           )
@@ -266,6 +268,7 @@ class _ChosenListState extends State<ChosenList> {
   }
 }
 
+/// A [Widget] for every row of each catalogue element
 class CatalogueElementRow extends StatelessWidget {
   CatalogueElementRow(
       {this.element,
@@ -323,11 +326,39 @@ class CatalogueElementRow extends StatelessWidget {
 
   void _deleteElement(GlobalKey listStateKey) {
     // TODO: find a better way to setState()
-    print('In _deleteleElement ' + listStateKey.currentState.toString());
-    final _ChosenListState listState = listStateKey.currentState;
-    print(listState);
     chosenListState.setState(() {
       catalogue.removeAt(index);
     });
+  }
+}
+
+
+/// A [Widget] for the column of every category
+class CatalogueCategoryColumn extends StatelessWidget {
+  CatalogueCategoryColumn(
+      {this.index, this.catalogueSubList, this.chosenListState});
+
+  final _ChosenListState chosenListState;
+  final List<CatalogueElement> catalogueSubList;
+  final int index;
+  @override
+  Widget build(BuildContext context) {
+    return new Column(
+      children: catalogueSubListBuilder(),
+    );
+  }
+
+  List<Widget> catalogueSubListBuilder() {
+    List<Widget> catalogueElementColumnList = <Widget>[];
+    for (int i = 0; i < catalogueSubList.length; ++i) {
+      catalogueElementColumnList.add(new CatalogueElementRow(
+        catalogue: catalogueSubList,
+        chosenListState: chosenListState,
+        index: i,
+        element: catalogueSubList[i],
+        ),
+      );
+    }
+    return catalogueElementColumnList;
   }
 }

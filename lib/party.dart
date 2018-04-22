@@ -6,7 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 
-import 'catalogue_element.dart';
+import 'catalogue/catalogue.dart';
 
 /// Class that defines every Party object in the app.
 class Party {
@@ -35,6 +35,7 @@ class Party {
     fromDayTime = snapshot['fromDayTime'];
     toDayTime = snapshot['toDayTime'];
     privacy = snapshot['privacy'];
+    catalogue = new Catalogue.fromFirestore(snapshot['catalogue']);
     id = snapshot.documentID;
 
     // TODO: implement the user and the Pinder-points
@@ -59,7 +60,7 @@ class Party {
   String description;
   String id;
   int maxPeople;
-  List<CatalogueElement> catalogue;
+  Catalogue catalogue;
 
   static const List<String> privacyOptions = ['Public', 'Closed', 'Secret'];
   static const List<IconData> privacyOptionsIcons = [
@@ -100,19 +101,12 @@ class Party {
       "imageUrl": imageUrl,
       "maxPeople": maxPeople,
       "privacy": privacy,
-      "catalogue": catalogueMapper()
+      "catalogue": catalogue.catalogueMatrixMapper(),
     };
     return partyMap;
   }
 
-  List<Map<String, dynamic>> catalogueMapper() {
-    List<Map<String, dynamic>> catalogueMap = <Map<String, dynamic>>[];
-    for (CatalogueElement element in catalogue) {
-      catalogueMap.add(element.catalogueMapper());
-    }
-    return catalogueMap;
-  }
-
+  /// Uploads the image reauested by the user
   Future<Null> uploadImage(File imageFile) async {
     print("uploading image"); //todo: remove debug print
     int random = new Random().nextInt(100000);

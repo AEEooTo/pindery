@@ -1,9 +1,13 @@
 /// This file contains the code for Pindery's page where to choose what to bring to a party.
 ///
+
+// External imports
 import 'package:flutter/material.dart';
-import 'item_card.dart';
-import 'package:pindery/party.dart';
-import 'package:pindery/theme.dart';
+
+// Internal imports
+import 'category_card.dart';
+import '../party.dart';
+import '../theme.dart';
 
 final String beveragesCoverImagePath = "assets/img/beer_2.jpg";
 final String foodCoverImagePath = "assets/img/pasta.jpeg";

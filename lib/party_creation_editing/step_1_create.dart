@@ -8,7 +8,7 @@ import 'party_details_utils.dart';
 import '../theme.dart';
 import '../party.dart';
 import 'step_2_catalogue.dart';
-import '../catalogue_element.dart';
+import '../catalogue/catalogue.dart';
 
 /// Page used to create a new party
 class CreatePartyPage extends StatefulWidget {
@@ -33,7 +33,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
 
   // To be filled party instance
   Party party = new Party();
-  List<CatalogueElement> catalogue = <CatalogueElement>[];
+  final Catalogue catalogue = new Catalogue.initialization();
 
   // Text editing controllers
   TextEditingController nameController = new TextEditingController();
@@ -53,7 +53,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   // Privacy options
   final List<String> _allPrivacyOptions = Party.privacyOptions;
   String _privacyOption = Party.privacyOptions[0];
-
+  
   Widget build(BuildContext context) {
     return new Theme(
       data: Theme.of(context),
@@ -258,11 +258,9 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   }
 
   void _handleSubmitted() {
-    printPartyInfo();
     final FormState form = formKey.currentState;
     form.save();
     assignPartyFields();
-    printPartyInfo();
     Navigator.push(
       context,
       new MaterialPageRoute(
@@ -281,14 +279,5 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     party.fromDayTime = dateTimeParser(_fromTime, _fromDate);
     party.toDayTime = dateTimeParser(_toTime, _toDate);
     party.privacy = _allPrivacyOptions.indexOf(_privacyOption);
-  }
-
-  /// Just for debugging purpose
-  void printPartyInfo() {
-    print(party.name);
-    print(party.description);
-    print(party.place);
-    print(party.fromDayTime);
-    print(party.toDayTime);
   }
 }

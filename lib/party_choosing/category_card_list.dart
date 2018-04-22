@@ -1,3 +1,4 @@
+// External imports
 import 'package:flutter/material.dart';
 import 'package:pindery/theme.dart';
 
@@ -114,7 +115,6 @@ class DualHeaderWithHint extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = pinderyTheme;
 
     return new Container(
       child: new Row(children: <Widget>[

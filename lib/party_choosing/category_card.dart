@@ -1,9 +1,9 @@
+// External imports
 import 'package:flutter/material.dart';
+
+// Internal imports
 import '../party.dart';
-import 'dart:async';
-import 'item_cardlist.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import '../catalogue_element.dart';
+import 'category_card_list.dart';
 
 const String partyStuffCollection = "party_stuff";
 
