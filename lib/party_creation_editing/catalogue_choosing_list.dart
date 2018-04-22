@@ -16,12 +16,6 @@ class CatalogueChoosingList extends StatelessWidget {
 
   final Catalogue catalogue;
 
-  final Category drinksCategory = new Category(Categories.drinks.index);
-
-  final Category foodCategory = new Category(Categories.food.index);
-
-  final Category utilitiesCategory = new Category(Categories.utilities.index);
-
   @override
   Widget build(BuildContext context) {
 
@@ -32,24 +26,22 @@ class CatalogueChoosingList extends StatelessWidget {
       body: new Theme(
         data: pinderyTheme,
         child: new ListView(
-          children: <Widget>[
-            new CategoryTilesBlock(
-              category: drinksCategory,
-              catalogue: catalogue.catalogue[Categories.drinks.index],
-            ),
-            new CategoryTilesBlock(
-              category: foodCategory,
-              catalogue: catalogue.catalogue[Categories.food.index],
-            ),
-            new CategoryTilesBlock(
-              category: utilitiesCategory,
-              catalogue: catalogue.catalogue[Categories.utilities.index],
-            ),
-          ],
+          children: categoryTilesGenerator(),
         ),
       ),
     );
   }
+
+  /// Generates the children for the column of the chosen stuff list
+  List<CategoryTilesBlock> categoryTilesGenerator() {
+    List<CategoryTilesBlock> categoryTilesList = <CategoryTilesBlock>[];
+    for (int i = 0; i < Catalogue.names.length; ++i) {
+      categoryTilesList.add(new CategoryTilesBlock(i, catalogue.catalogue[i]));
+    }
+
+    return categoryTilesList;
+  }
+
 }
 
 class CatalogueTileTitle extends StatelessWidget {
@@ -187,10 +179,15 @@ class CatalogueTile extends StatelessWidget {
 }
 
 class CategoryTilesBlock extends StatelessWidget {
-  CategoryTilesBlock({this.category, this.catalogue});
-
-  final Category category;
-  final List<CatalogueElement> catalogue;
+  CategoryTilesBlock(int index, List<CatalogueElement> catalogue) {
+    this.index = index;
+    this.catalogue = catalogue;
+    this.category = new Category(index);
+  }
+  
+  int index;
+  Category category;
+  List<CatalogueElement> catalogue;
 
   @override
   Widget build(BuildContext context) {

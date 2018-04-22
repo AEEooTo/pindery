@@ -3,6 +3,8 @@ import 'catalogue_element.dart';
 
 enum Categories { drinks, food, utilities }
 
+
+/// Is the class which manages the catalogue
 class Catalogue {
   Catalogue({this.catalogue});
 

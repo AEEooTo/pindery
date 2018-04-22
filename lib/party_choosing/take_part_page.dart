@@ -44,7 +44,7 @@ class _TakePartPageState extends State<TakePartPage> {
       child: new Scaffold(
         key: homeScaffoldKey,
         appBar: new AppBar(
-          title: new Text('Choose what you will bring'),
+          title: new Text('Choose what to bring!'),
         ),
         floatingActionButton: new FloatingActionButton(
           onPressed: null,
