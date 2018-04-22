@@ -32,7 +32,15 @@ class _TakePartPageState extends State<TakePartPage> {
   @override
   Widget build(BuildContext context) {
     return new Theme(
-      data: pinderyTheme.copyWith(brightness: Brightness.light),
+      data: new ThemeData(
+        primaryColor: primary,
+        primaryColorLight: primaryLight,
+        primaryColorDark: primaryDark,
+        accentColor: secondary,
+        buttonTheme: new ButtonThemeData(textTheme: ButtonTextTheme.accent),
+        brightness: Brightness.light,
+        backgroundColor: primaryLight,
+      ),
       child: new Scaffold(
         key: homeScaffoldKey,
         appBar: new AppBar(
@@ -47,30 +55,35 @@ class _TakePartPageState extends State<TakePartPage> {
           children: <Widget>[
             new Expanded(
               child: new Container(
-                color: primary,
+                color: primaryLight,
                 child: new ListView(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
                   children: categoryCardListBuilder(),
                 ),
               ),
             ),
-            new Container(
-              height: 50.0,
-              color: primary,
-              child: new Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  new Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: new Text(
-                      'Pinder Points:  ' +
-                          obtainedPinderPoints.toString() +
-                          '/' +
-                          widget.party.pinderPoints.toString(),
-                      style: new TextStyle(color: Colors.white),
+            new Material(
+              elevation: 400.0,
+              type: MaterialType.canvas,
+              shadowColor: secondary,
+              child: new Container(
+                height: 44.0,
+                color: primary,
+                child: new Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    new Padding(
+                      padding: const EdgeInsets.only(left: 16.0),
+                      child: new Text(
+                        'Pinder Points:  ' +
+                            obtainedPinderPoints.toString() +
+                            '/' +
+                            widget.party.pinderPoints.toString(),
+                        style: new TextStyle(color: Colors.white),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ],
@@ -82,7 +95,7 @@ class _TakePartPageState extends State<TakePartPage> {
   List<ItemCard> categoryCardListBuilder() {
     List<ItemCard> itemCardList = <ItemCard>[];
     for (int i = 0; i < Catalogue.names.length; ++i) {
-      List<CatalogueElement> elementsSublist; 
+      List<CatalogueElement> elementsSublist;
       if (widget.party.catalogue.catalogue[i].isNotEmpty) {
         elementsSublist = widget.party.catalogue.catalogue[i];
         itemCardList.add(new ItemCard(

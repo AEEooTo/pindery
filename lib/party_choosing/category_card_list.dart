@@ -39,6 +39,7 @@ class _ListItemState extends State<ListItem> {
                 item.isExpanded = false;
               });
             }
+
             return new Form(child: new Builder(builder: (BuildContext context) {
               return new CollapsibleBody(
                 onSave: () {
@@ -55,14 +56,17 @@ class _ListItemState extends State<ListItem> {
                     item.value = value;
                   },
                   builder: (FormFieldState<double> field) {
-                    return new Slider(
-                      min: 0.0,
-                      max: element.remainingQuantity.toDouble(),
-                      divisions: element.remainingQuantity,
-                      activeColor: secondary,
-                      label: '${field.value.round()}',
-                      value: field.value.toDouble(),
-                      onChanged: field.didChange,
+                    return new Padding(
+                      padding: const EdgeInsets.only(top: 53.0),
+                      child: new Slider(
+                        min: 0.0,
+                        max: element.remainingQuantity.toDouble(),
+                        divisions: element.remainingQuantity,
+                        activeColor: secondary,
+                        label: '${field.value.ceil()}',
+                        value: field.value.toDouble(),
+                        onChanged: field.didChange,
+                      ),
                     );
                   },
                 ),
@@ -77,25 +81,21 @@ class _ListItemState extends State<ListItem> {
 
   @override
   Widget build(BuildContext context) {
-    print('_items is long ${_items.length}');
     return new SafeArea(
       top: false,
       bottom: false,
-      child: new Container(
-        color: Colors.white,
-        child: new ExpansionPanelList(
-            expansionCallback: (int index, bool isExpanded) {
-              setState(() {
-                _items[index].isExpanded = !isExpanded;
-              });
-            },
-            children: _items.map((Item<double> item) {
-              return new ExpansionPanel(
-                  isExpanded: item.isExpanded,
-                  headerBuilder: item.headerBuilder,
-                  body: item.build());
-            }).toList()),
-      ),
+      child: new ExpansionPanelList(
+          expansionCallback: (int index, bool isExpanded) {
+            setState(() {
+              _items[index].isExpanded = !isExpanded;
+            });
+          },
+          children: _items.map((Item<double> item) {
+            return new ExpansionPanel(
+                isExpanded: item.isExpanded,
+                headerBuilder: item.headerBuilder,
+                body: item.build());
+          }).toList()),
     );
   }
 }
@@ -181,7 +181,7 @@ class CollapsibleBody extends StatelessWidget {
     return new Container(
       child: new Column(
         children: <Widget>[
-          //SLIDER
+          // SLIDER
           new Container(
               margin:
                   const EdgeInsets.only(left: 24.0, right: 24.0, bottom: 24.0) -

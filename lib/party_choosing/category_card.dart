@@ -16,43 +16,56 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Card(
-      child: new Container(
-        child: new Column(
-          children: <Widget>[
-            Container(
-                height: 100.0,
-                decoration: new BoxDecoration(
-                    image: new DecorationImage(
-                        image: assetImage, fit: BoxFit.cover)),
-                child: new Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    new Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 4.0),
-                      child: new Text(
-                        category,
-                        overflow: TextOverflow.ellipsis,
-                        style: new TextStyle(
-                            fontSize: 28.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 1.0),
-                      ),
+    return new Container(
+      margin: EdgeInsets.only(top: 8.0, left: 4.0, right: 4.0),
+      child: Column(
+        children: <Widget>[
+          new Material(
+            borderRadius: new BorderRadius.vertical(top: new Radius.circular(2.0)),
+            elevation: 100.0,
+            child: new Container(
+              height: 100.0,
+              decoration: new BoxDecoration(
+                image:
+                    new DecorationImage(image: assetImage, fit: BoxFit.cover),
+              ),
+              child: new Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  new Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 4.0),
+                    child: new Text(
+                      category,
+                      overflow: TextOverflow.ellipsis,
+                      style: new TextStyle(
+                          fontSize: 28.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.0),
                     ),
-                  ],
-                )),
-            new Container(
-              decoration: new BoxDecoration(color: Colors.white),
-              child: new ListItem(
-                elementsList: catalogueSublist,
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+          new Container(
+            margin: EdgeInsets.only(bottom: 8.0),
+            child: new ListItem(
+              elementsList: catalogueSublist,
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  /// Computes the height of the [Container]
+  double containerHeight() {
+    const double expansionPanelHeight = 48.0;
+    double height = catalogueSublist.length * expansionPanelHeight;
+    height -= height * 0.2;
+    return height;
   }
 }
 

@@ -245,28 +245,32 @@ class _ChosenListState extends State<ChosenList> {
         children: <Widget>[
           new Form(
             key: formKey,
-            child: new ListView.builder(
-              shrinkWrap: true,
-              itemBuilder: (_, int index) {
-                if (catalogue.catalogue[index].isNotEmpty) {
-                  return new CatalogueCategoryColumn(
-                    catalogueSubList: catalogue.catalogue[index],
-                    index: index,
-                    chosenListState: this,
-                  );
-                }
-                else {
-                  return new Container();
-                }
-              },
-              itemCount: catalogue.catalogue.length,
+            child: new Padding(
               padding: EdgeInsets.all(16.0),
-            ),
+              child: new Column(
+                children: chosenListColumnGenerator(),
+              )
+            )
           )
         ],
       ),
     );
   }
+
+  List<CatalogueCategoryColumn> chosenListColumnGenerator() {
+    List<CatalogueCategoryColumn> children = <CatalogueCategoryColumn>[];
+    for (int i = 0; i < catalogue.catalogue.length; ++i) {
+      if (catalogue.catalogue[i].isNotEmpty) {
+        children.add(new CatalogueCategoryColumn(
+          catalogueSubList: catalogue.catalogue[i],
+          index: i,
+          chosenListState: this,
+          ));
+      }
+    }
+    return children;
+  }
+
 }
 
 /// A [Widget] for every row of each catalogue element
