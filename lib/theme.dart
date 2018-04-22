@@ -27,6 +27,7 @@ ThemeData pinderyTheme = new ThemeData(
   buttonColor: secondaryLight,
   buttonTheme: new ButtonThemeData(textTheme: ButtonTextTheme.accent),
   brightness: Brightness.dark,
+  backgroundColor: primaryLight,
 );
 
 TextStyle pinderyTextStyle = new TextStyle(

@@ -2,71 +2,70 @@
 import 'package:flutter/material.dart';
 
 // Internal imports
-import '../party.dart';
+import '../catalogue/catalogue_element.dart';
 import 'category_card_list.dart';
 
 const String partyStuffCollection = "party_stuff";
 
 class ItemCard extends StatelessWidget {
-  ItemCard({this.party, this.category, this.assetImage});
+  ItemCard({this.catalogueSublist, this.category, this.assetImage});
 
-  final Party party;
+  final List<CatalogueElement> catalogueSublist;
   final String category;
   final AssetImage assetImage;
 
   @override
   Widget build(BuildContext context) {
-    return new Card(
-      child: new Container(
-        child: new Column(
-          children: <Widget>[
-            Container(
-                height: 100.0,
-                decoration: new BoxDecoration(
-                    image: new DecorationImage(
-                        image: assetImage, fit: BoxFit.cover)),
-                child: new Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: <Widget>[
-                    new Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 4.0),
-                      child: new Text(
-                        category,
-                        overflow: TextOverflow.ellipsis,
-                        style: new TextStyle(
-                            fontSize: 28.0,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 1.0),
-                      ),
+    return new Container(
+      margin: EdgeInsets.only(top: 8.0, left: 4.0, right: 4.0),
+      child: Column(
+        children: <Widget>[
+          new Material(
+            borderRadius: new BorderRadius.vertical(top: new Radius.circular(2.0)),
+            elevation: 100.0,
+            child: new Container(
+              height: 100.0,
+              decoration: new BoxDecoration(
+                image:
+                    new DecorationImage(image: assetImage, fit: BoxFit.cover),
+              ),
+              child: new Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: <Widget>[
+                  new Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16.0, vertical: 4.0),
+                    child: new Text(
+                      category,
+                      overflow: TextOverflow.ellipsis,
+                      style: new TextStyle(
+                          fontSize: 28.0,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 1.0),
                     ),
-                  ],
-                )),
-            new Container(
-              decoration: new BoxDecoration(color: Colors.white),
-              child: new Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    new ListItem(
-                      name: 'ciao',
-                      maxNumber: 2,
-                    ),
-                    new ListItem(
-                      name: 'pollo',
-                      maxNumber: 15,
-                    ),
-                    new ListItem(
-                      name: 'gatto',
-                      maxNumber: 20,
-                    ),
-                  ]),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
+          ),
+          new Container(
+            margin: EdgeInsets.only(bottom: 8.0),
+            child: new ListItem(
+              elementsList: catalogueSublist,
+            ),
+          ),
+        ],
       ),
     );
+  }
+
+  /// Computes the height of the [Container]
+  double containerHeight() {
+    const double expansionPanelHeight = 48.0;
+    double height = catalogueSublist.length * expansionPanelHeight;
+    height -= height * 0.2;
+    return height;
   }
 }
 
