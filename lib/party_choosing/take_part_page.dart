@@ -5,7 +5,7 @@
 import 'package:flutter/material.dart';
 
 // Internal imports
-import 'category_card.dart';
+import 'item_card.dart';
 import '../party.dart';
 import '../theme.dart';
 import '../catalogue/catalogue.dart';
@@ -27,7 +27,14 @@ class TakePartPage extends StatefulWidget {
 class _TakePartPageState extends State<TakePartPage> {
   final GlobalKey<ScaffoldState> homeScaffoldKey =
       new GlobalKey<ScaffoldState>();
-  int obtainedPinderPoints = 4;
+  ObtainedPoints obtainedPoints = new ObtainedPoints();
+
+  @override
+    void setState(VoidCallback fn) {
+      super.setState(fn);
+      debugPrint('Setting state');
+      debugPrint('Down here we have ${obtainedPoints.points}');
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +54,7 @@ class _TakePartPageState extends State<TakePartPage> {
           title: new Text('Choose what to bring!'),
         ),
         floatingActionButton: new FloatingActionButton(
+          tooltip: 'Participate to the party!',
           onPressed: null,
           child: new Icon(Icons.arrow_forward),
           backgroundColor: secondary,
@@ -76,7 +84,7 @@ class _TakePartPageState extends State<TakePartPage> {
                       padding: const EdgeInsets.only(left: 16.0),
                       child: new Text(
                         'Pinder Points:  ' +
-                            obtainedPinderPoints.toString() +
+                            obtainedPoints.points.toString() +
                             '/' +
                             widget.party.pinderPoints.toString(),
                         style: new TextStyle(color: Colors.white),
@@ -102,10 +110,19 @@ class _TakePartPageState extends State<TakePartPage> {
           category: Catalogue.names[i],
           catalogueSublist: elementsSublist,
           assetImage: new AssetImage(Catalogue.pics[i]),
+          obtainedPoints: obtainedPoints,
+          takePartPageState: this,
         ));
       }
     }
 
     return itemCardList;
   }
+}
+
+/// Class for the obtained Pinder Points
+/// It is necessary, since it's not possible to pass the primitive [int] as reference.
+class ObtainedPoints {
+  ObtainedPoints({this.points = 0});
+  int points;
 }

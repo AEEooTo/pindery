@@ -1,6 +1,7 @@
 // External imports
 import 'package:flutter/material.dart';
 
+import 'take_part_page.dart';
 import '../catalogue/catalogue_element.dart';
 import '../theme.dart';
 
@@ -8,9 +9,12 @@ typedef Widget ItemBodyBuilder<double>(Item<double> item);
 typedef String ValueToString<double>(double value);
 
 class ListItem extends StatefulWidget {
-  ListItem({this.elementsList});
+  ListItem(
+      {this.elementsList, this.takePartPageState, this.obtainedPoints});
 
   final List<CatalogueElement> elementsList;
+  ObtainedPoints obtainedPoints;
+  State<TakePartPage> takePartPageState;
 
   @override
   _ListItemState createState() => new _ListItemState();
@@ -45,6 +49,11 @@ class _ListItemState extends State<ListItem> {
                 onSave: () {
                   Form.of(context).save();
                   close();
+                  widget.takePartPageState.setState(() {
+                    // TODO: add the case when the user decides to change mind!
+                    widget.obtainedPoints.points +=
+                        item.value.round() * element.elementValue;
+                  });
                 },
                 onCancel: () {
                   Form.of(context).reset();
