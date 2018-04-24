@@ -49,7 +49,7 @@ class _SignUpPageState extends State<SignupPage> {
         primaryColor: primary,
         primaryColorLight: primaryLight,
         primaryColorDark: primaryDark,
-        accentColor: secondary,
+        accentColor: Colors.white,
         buttonTheme: new ButtonThemeData(textTheme: ButtonTextTheme.accent),
         brightness: Brightness.light,
       ),
