@@ -30,13 +30,6 @@ class _TakePartPageState extends State<TakePartPage> {
   ObtainedPoints obtainedPoints = new ObtainedPoints();
 
   @override
-    void setState(VoidCallback fn) {
-      super.setState(fn);
-      debugPrint('Setting state');
-      debugPrint('Down here we have ${obtainedPoints.points}');
-    }
-
-  @override
   Widget build(BuildContext context) {
     return new Theme(
       data: new ThemeData(

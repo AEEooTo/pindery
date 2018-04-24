@@ -1,6 +1,7 @@
-// External imports
+// External libraries imports
 import 'package:flutter/material.dart';
 
+// Internal imports
 import 'take_part_page.dart';
 import '../catalogue/catalogue_element.dart';
 import '../theme.dart';
@@ -9,19 +10,21 @@ typedef Widget ItemBodyBuilder<double>(Item<double> item);
 typedef String ValueToString<double>(double value);
 
 class ListItem extends StatefulWidget {
-  ListItem(
-      {this.elementsList, this.takePartPageState, this.obtainedPoints});
+  ListItem({this.elementsList, this.takePartPageState, this.obtainedPoints});
 
   final List<CatalogueElement> elementsList;
-  ObtainedPoints obtainedPoints;
-  State<TakePartPage> takePartPageState;
+  final ObtainedPoints obtainedPoints;
+  final State<TakePartPage> takePartPageState;
 
   @override
-  _ListItemState createState() => new _ListItemState();
+  _ListItemState createState() => new _ListItemState(obtainedPoints: obtainedPoints, takePartPageState: takePartPageState);
 }
 
 class _ListItemState extends State<ListItem> {
+  _ListItemState({this.obtainedPoints, this.takePartPageState});
   List<Item<double>> _items;
+  ObtainedPoints obtainedPoints;
+  State<TakePartPage> takePartPageState;
 
   @override
   void initState() {
@@ -33,56 +36,61 @@ class _ListItemState extends State<ListItem> {
     List<Item<double>> itemsList = <Item<double>>[];
     if (widget.elementsList.isNotEmpty) {
       for (CatalogueElement element in widget.elementsList) {
-        itemsList.add(new Item<double>(
-          name: element.elementName,
-          value: 0.0,
-          valueToString: (double amount) => '${amount.round()}',
-          builder: (Item<double> item) {
-            void close() {
-              setState(() {
-                item.isExpanded = false;
-              });
-            }
-
-            return new Form(child: new Builder(builder: (BuildContext context) {
-              return new CollapsibleBody(
-                onSave: () {
-                  Form.of(context).save();
-                  close();
-                  widget.takePartPageState.setState(() {
-                    // TODO: add the case when the user decides to change mind!
-                    widget.obtainedPoints.points +=
-                        item.value.round() * element.elementValue;
-                  });
-                },
-                onCancel: () {
-                  Form.of(context).reset();
-                  close();
-                },
-                child: new FormField<double>(
-                  initialValue: item.value,
-                  onSaved: (double value) {
-                    item.value = value;
-                  },
-                  builder: (FormFieldState<double> field) {
-                    return new Padding(
-                      padding: const EdgeInsets.only(top: 53.0),
-                      child: new Slider(
-                        min: 0.0,
-                        max: element.remainingQuantity.toDouble(),
-                        divisions: element.remainingQuantity,
-                        activeColor: secondary,
-                        label: '${field.value.ceil()}',
-                        value: field.value.toDouble(),
-                        onChanged: field.didChange,
+        itemsList.add(
+          new Item<double>(
+            name: element.elementName,
+            quantity: 0.0,
+            valueToString: (double amount) => '${amount.round()}',
+            builder: (Item<double> item) {
+              void close() {
+                setState(() {
+                  item.isExpanded = false;
+                });
+              }
+              return new Form(
+                child: new Builder(
+                  builder: (BuildContext context) {
+                    return new CollapsibleBody(
+                      onSave: () {
+                        Form.of(context).save();
+                        close();
+                        takePartPageState.setState(() {
+                            obtainedPoints.points +=
+                              (item.quantity.round() - item.previousQuantity) * element.elementValue;
+                            item.previousQuantity = item.quantity.round();
+                        });
+                      },
+                      onCancel: () {
+                        Form.of(context).reset();
+                        close();
+                      },
+                      child: new FormField<double>(
+                        initialValue: item.quantity,
+                        onSaved: (double value) {
+                          item.quantity = value;
+                        },
+                        builder: (FormFieldState<double> field) {
+                          return new Padding(
+                            padding: const EdgeInsets.only(top: 53.0),
+                            child: new Slider(
+                              min: 0.0,
+                              max: element.remainingQuantity.toDouble(),
+                              divisions: element.remainingQuantity,
+                              activeColor: secondary,
+                              label: '${field.value.ceil()}',
+                              value: field.value.toDouble(),
+                              onChanged: field.didChange,
+                            ),
+                          );
+                        },
                       ),
                     );
                   },
                 ),
               );
-            }));
-          },
-        ));
+            },
+          ),
+        );
       }
     }
     return itemsList;
@@ -234,20 +242,21 @@ class CollapsibleBody extends StatelessWidget {
 }
 
 class Item<double> {
-  Item({this.name, this.value, this.builder, this.valueToString})
-      : textController = new TextEditingController(text: valueToString(value));
+  Item({this.name, this.quantity, this.builder, this.valueToString})
+      : textController = new TextEditingController(text: valueToString(quantity));
 
   final String name;
   final TextEditingController textController;
   final ItemBodyBuilder<double> builder;
   final ValueToString<double> valueToString;
-  double value;
+  double quantity;
   bool isExpanded = false;
+  int previousQuantity = 0;
 
   ExpansionPanelHeaderBuilder get headerBuilder {
     return (BuildContext context, bool isExpanded) {
       return new DualHeaderWithHint(
-          name: name, value: valueToString(value), showHint: isExpanded);
+          name: name, value: valueToString(quantity), showHint: isExpanded);
     };
   }
 
