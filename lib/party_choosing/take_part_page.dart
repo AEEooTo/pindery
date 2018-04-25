@@ -15,9 +15,11 @@ final String beveragesCoverImagePath = "assets/img/beer_2.jpg";
 final String foodCoverImagePath = "assets/img/pasta.jpeg";
 final String utilitiesCoverImagePath = "assets/img/kittens.jpeg";
 
+/// The page that displays the stuff that the participants have to bring
 class TakePartPage extends StatefulWidget {
   TakePartPage({this.party});
 
+  /// The [Party] instance the user wants to take part to
   final Party party;
 
   @override
@@ -48,9 +50,16 @@ class _TakePartPageState extends State<TakePartPage> {
         ),
         floatingActionButton: new FloatingActionButton(
           tooltip: 'Participate to the party!',
-          onPressed: null,
+          onPressed: () => obtainedPoints.points > widget.party.pinderPoints
+              ? print("Yay, you can take part to the party!")
+              : homeScaffoldKey.currentState.showSnackBar(
+                new SnackBar(
+                  content: new Text('You need to gain the minimum amount of points!'),
+                  backgroundColor: primary,
+              )),
           child: new Icon(Icons.arrow_forward),
           backgroundColor: secondary,
+
         ),
         body: new Column(
           children: <Widget>[
@@ -59,7 +68,15 @@ class _TakePartPageState extends State<TakePartPage> {
                 color: primaryLight,
                 child: new ListView(
                   padding: EdgeInsets.symmetric(horizontal: 8.0),
-                  children: categoryCardListBuilder(),
+                  // TODO: find a better way to display the cards,
+                  // since the ListView would be less expensive than the Column.
+                  // At the moment I'm using a column, since with the ListView rebuilds the cards
+                  // every time they appear and disappear, so the slider returns at 0 every time
+                  children: <Widget>[
+                    new Column(
+                      children: categoryCardListBuilder(),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -78,9 +95,12 @@ class _TakePartPageState extends State<TakePartPage> {
                       child: new Text(
                         'Pinder Points:  ' +
                             obtainedPoints.points.toString() +
-                            '/' +
+                            ' / ' +
                             widget.party.pinderPoints.toString(),
-                        style: new TextStyle(color: Colors.white),
+                        style: new TextStyle(
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w300),
                       ),
                     ),
                   ],
@@ -93,6 +113,7 @@ class _TakePartPageState extends State<TakePartPage> {
     );
   }
 
+  /// Builds the list of the categories of the [Catalogue]
   List<ItemCard> categoryCardListBuilder() {
     List<ItemCard> itemCardList = <ItemCard>[];
     for (int i = 0; i < Catalogue.names.length; ++i) {
