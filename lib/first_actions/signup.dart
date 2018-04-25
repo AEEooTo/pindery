@@ -85,9 +85,7 @@ class _SignUpPageState extends State<SignupPage> {
                         decoration: new BoxDecoration(
                             border: Border.all(color: dividerColor),
                             shape: BoxShape.circle),
-                        child: new UserImageChooser(
-                          image: imageLocalPath,
-                        )),
+                        child: new UserImageChooser()),
                     new Container(
                       child: new Form(
                         key: formKey,
@@ -237,7 +235,7 @@ class SignUpButton extends StatelessWidget {
       Navigator.pop(context);
       Scaffold.of(context).showSnackBar(new SnackBar(
             content: new Text(
-              "A user with this e-mail already exists",
+              "Error",
               textAlign: TextAlign.center,
             ),
           ));
@@ -254,21 +252,25 @@ Future<bool> _trulyHandleSignUp(
     //user creation as a firebase auth object
     FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
         email: _email, password: _password);
+    print("user firebase created");
     //user creation as our proprietary object
     int random = new Random().nextInt(100000);
     StorageReference ref = FirebaseStorage.instance
         .ref()
         .child("/userProPics/dick_pic_$random.jpg");
+    print("reference taken");
     await _compressImage();
-    ref.put(
+    StorageUploadTask uploadTask = ref.put(
         imageLocalPath); //TODO: consider check timeout (even though the profile pic is very small)
-    String downloadUrl = ref.getDownloadURL().toString();
+    UploadTaskSnapshot task = await uploadTask.future;
+    Uri downloadUrl = task.downloadUrl;
+    print("l'urlo di download : $downloadUrl");
     User databaseUser = new User(
         name: _name,
         surname: _surname,
         email: _email,
         uid: user.uid,
-        profilePictureUrl: downloadUrl);
+        profilePictureUrl: downloadUrl.toString());
     await databaseUser.sendUser();
   } catch (error) {
     // TODO: check the type of error and prompt the user consequently
@@ -446,10 +448,6 @@ class SigningUpPage extends StatelessWidget {
 }
 
 class UserImageChooser extends StatefulWidget {
-  UserImageChooser({this.image});
-
-  final File image;
-
   @override
   UserImageChooserState createState() => new UserImageChooserState();
 }
@@ -477,6 +475,7 @@ class UserImageChooserState extends State<UserImageChooser> {
           ),
           onPressed: () async {
             imageLocalPath = await _imageChooser();
+            print(imageLocalPath);
             setState(() {});
           },
         ),
