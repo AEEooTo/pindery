@@ -1,8 +1,5 @@
-theme: jekyll-theme-minimal
----
 title: Pindery
 logo: /assets/img/logo.png
-description: An amazing party app
+description: An amazing party app.
 show_downloads: true
-url: https://aeeooto.github.io/pindery/
----
+theme: jekyll-theme-minimal
