@@ -1,5 +1,5 @@
 title: Pindery
 logo: /assets/img/logo.png
 description: An amazing party app.
-show_downloads: true
+show_downloads: false
 theme: jekyll-theme-minimal
