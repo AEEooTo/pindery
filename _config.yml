@@ -1,6 +1,8 @@
-theme: jekyll-theme-cayman
+theme: jekyll-theme-minimal
 ---
-name: Pindery
+title: Pindery
+logo: /assets/img/logo.png
 description: An amazing party app
+show_downloads: true
 url: https://aeeooto.github.io/pindery/
 ---
