@@ -9,7 +9,12 @@ import 'theme.dart';
 import 'package:pindery/home_page/home_page.dart';
 import 'package:pindery/first_actions/welcome.dart';
 
-void main() => runApp(new Pindery());
+void main() {
+  // Overriding https://github.com/flutter/flutter/issues/13736 for better
+  // visual effect at the cost of performance.
+  MaterialPageRoute.debugEnableFadingRoutes = true; // ignore: deprecated_member_use
+  runApp(new Pindery());
+  }
 
 class Pindery extends StatelessWidget {
   @override

@@ -37,8 +37,6 @@ class SettingsPage extends StatelessWidget {
               new Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: new SizedBox(
-                  height: 72.0,
-                  width: 72.0,
                   child: new PinderyCircleAvatar(user: user),
                 ),
               ),

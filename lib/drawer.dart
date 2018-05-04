@@ -12,15 +12,10 @@ import 'utils.dart';
 import 'home_page/home_page.dart';
 import 'settings.dart';
 
-const String coverImagePath = "assets/img/movingParty.jpeg";
-
-
-final String name = "Edoardo Debenedetti";
-final String avatarPath = "assets/img/avatar.jpg";
-
 /// Default drawer for Pindery app
 class PinderyDrawer extends StatelessWidget {
   PinderyDrawer({this.user});
+  static const String coverImagePath = "assets/img/movingParty.jpeg";
 
   final User user;
   final GlobalKey<DrawerControllerState> drawerKey =
