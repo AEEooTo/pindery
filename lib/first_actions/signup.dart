@@ -259,7 +259,7 @@ Future<bool> _trulyHandleSignUp(
         .ref()
         .child("/userProPics/dick_pic_$random.jpg");
     print("reference taken");
-    await _compressImage();
+    //await _compressImage();
     StorageUploadTask uploadTask = ref.put(
         imageLocalPath); //TODO: consider check timeout (even though the profile pic is very small)
     UploadTaskSnapshot task = await uploadTask.future;
@@ -475,7 +475,6 @@ class UserImageChooserState extends State<UserImageChooser> {
           ),
           onPressed: () async {
             imageLocalPath = await _imageChooser();
-            print(imageLocalPath);
             setState(() {});
           },
         ),
@@ -513,35 +512,38 @@ class UserImageChooserState extends State<UserImageChooser> {
         });
     if (choose != null) {
       localPath = await ImagePicker.pickImage(source: choose);
+      localPath = await _cropImage(localPath);
     }
     return localPath;
   }
 }
 
-Future<Null> _compressImage() async {
-  print("compressing image"); //todo: remove debug print
+Future<File> _cropImage(File imageFile) async {
+  print("cropping image"); //todo: remove debug print
   final tempDir = await getTemporaryDirectory();
   final path = tempDir.path;
   int rand = new Random().nextInt(10000);
+  int proPicDimension = 200;
 
-  Im.Image image = Im.decodeImage(imageLocalPath.readAsBytesSync());
-
-  int widthFinal = 0;
-  int widthSquareMin = 200;
-
-  //algorithm to decide the image width
-  if (image.height > image.width) {
-    widthFinal = widthSquareMin;
-    if (image.width > widthSquareMin) {
-      image = Im.copyResize(image, widthFinal);
-    }
-  } else {
-    widthFinal = ((image.width * widthSquareMin) / image.height).round();
-    if (image.height > widthSquareMin) {
-      image = Im.copyResize(image, widthFinal);
-    }
+  Im.Image image = Im.decodeImage(imageFile.readAsBytesSync());
+  if(image.width > image.height){
+    int newWidth = image.height;
+    image = Im.copyCrop(image,
+        ((image.width/2).round() - (newWidth/2).round()),
+        0,
+        newWidth,
+        newWidth);
+  }else{
+    int newHeight = image.width;
+    image = Im.copyCrop(image,
+        0,
+        ((image.width/2).round() - (newHeight/2).round()),
+        newHeight,
+        newHeight);
   }
-  print("image compressed"); //todo: remove debug print
-  imageLocalPath = new File('$path/img_$rand.jpg')
+  image = Im.copyResize(image, proPicDimension);
+  print("image cropped");
+  imageFile = new File('$path/img_$rand.jpg')
     ..writeAsBytesSync(Im.encodeJpg(image, quality: 10));
+  return imageFile;
 }

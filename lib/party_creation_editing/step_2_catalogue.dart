@@ -168,12 +168,12 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
   }
 
   Future<Null> _uploadingDialog(FormState formState) async {
-    _compressImage().then((randomVariables) => _handleSubmitted(formState));
-    print("past the futures");
     return showDialog<Null>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        _compressImage().whenComplete(() => _handleSubmitted(formState));
+        print("past the futures");
         return new AlertDialog(
           title: new Text('Loading'),
           content: new SingleChildScrollView(
