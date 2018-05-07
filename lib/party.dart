@@ -106,7 +106,7 @@ class Party {
     return partyMap;
   }
 
-  /// Uploads the image reauested by the user
+  /// Uploads the image requested by the user
   Future<Null> uploadImage(File imageFile) async {
     print("uploading image"); //todo: remove debug print
     int random = new Random().nextInt(100000);

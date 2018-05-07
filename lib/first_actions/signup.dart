@@ -13,13 +13,13 @@ import 'package:validator/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:image/image.dart' as Im;
-import 'package:path_provider/path_provider.dart';
 
 // Internal imports
 import '../theme.dart';
 import '../user.dart';
+import '../image_compression.dart';
 
+bool _isImageCompressed = false;
 String _name;
 String _surname;
 String _email;
@@ -94,7 +94,7 @@ class _SignUpPageState extends State<SignupPage> {
                               labelText: 'Name',
                               controller: nameController,
                               validator: (val) => (!isAlpha(val) || val.isEmpty
-                                  ? 'You must a valid username'
+                                  ? 'You must enter a valid username'
                                   : null),
                               onSaved: (val) => _name = val,
                               onFieldSubmitted: (String value) {
@@ -128,12 +128,10 @@ class _SignUpPageState extends State<SignupPage> {
                               controller: emailController,
                               onSaved: (val) {
                                 _email = val;
-                                print("dopo onSaved è : $_email");
                               },
                               onFieldSubmitted: (String value) {
                                 setState(() {
                                   _email = value;
-                                  print("dopo il primo setstate $_email");
                                 });
                               },
                             ),
@@ -223,6 +221,8 @@ class SignUpButton extends StatelessWidget {
         .push(new MaterialPageRoute(builder: (context) => new SigningUpPage()));
     bool result = await _trulyHandleSignUp(firebaseAuth, context);
     if (result) {
+      imageLocalPath = null;
+      //TODO: clean the form
       Navigator.popUntil(context, ModalRoute.withName('/'));
     } else {
       Navigator.pop(context);
@@ -231,33 +231,33 @@ class SignUpButton extends StatelessWidget {
               "Error",
               textAlign: TextAlign.center,
             ),
-          ));
+          ),);
     }
   }
 }
 
 Future<bool> _trulyHandleSignUp(
     FirebaseAuth firebaseAuth, BuildContext context) async {
-  print('Entered _trulyHandleSignUp()');//TODO: remove after debug
+  print('Entered _trulyHandleSignUp()'); //TODO: remove after debug
   bool hasSucceeded = true;
   try {
-    print('Trying to signup');//TODO: remove after debug
+    print('Trying to signup'); //TODO: remove after debug
     //user creation as a firebase auth object
     FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
         email: _email, password: _password);
-    print("user firebase created");
+    print("user firebase created"); //TODO: remove after debug
     //user creation as our proprietary object
     int random = new Random().nextInt(100000);
     StorageReference ref = FirebaseStorage.instance
         .ref()
         .child("/userProPics/dick_pic_$random.jpg");
-    print("reference taken");
-    //await _compressImage();
-    StorageUploadTask uploadTask = ref.putFile(
-        imageLocalPath); //TODO: consider check timeout (even though the profile pic is very small)
+    print("reference taken"); //TODO: remove after debug
+    imageLocalPath = await cropImage(imageLocalPath);
+    StorageUploadTask uploadTask = ref.putFile(imageLocalPath);
+    //TODO: consider to check timeout (even though the profile pic is very small)
     UploadTaskSnapshot task = await uploadTask.future;
     Uri downloadUrl = task.downloadUrl;
-    print("l'urlo di download : $downloadUrl");
+    print("l'urlo di download : $downloadUrl"); //TODO: remove after debug
     User databaseUser = new User(
         name: _name,
         surname: _surname,
@@ -452,12 +452,13 @@ class UserImageChooserState extends State<UserImageChooser> {
   Widget build(BuildContext context) {
     if (imageLocalPath != null) {
       return new SizedBox(
-          width: 72.0,
-          height: 72.0,
-          child: new CircleAvatar(
-            backgroundImage: new FileImage(imageLocalPath),
-            backgroundColor: secondary,
-          ));
+        width: 72.0,
+        height: 72.0,
+        child: new CircleAvatar(
+          backgroundImage: new FileImage(imageLocalPath),
+          backgroundColor: secondary,
+        ),
+      );
     } else {
       return new Container(
         padding: EdgeInsets.all(15.0),
@@ -479,64 +480,37 @@ class UserImageChooserState extends State<UserImageChooser> {
     ImageSource choose;
     File localPath;
     choose = await showDialog<ImageSource>(
-        context: context,
-        builder: (BuildContext context) {
-          return new SimpleDialog(
-            title: const Text('Select method'),
-            children: <Widget>[
-              new SimpleDialogOption(
-                  onPressed: () {
-                    Navigator.pop(context, ImageSource.gallery);
-                  },
-                  child: new Container(
-                    padding: null,
-                    child: const Text("Gallery"),
-                  )),
-              new SimpleDialogOption(
-                  onPressed: () {
-                    Navigator.pop(context, ImageSource.camera);
-                  },
-                  child: new Container(
-                    padding: null,
-                    child: const Text('Camera'),
-                  )),
-            ],
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return new SimpleDialog(
+          title: const Text('Select method'),
+          children: <Widget>[
+            new SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context, ImageSource.gallery);
+              },
+              child: new Container(
+                padding: null,
+                child: const Text("Gallery"),
+              ),
+            ),
+            new SimpleDialogOption(
+              onPressed: () {
+                Navigator.pop(context, ImageSource.camera);
+              },
+              child: new Container(
+                padding: null,
+                child: const Text("Camera"),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+    print(choose);
     if (choose != null) {
       localPath = await ImagePicker.pickImage(source: choose);
-      localPath = await _cropImage(localPath);
     }
     return localPath;
   }
-}
-
-Future<File> _cropImage(File imageFile) async {
-  print("cropping image"); //todo: remove debug print
-  final tempDir = await getTemporaryDirectory();
-  final path = tempDir.path;
-  int rand = new Random().nextInt(10000);
-  int proPicDimension = 200;
-
-  Im.Image image = Im.decodeImage(imageFile.readAsBytesSync());
-  if(image.width > image.height){
-    int newWidth = image.height;
-    image = Im.copyCrop(image,
-        ((image.width/2).round() - (newWidth/2).round()),
-        0,
-        newWidth,
-        newWidth);
-  }else{
-    int newHeight = image.width;
-    image = Im.copyCrop(image,
-        0,
-        ((image.width/2).round() - (newHeight/2).round()),
-        newHeight,
-        newHeight);
-  }
-  image = Im.copyResize(image, proPicDimension);
-  print("image cropped");
-  imageFile = new File('$path/img_$rand.jpg')
-    ..writeAsBytesSync(Im.encodeJpg(image, quality: 10));
-  return imageFile;
 }
