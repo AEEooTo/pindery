@@ -7,8 +7,7 @@ import '../party.dart';
 const String testCity = "shanghai";
 
 class PartyCardList extends StatelessWidget {
-  PartyCardList({this.city, this.hideButtonController});
-  final ScrollController hideButtonController;
+  PartyCardList({this.city});
   final String city;
 
   CollectionReference _getReference(String city) {
@@ -58,7 +57,6 @@ class PartyCardList extends StatelessWidget {
             );
           }
           return new ListView.builder(
-            controller: hideButtonController,
             padding: new EdgeInsets.only(
                 top: 8.0, right: 8.0, left: 8.0, bottom: 80.0),
             reverse: false,

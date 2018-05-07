@@ -24,7 +24,6 @@ String _name;
 String _surname;
 String _email;
 String _password;
-String _cpassword;
 TextEditingController nameController = new TextEditingController();
 TextEditingController surnameController = new TextEditingController();
 TextEditingController emailController = new TextEditingController();
@@ -158,12 +157,6 @@ class _SignUpPageState extends State<SignupPage> {
                                       ? 'The passwords must be equal'
                                       : null,
                               controller: _confirmPasswordController,
-                              onSaved: (val) => _cpassword = val,
-                              onFieldSubmitted: (String value) {
-                                setState(() {
-                                  _cpassword = value;
-                                });
-                              },
                             ),
                             new Padding(
                               padding: const EdgeInsets.only(
@@ -260,7 +253,7 @@ Future<bool> _trulyHandleSignUp(
         .child("/userProPics/dick_pic_$random.jpg");
     print("reference taken");
     //await _compressImage();
-    StorageUploadTask uploadTask = ref.put(
+    StorageUploadTask uploadTask = ref.putFile(
         imageLocalPath); //TODO: consider check timeout (even though the profile pic is very small)
     UploadTaskSnapshot task = await uploadTask.future;
     Uri downloadUrl = task.downloadUrl;

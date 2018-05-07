@@ -85,7 +85,6 @@ class HomePage extends StatelessWidget {
   final String title = 'Pindery';
   final GlobalKey<ScaffoldState> homeScaffoldKey =
       new GlobalKey<ScaffoldState>();
-  ScrollController _hideButtonController;
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +97,6 @@ class HomePage extends StatelessWidget {
         child: new PinderyDrawer(user: user),
       ),
       body: new PartyCardList(
-        hideButtonController: _hideButtonController,
       ),
       floatingActionButton: new Opacity(
         opacity: 1.0,

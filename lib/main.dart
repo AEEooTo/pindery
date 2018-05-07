@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'theme.dart';
-import 'package:pindery/home_page/home_page.dart';
-import 'package:pindery/first_actions/welcome.dart';
+import 'home_page/home_page.dart';
+import 'first_actions/welcome.dart';
 
 void main() {
   // Overriding https://github.com/flutter/flutter/issues/13736 for better

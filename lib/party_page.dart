@@ -280,7 +280,7 @@ class WhitePartyBlock extends StatelessWidget {
 class RatingStars extends StatelessWidget {
   RatingStars({this.number});
 
-  num number;
+  final num number;
   final List<bool> active = new List(5);
 
   void starsMethod(num number) {

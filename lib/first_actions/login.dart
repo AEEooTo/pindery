@@ -176,7 +176,7 @@ Future<bool> _trulyHandleLogin(
     FirebaseAuth firebaseAuth, BuildContext context) async {
   bool hasSucceeded = true;
   try {
-    FirebaseUser user = await _auth.signInWithEmailAndPassword(
+    await _auth.signInWithEmailAndPassword(
         email: _email, password: _password);
   } catch (error) {
     // TODO: check the type of error and prompt the user consequently

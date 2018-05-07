@@ -113,7 +113,7 @@ class Party {
     StorageReference ref = FirebaseStorage.instance
         .ref()
         .child("/partyImages/party_image_$random.jpg");
-    StorageUploadTask uploadTask = ref.put(imageLocalPath);
+    StorageUploadTask uploadTask = ref.putFile(imageLocalPath);
     Duration timeoutDuration = new Duration(seconds: 30);
     try {
       UploadTaskSnapshot task = await uploadTask.future
