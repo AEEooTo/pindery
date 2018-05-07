@@ -19,7 +19,6 @@ import '../theme.dart';
 import '../user.dart';
 import '../image_compression.dart';
 
-bool _isImageCompressed = false;
 String _name;
 String _surname;
 String _email;
@@ -185,7 +184,7 @@ class SignUpButton extends StatelessWidget {
 
   final String text;
   final Color color;
-  final formKey;
+  final GlobalKey<FormState> formKey;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
 
   Widget build(BuildContext context) {
@@ -222,17 +221,33 @@ class SignUpButton extends StatelessWidget {
     bool result = await _trulyHandleSignUp(firebaseAuth, context);
     if (result) {
       imageLocalPath = null;
-      //TODO: clean the form
+      clearForm();
       Navigator.popUntil(context, ModalRoute.withName('/'));
     } else {
       Navigator.pop(context);
-      Scaffold.of(context).showSnackBar(new SnackBar(
-            content: new Text(
-              "Error",
-              textAlign: TextAlign.center,
+      Scaffold.of(context).showSnackBar(
+            new SnackBar(
+              content: new Text(
+                "Error",
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),);
+          );
     }
+  }
+
+  void clearForm(){
+    final FormState formState = formKey.currentState;
+    formState.reset();
+    nameController.clear();
+    surnameController.clear();
+    emailController.clear();
+    _passwordController.clear();
+    _confirmPasswordController.clear();
+    _name = null;
+    _surname = null;
+    _email = null;
+    _password = null;
   }
 }
 
@@ -281,7 +296,7 @@ class PasswordField extends StatefulWidget {
       this.validator,
       this.onFieldSubmitted,
       this.controller,
-      this.activateIcon});
+      this.activateIcon,});
 
   final String hintText;
   final String labelText;
@@ -302,6 +317,7 @@ class _PasswordFieldState extends State<PasswordField> {
   @override
   Widget build(BuildContext context) {
     return new TextFormField(
+      initialValue: null,
       autocorrect: false,
       controller: widget.controller,
       obscureText: _obscureText,
@@ -366,6 +382,7 @@ class InformationField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new TextFormField(
+      initialValue: null,
       controller: controller,
       keyboardType: textInputType,
       onSaved: onSaved,
