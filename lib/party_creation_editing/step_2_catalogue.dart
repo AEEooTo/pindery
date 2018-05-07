@@ -2,18 +2,15 @@
 /// contains the code for choosing the party catalogue
 /// ///
 import 'dart:async';
-import 'dart:io';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:image/image.dart' as Im;
-import 'package:path_provider/path_provider.dart';
 
 import '../catalogue/catalogue_element.dart';
 import '../catalogue/catalogue.dart';
 import '../party.dart';
 import 'catalogue_choosing_list.dart';
 import 'party_details_utils.dart';
+import '../image_compression.dart';
 
 class ChooseCataloguePage extends StatefulWidget {
   static const String routeName = '/create-party/step-2';
@@ -141,38 +138,14 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
     }
   }
 
-  Future<Null> _compressImage() async {
-    print("compressing image"); //todo: remove debug print
-    final tempDir = await getTemporaryDirectory();
-    final path = tempDir.path;
-    int rand = new Random().nextInt(10000);
-
-    Im.Image image = Im.decodeImage(party.imageLocalPath.readAsBytesSync());
-
-    int widthFinal = 0;
-    //algorithm to decide the image width
-    if (image.height > image.width) {
-      widthFinal = 1080;
-      if (image.width > 1080) {
-        image = Im.copyResize(image, widthFinal);
-      }
-    } else {
-      widthFinal = ((image.width * 1080) / image.height).round();
-      if (image.height > 1080) {
-        image = Im.copyResize(image, widthFinal);
-      }
-    }
-    print("image compressed");//todo: remove debug print
-    party.imageLocalPath = new File('$path/img_$rand.jpg')
-      ..writeAsBytesSync(Im.encodeJpg(image, quality: 50));
-  }
-
   Future<Null> _uploadingDialog(FormState formState) async {
     return showDialog<Null>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        _compressImage().whenComplete(() => _handleSubmitted(formState));
+        compressImage(party.imageLocalPath)
+            .then((image) => party.imageLocalPath = image)
+            .whenComplete(() => _handleSubmitted(formState));
         print("past the futures");
         return new AlertDialog(
           title: new Text('Loading'),

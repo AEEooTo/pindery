@@ -1,6 +1,8 @@
 ///here is managed the image compression
 ///
 
+library image_compression;
+
 //Dart core imports
 import 'dart:io';
 import 'dart:async';
@@ -46,3 +48,30 @@ Im.Image _imageSquarer(Im.Image image){
   return image;
 }
 
+///this function compress the image picture [File]
+Future<File> compressImage(File imageFile) async {
+  print("compressing image"); //todo: remove debug print
+  final tempDir = await getTemporaryDirectory();
+  final path = tempDir.path;
+  int rand = new Random().nextInt(10000);
+
+  Im.Image image = Im.decodeImage(imageFile.readAsBytesSync());
+
+  int widthFinal = 0;
+  //algorithm to decide the image width
+  if (image.height > image.width) {
+    widthFinal = 1080;
+    if (image.width > 1080) {
+      image = Im.copyResize(image, widthFinal);
+    }
+  } else {
+    widthFinal = ((image.width * 1080) / image.height).round();
+    if (image.height > 1080) {
+      image = Im.copyResize(image, widthFinal);
+    }
+  }
+  print("image compressed");//todo: remove debug print
+  imageFile = new File('$path/img_$rand.jpg')
+    ..writeAsBytesSync(Im.encodeJpg(image, quality: 50));
+  return imageFile;
+}
