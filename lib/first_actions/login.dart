@@ -14,7 +14,6 @@ String _email;
 String _password;
 FirebaseAuth _auth = FirebaseAuth.instance;
 
-//todo: make it stateless
 class LoginPage extends StatefulWidget {
   static const routeName = '/login-page';
 
@@ -79,11 +78,6 @@ class _LoginPageState extends State<LoginPage> {
                                       onSaved: (String value) {
                                         _email = value;
                                       },
-                                      onFieldSubmitted: (String value) {
-                                        setState(() {
-                                          _email = value;
-                                        });
-                                      },
                                     ),
                                   ),
                                   new PasswordField(
@@ -95,11 +89,6 @@ class _LoginPageState extends State<LoginPage> {
                                     onSaved: (String value) {
                                       _password = value;
                                     },
-                                    onFieldSubmitted: (String value) {
-                                      setState(() {
-                                        _password = value;
-                                      });
-                                    },
                                   ),
                                   new Padding(
                                     padding: const EdgeInsets.only(top: 80.0),
@@ -109,7 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                                       formKey: formKey,
                                     ),
                                   ),
-                                  //todo: add forgot password
+                                  // TODO: add forgot password
                                 ],
                               ),
                             ),
@@ -192,7 +181,6 @@ class PasswordField extends StatefulWidget {
     this.helperText,
     this.onSaved,
     this.validator,
-    this.onFieldSubmitted,
   });
 
   final String hintText;
@@ -200,7 +188,6 @@ class PasswordField extends StatefulWidget {
   final String helperText;
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String> validator;
-  final ValueChanged<String> onFieldSubmitted;
 
   @override
   _PasswordFieldState createState() => new _PasswordFieldState();
@@ -217,7 +204,6 @@ class _PasswordFieldState extends State<PasswordField> {
       obscureText: _obscureText,
       onSaved: widget.onSaved,
       validator: widget.validator,
-      onFieldSubmitted: widget.onFieldSubmitted,
       decoration: new InputDecoration(
         fillColor: Colors.white,
         border: new UnderlineInputBorder(),
@@ -257,7 +243,6 @@ class EmailField extends StatelessWidget {
     this.helperText,
     this.onSaved,
     this.validator,
-    this.onFieldSubmitted,
   });
 
   final String hintText;
@@ -265,17 +250,14 @@ class EmailField extends StatelessWidget {
   final String helperText;
   final FormFieldSetter<String> onSaved;
   final FormFieldValidator<String> validator;
-  final ValueChanged<String> onFieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
     return new TextFormField(
       controller: usernameController,
       keyboardType: TextInputType.emailAddress,
-      maxLength: 30,
       onSaved: onSaved,
       validator: validator,
-      onFieldSubmitted: onFieldSubmitted,
       decoration: new InputDecoration(
         fillColor: Colors.white,
         border: new UnderlineInputBorder(),

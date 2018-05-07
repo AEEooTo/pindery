@@ -33,7 +33,6 @@ final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
 
 enum Choose { gallery, camera }
 
-//todo: make it stateless
 class SignupPage extends StatefulWidget {
   static final routeName = '/login-page';
 
@@ -96,12 +95,6 @@ class _SignUpPageState extends State<SignupPage> {
                                   ? 'You must enter a valid username'
                                   : null),
                               onSaved: (val) => _name = val,
-                              onFieldSubmitted: (String value) {
-                                // TODO: Are all those setState() necessary?
-                                setState(() {
-                                  _name = value;
-                                });
-                              },
                               textInputType: TextInputType.text,
                             ),
                             new InformationField(
@@ -111,11 +104,6 @@ class _SignUpPageState extends State<SignupPage> {
                                   : null,
                               controller: surnameController,
                               onSaved: (val) => _surname = val,
-                              onFieldSubmitted: (String value) {
-                                setState(() {
-                                  _surname = value;
-                                });
-                              },
                               textInputType: TextInputType.text,
                             ),
                             new InformationField(
@@ -128,11 +116,6 @@ class _SignUpPageState extends State<SignupPage> {
                               onSaved: (val) {
                                 _email = val;
                               },
-                              onFieldSubmitted: (String value) {
-                                setState(() {
-                                  _email = value;
-                                });
-                              },
                             ),
                             new PasswordField(
                               activateIcon: true,
@@ -140,11 +123,6 @@ class _SignUpPageState extends State<SignupPage> {
                               validator: (val) => val.isEmpty ? '' : null,
                               controller: _passwordController,
                               onSaved: (val) => _password = val,
-                              onFieldSubmitted: (String value) {
-                                setState(() {
-                                  _password = value;
-                                });
-                              },
                             ),
                             new PasswordField(
                               activateIcon: false,
