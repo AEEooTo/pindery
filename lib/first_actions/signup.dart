@@ -34,7 +34,6 @@ final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
 
 enum Choose { gallery, camera }
 
-//todo: make it stateless
 class SignupPage extends StatefulWidget {
   static final routeName = '/login-page';
 
