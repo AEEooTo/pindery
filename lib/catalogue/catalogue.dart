@@ -3,8 +3,7 @@ import 'catalogue_element.dart';
 
 enum Categories { drinks, food, utilities }
 
-
-/// Is the class which manages the catalogue
+/// The class which manages the party catalogue
 class Catalogue {
   Catalogue({this.catalogue});
 
@@ -36,10 +35,18 @@ class Catalogue {
   ];
 
   /// Names for the different categories
-  static const List<String> names = const <String>["Drinks", "Food", "Utilities"];
+  static const List<String> names = const <String>[
+    "Drinks",
+    "Food",
+    "Utilities"
+  ];
 
   /// Names on the database of the different categories paths
-  static const List<String> dbNames = const <String>["drinks", "food", "utilities"];
+  static const List<String> dbNames = const <String>[
+    "drinks",
+    "food",
+    "utilities"
+  ];
 
   /// Paths for the different subcategories
   static const List<List<String>> dbSubCategories = const <List<String>>[
@@ -116,12 +123,29 @@ class Catalogue {
     return true;
   }
 
+  /// Updates the [chosenQuantity] fields in all the elements of the catalogue
+  /// based on the [locallyChosenQuantyty] fields. It takes an up-to-date [Catalogue] instance,
+  /// syncronized with Firestore, and adds up the quantity of every element chosen
+  /// by the participants.
+  void update(Catalogue upToDateCatalogue) {
+    debugPrint('\nIn update:\nupToDateCatalogue:');
+    upToDateCatalogue.printCatalogue();
+    debugPrint('\nlocalCatalogue:');
+    printCatalogue();
+    for (int i = 0; i < this.catalogue.length; ++i) {
+      for (int j = 0; j < this.catalogue[i].length; ++j) {
+        catalogue[i][j].chosenQuantity += upToDateCatalogue.catalogue[i][j].locallyChosenQuantity;
+      }
+    }
+  }
+
   /// Prints the [catalogue] field, for debuggng purposes
   void printCatalogue() {
     for (int i = 0; i < catalogue.length; ++i) {
-      print(i);
+      debugPrint(i.toString());
       for (int j = 0; j < catalogue[i].length; ++j) {
-        print(catalogue[i][j].elementName);
+        debugPrint(
+            '${catalogue[i][j].elementName} locallyChosen: ${catalogue[i][j].locallyChosenQuantity}, chosen: ${catalogue[i][j].chosenQuantity}');
       }
     }
   }

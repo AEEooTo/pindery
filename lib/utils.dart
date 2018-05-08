@@ -18,7 +18,7 @@ class PinderyCircleAvatar extends StatelessWidget {
   /// The [User] whose image/name is used for the widget
   final User user;
 
-  // The the radius of the circle
+  /// The the radius of the circle
   final double radius;
 
   @override

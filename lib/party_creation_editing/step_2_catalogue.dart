@@ -133,7 +133,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
     party.catalogue = catalogue;
     await party.uploadImage(party.imageLocalPath);
     if (!cancelled) {
-      party.sendParty();
+      party.addNewParty();
       Navigator.of(context).pop();
     }
   }

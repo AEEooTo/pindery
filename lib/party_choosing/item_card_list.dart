@@ -17,14 +17,19 @@ class ListItem extends StatefulWidget {
   final State<TakePartPage> takePartPageState;
 
   @override
-  _ListItemState createState() => new _ListItemState(obtainedPoints: obtainedPoints, takePartPageState: takePartPageState);
+  _ListItemState createState() => new _ListItemState(
+      obtainedPoints: obtainedPoints,
+      takePartPageState: takePartPageState,
+      elementsList: elementsList);
 }
 
 class _ListItemState extends State<ListItem> {
-  _ListItemState({this.obtainedPoints, this.takePartPageState});
+  _ListItemState(
+      {this.obtainedPoints, this.takePartPageState, this.elementsList});
   List<Item<double>> _items;
   ObtainedPoints obtainedPoints;
   State<TakePartPage> takePartPageState;
+  List<CatalogueElement> elementsList;
 
   @override
   void initState() {
@@ -35,8 +40,9 @@ class _ListItemState extends State<ListItem> {
   List<Item<double>> itemListBuilder() {
     List<Item<double>> itemsList = <Item<double>>[];
     if (widget.elementsList.isNotEmpty) {
-      for (CatalogueElement element in widget.elementsList) {
-        itemsList.add(
+      for (CatalogueElement element in elementsList) {
+        if (element.remainingQuantity > 0) {
+          itemsList.add(
           new Item<double>(
             name: element.elementName,
             quantity: 0.0,
@@ -47,6 +53,7 @@ class _ListItemState extends State<ListItem> {
                   item.isExpanded = false;
                 });
               }
+
               return new Form(
                 child: new Builder(
                   builder: (BuildContext context) {
@@ -55,9 +62,14 @@ class _ListItemState extends State<ListItem> {
                         Form.of(context).save();
                         close();
                         takePartPageState.setState(() {
-                            obtainedPoints.points +=
-                              (item.quantity.round() - item.previousQuantity) * element.elementValue;
-                            item.previousQuantity = item.quantity.round();
+                          obtainedPoints.points +=
+                              (item.quantity.round() - item.previousQuantity) *
+                                  element.elementValue;
+                          element.locallyChosenQuantity +=
+                              item.quantity.round() - item.previousQuantity;
+                          debugPrint(
+                              '${element.elementName}: ${element.locallyChosenQuantity}');
+                          item.previousQuantity = item.quantity.round();
                         });
                       },
                       onCancel: () {
@@ -91,6 +103,7 @@ class _ListItemState extends State<ListItem> {
             },
           ),
         );
+        }
       }
     }
     return itemsList;
@@ -243,7 +256,8 @@ class CollapsibleBody extends StatelessWidget {
 
 class Item<double> {
   Item({this.name, this.quantity, this.builder, this.valueToString})
-      : textController = new TextEditingController(text: valueToString(quantity));
+      : textController =
+            new TextEditingController(text: valueToString(quantity));
 
   final String name;
   final TextEditingController textController;

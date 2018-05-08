@@ -51,15 +51,14 @@ class _TakePartPageState extends State<TakePartPage> {
         floatingActionButton: new FloatingActionButton(
           tooltip: 'Participate to the party!',
           onPressed: () => obtainedPoints.points > widget.party.pinderPoints
-              ? print("Yay, you can take part to the party!")
-              : homeScaffoldKey.currentState.showSnackBar(
-                new SnackBar(
-                  content: new Text('You need to gain the minimum amount of points!'),
+              ? widget.party.handleParticipation()
+              : homeScaffoldKey.currentState.showSnackBar(new SnackBar(
+                  content: new Text(
+                      'You need to gain the minimum amount of points!'),
                   backgroundColor: primary,
-              )),
+                )),
           child: new Icon(Icons.arrow_forward),
           backgroundColor: secondary,
-
         ),
         body: new Column(
           children: <Widget>[
@@ -71,7 +70,7 @@ class _TakePartPageState extends State<TakePartPage> {
                   // TODO: find a better way to display the cards,
                   // since the ListView would be less expensive than the Column.
                   // At the moment I'm using a column, since with the ListView rebuilds the cards
-                  // every time they appear and disappear, so the slider returns at 0 every time
+                  // every time they appear and disappear, so the slider would return to 0 every time
                   children: <Widget>[
                     new Column(
                       children: categoryCardListBuilder(),

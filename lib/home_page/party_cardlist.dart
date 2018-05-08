@@ -1,3 +1,5 @@
+// TODO: refractor the filename to 'party_card_list.dart'
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
