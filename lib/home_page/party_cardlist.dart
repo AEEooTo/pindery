@@ -69,7 +69,7 @@ class PartyCardList extends StatelessWidget {
                     .compareTo(documentB['fromDayTime']);
               });
               final DocumentSnapshot document = documentsList[index];
-              Party party = new Party.fromJSON(document);
+              Party party = new Party.fromSnapshot(document);
               return new PartyCard(party: party);
             },
             itemCount: snapshot.data.documents.length,

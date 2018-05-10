@@ -10,6 +10,7 @@ import 'party.dart';
 import 'drawer.dart';
 import 'theme.dart';
 import 'party_choosing/take_part_page.dart';
+import 'privacy.dart';
 
 enum AppBarBehavior { normal, pinned, floating, snapping }
 
@@ -72,7 +73,7 @@ class PartyPage extends StatelessWidget {
             delegate: new SliverChildListDelegate(
               <Widget>[
                 new BlackPartyHeader(
-                  organiser: party.organiser,
+                  organiser: party.organiserUID,
                   rating: party.rating,
                   ratingNumber: party.ratingNumber,
                   party: party,
@@ -94,8 +95,8 @@ class PartyPage extends StatelessWidget {
                   icon: const IconData(0xe5ca, fontFamily: 'MaterialIcons'),
                 ),
                 new WhitePartyBlock(
-                  data: Party.privacyOptions[party.privacy],
-                  icon: Party.privacyOptionsIcons[party.privacy],
+                  data: Privacy.options[party.privacy.type],
+                  icon: Privacy.optionsIcons[party.privacy.type],
                 ),
                 new Container(
                   decoration: new BoxDecoration(

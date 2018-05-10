@@ -5,8 +5,6 @@ import 'dart:async';
 
 // External libraries imports
 import 'package:flutter/material.dart';
-import 'package:pindery/first_actions/welcome.dart';
-import 'package:pindery/party_creation_editing/step_1_create.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
@@ -16,6 +14,8 @@ import 'party_cardlist.dart';
 import '../drawer.dart' show PinderyDrawer;
 import '../user.dart';
 import '../theme.dart';
+import '../first_actions/welcome.dart';
+import '../party_creation_editing/step_1_create.dart';
 
 /// This file contains the code for Pindery's homepage's structure.
 

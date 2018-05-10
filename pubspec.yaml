@@ -1,5 +1,6 @@
 name: pindery
 description: An amazing party app
+version: 0.0.1-alpha0
 
 dependencies:
   flutter:

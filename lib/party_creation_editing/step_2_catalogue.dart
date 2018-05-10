@@ -131,7 +131,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
   Future<Null> _handleSubmitted(FormState formState) async {
     formState.save();
     party.catalogue = catalogue;
-    await party.uploadImage(party.imageLocalPath);
+    await party.uploadImage();
     if (!cancelled) {
       party.addNewParty();
       Navigator.of(context).pop();
@@ -143,8 +143,8 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        compressImage(party.imageLocalPath)
-            .then((image) => party.imageLocalPath = image)
+        compressImage(party.localImageFile)
+            .then((image) => party.localImageFile = image)
             .whenComplete(() => _handleSubmitted(formState));
         print("past the futures");
         return new AlertDialog(
