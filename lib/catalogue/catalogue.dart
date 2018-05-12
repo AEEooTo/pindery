@@ -68,20 +68,33 @@ class Catalogue {
   /// Number of cateogries in the [Catalogue] instance
   int get numberOfCategories => catalogue.length;
 
-  /// Returns the number of Pinder-points for the current [Catalogue] instance
+  /// Returns the number of Pinder-points per person needed for the current [Catalogue] instance
   int ppp(int numberOfPeople) => (totalPoints / numberOfPeople).ceil();
+
+  /// Checks if the [catalogue] and its [List]s are empty
+  bool get isEmpty => _isEmpty();
+
+  /// implementation of [isEmpty]
+  bool _isEmpty() {
+    for (int i = 0; i < Catalogue.names.length; ++i) {
+      if (catalogue[i].isNotEmpty) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   /// Creates a matrix of Maps representing each [CatalogueElement]
   Map<String, Map<String, Map<String, dynamic>>> catalogueMatrixMapper() {
     Map<String, Map<String, Map<String, dynamic>>> catalogueMatrixMap = {};
     for (int i = 0; i < catalogue.length; ++i) {
-      catalogueMatrixMap[i.toString()] = catalogueListMapper(catalogue[i]);
+      catalogueMatrixMap[i.toString()] = _catalogueListMapper(catalogue[i]);
     }
     return catalogueMatrixMap;
   }
 
   /// Creates a list of Maps representing each [CatalogueElement] to be added with the [CatalogueMatrixMapper()]
-  Map<String, Map<String, dynamic>> catalogueListMapper(
+  Map<String, Map<String, dynamic>> _catalogueListMapper(
       List<CatalogueElement> catalogueList) {
     Map<String, Map<String, dynamic>> catalogueListMap = {};
     for (int i = 0; i < catalogueList.length; ++i) {
@@ -100,7 +113,7 @@ class Catalogue {
     return catalogueList;
   }
 
-  /// Creates a [List] from a Map of [CatalogueElement]s
+  /// Creates a [List] from a Map composed by a row of [CatalogueElement]s
   List<CatalogueElement> _catalogueMapLister(Map catalogueMap) {
     List<CatalogueElement> catalogueList = <CatalogueElement>[];
     for (int i = 0; catalogueMap[i.toString()] != null; ++i) {
@@ -108,19 +121,6 @@ class Catalogue {
           .add(new CatalogueElement.fromMap(catalogueMap[i.toString()]));
     }
     return catalogueList;
-  }
-
-  /// Checks if the [catalogue] and its [List]s are empty
-  bool get isEmpty => _isEmpty();
-
-  /// implementation of [isEmpty]
-  bool _isEmpty() {
-    for (int i = 0; i < Catalogue.names.length; ++i) {
-      if (catalogue[i].isNotEmpty) {
-        return false;
-      }
-    }
-    return true;
   }
 
   /// Updates the [chosenQuantity] fields in all the elements of the catalogue

@@ -17,12 +17,13 @@ enum AppBarBehavior { normal, pinned, floating, snapping }
 class PartyPage extends StatelessWidget {
   final Party party;
 
-  final String routeName = '/party-page/';
+  final String routeName = '/party-page';
+  final GlobalKey<ScaffoldState> homeScaffoldKey;
 
   final AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
   final double _appBarHeight = 256.0;
 
-  PartyPage({this.party});
+  PartyPage({this.party, this.homeScaffoldKey});
 
   @override
   Widget build(BuildContext context) {

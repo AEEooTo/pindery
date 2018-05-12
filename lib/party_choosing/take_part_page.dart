@@ -1,6 +1,9 @@
 /// This file contains the code for Pindery's page where to choose what to bring to a party.
 ///
 
+// Core imports
+import 'dart:async';
+
 // External imports
 import 'package:flutter/material.dart';
 
@@ -27,7 +30,7 @@ class TakePartPage extends StatefulWidget {
 }
 
 class _TakePartPageState extends State<TakePartPage> {
-  final GlobalKey<ScaffoldState> homeScaffoldKey =
+  final GlobalKey<ScaffoldState> scaffoldKey =
       new GlobalKey<ScaffoldState>();
   ObtainedPoints obtainedPoints = new ObtainedPoints();
 
@@ -44,15 +47,15 @@ class _TakePartPageState extends State<TakePartPage> {
         backgroundColor: primaryLight,
       ),
       child: new Scaffold(
-        key: homeScaffoldKey,
+        key: scaffoldKey,
         appBar: new AppBar(
           title: new Text('Choose what to bring!'),
         ),
         floatingActionButton: new FloatingActionButton(
           tooltip: 'Participate to the party!',
-          onPressed: () => obtainedPoints.points > widget.party.pinderPoints
-              ? widget.party.handleParticipation()
-              : homeScaffoldKey.currentState.showSnackBar(new SnackBar(
+          onPressed: () => obtainedPoints.points >= widget.party.pinderPoints
+              ? _handleParticipation()
+              : scaffoldKey.currentState.showSnackBar(new SnackBar(
                   content: new Text(
                       'You need to gain the minimum amount of points!'),
                   backgroundColor: primary,
@@ -130,6 +133,14 @@ class _TakePartPageState extends State<TakePartPage> {
     }
 
     return itemCardList;
+  }
+
+  Future<bool> _handleParticipation() async {
+    bool success = true;
+    await widget.party.handleParticipation();
+    Navigator.of(context).popUntil(ModalRoute.withName('/'));
+    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text('You are going to party hard, great!')));
+    return success;
   }
 }
 

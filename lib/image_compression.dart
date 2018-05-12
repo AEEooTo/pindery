@@ -1,6 +1,4 @@
-///here is managed the image compression
-///
-
+/// Manages the image compression, cropping and resizing.
 library image_compression;
 
 //Dart core imports
@@ -12,7 +10,8 @@ import 'dart:math';
 import 'package:path_provider/path_provider.dart';
 import 'package:image/image.dart' as Im;
 
-///this function crops and compress the profile picture [File]
+/// Crops and compresses an image, as [File].
+/// It is used to compress the profile pictures.
 Future<File> cropImage(File imageFile) async {
   print("cropping image"); //todo: remove debug print
   final tempDir = await getTemporaryDirectory();
@@ -29,6 +28,7 @@ Future<File> cropImage(File imageFile) async {
   return imageFile;
 }
 
+/// Squares the images. Is is used to square the profile pictures.
 Im.Image _imageSquarer(Im.Image image){
   if(image.width > image.height){
     int newWidth = image.height;
@@ -48,7 +48,7 @@ Im.Image _imageSquarer(Im.Image image){
   return image;
 }
 
-///this function compress the image picture [File]
+/// Compresses the image picture, passed as [File].
 Future<File> compressImage(File imageFile) async {
   print("compressing image"); //todo: remove debug print
   final tempDir = await getTemporaryDirectory();

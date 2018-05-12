@@ -16,6 +16,7 @@ class User {
     name = snapshot['name'];
     surname = snapshot['surname'];
     profilePictureUrl = snapshot['profilePictureUrl'];
+    uid = snapshot['uid'];
   }
 
   /// Unique ID used by [firebase_auth].
@@ -63,7 +64,7 @@ class User {
         Firestore.instance.collection('users').document(uid);
     try {
       await reference
-          .setData(userMapper())
+          .setData(_userMapper())
           .timeout(timeoutDuration,
               onTimeout: () =>
                   throw new TimeoutException('TIMEOUT', timeoutDuration))
@@ -77,7 +78,7 @@ class User {
 
   /// Creates a [Map] starting from the data of the user, in order to
   /// upload the data on the DB.
-  Map<String, dynamic> userMapper() {
+  Map<String, dynamic> _userMapper() {
     return {
       'name': name,
       'surname': surname,

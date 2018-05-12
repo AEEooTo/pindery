@@ -187,7 +187,7 @@ class Party {
   /// Handles the participation to the party, updating the catalogue
   /// (adding the number of stuff that the participant is going to bring).
   /// TODO: In the future it will even handle the participants' profiles.
-  void handleParticipation() async {
+  Future<Null> handleParticipation() async {
     print('Handling participation');
     Party party = await getPartyFromFirestore(id);
     print('\nIn handleParticipation the local catalogue is:');

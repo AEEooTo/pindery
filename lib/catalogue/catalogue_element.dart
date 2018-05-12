@@ -1,4 +1,4 @@
-/// The class that defines an element in the party catalogue.
+/// Defines an element in the party catalogue.
 class CatalogueElement {
   CatalogueElement({this.elementName, this.elementQuantity, this.chosenQuantity, this.elementValue});
 

@@ -15,6 +15,7 @@ class SettingsPage extends StatelessWidget {
   SettingsPage({this.user});
 
   final User user;
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
