@@ -101,7 +101,7 @@ class Party {
   /// The [Catalogue] of the party.
   Catalogue catalogue;
 
-  CollectionReference get partiesCollectionReference => Firestore.instance
+  CollectionReference get _partiesCollectionReference => Firestore.instance
       .collection('cities')
       .document(city.toLowerCase())
       .collection('parties');
@@ -109,11 +109,11 @@ class Party {
   /// Pushes the newly created party on the DB.
   Future<Null> addNewParty() async {
     // Firebase Firestore reference
-    final CollectionReference reference = partiesCollectionReference;
+    final CollectionReference reference = _partiesCollectionReference;
     Duration timeoutDuration = new Duration(seconds: 30);
     try {
       reference
-          .add(partyMapper())
+          .add(_partyMapper())
           .catchError(() => throw new Exception('UPLOAD ERROR'))
           .timeout(timeoutDuration,
               onTimeout: () =>
@@ -126,13 +126,13 @@ class Party {
   }
 
   /// Updates the existing party on which the method is called.
-  Future<Null> updateParty() async {
+  Future<Null> _updateParty() async {
     print('Updating the party');
     Duration timeoutDuration = new Duration(seconds: 30);
-    final DocumentReference reference = partiesCollectionReference.document(id);
+    final DocumentReference reference = _partiesCollectionReference.document(id);
     try {
       await reference
-          .setData(partyMapper())
+          .setData(_partyMapper())
           .catchError(() => throw new Exception('UPLOAD ERROR'))
           .timeout(timeoutDuration,
               onTimeout: () =>
@@ -145,7 +145,7 @@ class Party {
   }
 
   /// Creates a map from the Party instance to be pushed to Firestore.
-  Map<String, dynamic> partyMapper() {
+  Map<String, dynamic> _partyMapper() {
     Map<String, dynamic> partyMap = {
       "name": name,
       "place": place,
@@ -189,21 +189,21 @@ class Party {
   /// TODO: In the future it will even handle the participants' profiles.
   Future<Null> handleParticipation() async {
     print('Handling participation');
-    Party party = await getPartyFromFirestore(id);
+    Party party = await _getPartyFromFirestore(id);
     print('\nIn handleParticipation the local catalogue is:');
     catalogue.printCatalogue();
     party.catalogue.update(catalogue);
     print('\nAfter update:');
     party.catalogue.printCatalogue();
-    await party.updateParty();
+    await party._updateParty();
     print('Done, theoretically');
   }
 
   /// Gets a party from Firestore, using the ID of the party.
   /// It is used to have an always up-to-date party (i.e. when, for example
   /// the participants need to update the catalogue with the items they are going to bring).
-  Future<Party> getPartyFromFirestore(String id) async {
-    DocumentReference reference = partiesCollectionReference.document(id);
+  Future<Party> _getPartyFromFirestore(String id) async {
+    DocumentReference reference = _partiesCollectionReference.document(id);
     Party party;
     await reference.get().then((DocumentSnapshot partySnapshot) =>
         party = new Party.fromSnapshot(partySnapshot));
