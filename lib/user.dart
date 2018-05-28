@@ -1,6 +1,5 @@
-/// user.dart
-/// file used for the [User] class
-///
+/// Manages the user of the application.
+library user;
 
 // Dart core imports
 import 'dart:async';
@@ -8,7 +7,7 @@ import 'dart:async';
 // External libraries imports
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-/// Class to define a [User] object
+/// Class to define the application's user
 class User {
   User({this.email, this.name, this.surname, this.profilePictureUrl, this.uid});
 
@@ -17,21 +16,47 @@ class User {
     name = snapshot['name'];
     surname = snapshot['surname'];
     profilePictureUrl = snapshot['profilePictureUrl'];
+    uid = snapshot['uid'];
   }
 
+  /// Unique ID used by [firebase_auth].
   String uid;
 
-  /// Unique ID used by [firebase_auth]
+  /// The user's name.
   String name;
-  String surname;
-  String email;
-  String profilePictureUrl;
-  double rating;
-  int numberOfReviews;
-  double feedbackByOrganisers;
-  double numberOfFeedbacks;
-  static const usersDbPath = 'users';
 
+  /// The user's surname.
+  String surname;
+
+  /// The user's email.
+  String email;
+
+  /// The URL of the profile picture of the user, hosted on Firebase Storage.
+  String profilePictureUrl;
+
+  /// The rating given to the user, by the participants to the parties the user organised.
+  double rating;
+
+  /// The number of reviews the user was given by the participants to the parties the user organised.
+  int numberOfReviews;
+
+  /// The number of thumbs-ups given by the organisers of the parties the user took part to.
+  /// See [feedback].
+  int thumbsUpByOrganisers;
+
+  /// The total number of feedbacks (thumbs-ups and thumb-downs) received by the user as
+  /// participant to parties. See [feedback].
+  int numberOfFeedbacks;
+
+  /// The feedback (in percentage) of the user as participant to the party.
+  /// This is related to the reliability of the user in bringing what he is supposed to.
+  double get feedback => (thumbsUpByOrganisers / numberOfFeedbacks) * 100;
+
+  /// The path to the user collection on the DB.
+  static const String usersDbPath = 'users';
+
+  /// Uploads the user on the DB, it is used during the creation of the user,
+  /// within [SignUpButton].
   Future<Null> sendUser() async {
     print('sending user...');
     Duration timeoutDuration = new Duration(seconds: 60);
@@ -39,7 +64,7 @@ class User {
         Firestore.instance.collection('users').document(uid);
     try {
       await reference
-          .setData(userMapper())
+          .setData(_userMapper())
           .timeout(timeoutDuration,
               onTimeout: () =>
                   throw new TimeoutException('TIMEOUT', timeoutDuration))
@@ -51,7 +76,9 @@ class User {
     }
   }
 
-  Map<String, dynamic> userMapper() {
+  /// Creates a [Map] starting from the data of the user, in order to
+  /// upload the data on the DB.
+  Map<String, dynamic> _userMapper() {
     return {
       'name': name,
       'surname': surname,

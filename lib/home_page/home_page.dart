@@ -5,17 +5,19 @@ import 'dart:async';
 
 // External libraries imports
 import 'package:flutter/material.dart';
-import 'package:pindery/first_actions/welcome.dart';
-import 'package:pindery/party_creation_editing/step_1_create.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/rendering.dart';
 import 'party_cardlist.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 // Internal imports
 import '../drawer.dart' show PinderyDrawer;
 import '../user.dart';
 import '../theme.dart';
+import '../first_actions/welcome.dart';
+import '../party_creation_editing/step_1_create.dart';
 
 /// This file contains the code for Pindery's homepage's structure.
 
@@ -28,6 +30,9 @@ class PinderyHomePage extends StatefulWidget {
 
 class _PinderyHomePageState extends State<PinderyHomePage> {
   User user;
+  static FirebaseAnalytics analytics = new FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer =
+      new FirebaseAnalyticsObserver(analytics: analytics);
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +66,9 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
           if (snapshot.data == null) {
             return new WelcomePage();
           } else {
-            return new HomePage(user: user);
+            _testSetUserId();
+            return new HomePage(
+                user: user, observer: observer, analytics: analytics);
           }
           // loading
         });
@@ -76,15 +83,22 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
     user = User.fromFirestore(userOnDb);
     return firebaseUser;
   }
+
+  Future<Null> _testSetUserId() async {
+    await analytics.setUserId(user.uid);
+    await analytics.logLogin();
+  }
 }
 
 class HomePage extends StatelessWidget {
-  HomePage({this.user});
+  HomePage({this.user, this.analytics, this.observer});
 
   final User user;
   final String title = 'Pindery';
   final GlobalKey<ScaffoldState> homeScaffoldKey =
       new GlobalKey<ScaffoldState>();
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
 
   @override
   Widget build(BuildContext context) {
@@ -96,8 +110,7 @@ class HomePage extends StatelessWidget {
       drawer: new Drawer(
         child: new PinderyDrawer(user: user),
       ),
-      body: new PartyCardList(
-      ),
+      body: new PartyCardList(observer: observer, analytics: analytics),
       floatingActionButton: new Opacity(
         opacity: 1.0,
         child: new FloatingActionButton(
@@ -105,9 +118,10 @@ class HomePage extends StatelessWidget {
             await Navigator.push(
               context,
               new MaterialPageRoute(
-                  builder: (context) => new CreatePartyPage(
-                        homePageKey: homeScaffoldKey,
-                      )),
+                builder: (context) => new CreatePartyPage(
+                      homePageKey: homeScaffoldKey,
+                    ),
+              ),
             );
           },
           child: new Icon(Icons.add),

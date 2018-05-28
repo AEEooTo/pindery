@@ -1,26 +1,34 @@
+// TODO: refractor the filename to 'party_card_list.dart'
+
+// External imports
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
+// Internal imports
 import '../home_page/party_card.dart';
 import '../party.dart';
 
 const String testCity = "shanghai";
 
 class PartyCardList extends StatelessWidget {
-  PartyCardList({this.city});
-  final String city;
+  PartyCardList({this.analytics, this.observer});
 
-  CollectionReference _getReference(String city) {
-    return Firestore.instance
+  final String city = testCity;
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+
+
+  CollectionReference get _partiesCollectionReference => Firestore.instance
         .collection('cities')
         .document(city)
         .collection('parties');
-  }
 
   @override
   Widget build(BuildContext context) {
     return new StreamBuilder<QuerySnapshot>(
-        stream: _getReference(testCity).snapshots,
+        stream: _partiesCollectionReference.snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
             // TODO: add a better loading view
@@ -67,8 +75,8 @@ class PartyCardList extends StatelessWidget {
                     .compareTo(documentB['fromDayTime']);
               });
               final DocumentSnapshot document = documentsList[index];
-              Party party = new Party.fromJSON(document);
-              return new PartyCard(party: party);
+              Party party = new Party.fromSnapshot(document);
+              return new PartyCard(party: party, observer: observer, analytics: analytics,);
             },
             itemCount: snapshot.data.documents.length,
             scrollDirection: Axis.vertical,

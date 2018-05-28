@@ -1,21 +1,22 @@
 name: pindery
 description: An amazing party app
+version: 0.0.1-alpha0
 
 dependencies:
   flutter:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  firebase_core:
-  cloud_firestore: ^0.6.3
-  firebase_analytics: ^0.3.1
-  firebase_storage:
+  firebase_core: ^0.2.3
+  cloud_firestore: ^0.7.0
+  firebase_analytics: ^0.3.3
+  firebase_storage: ^0.3.4
   image_picker:
   transparent_image:
   image:
   path_provider: ^0.4.0
   validator: ">=0.0.4 <0.1.0"
-  firebase_auth: ^0.5.5
+  firebase_auth: ^0.5.9
   google_sign_in: ^3.0.1
   cached_network_image: ^0.4.0
 

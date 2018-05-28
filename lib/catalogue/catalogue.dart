@@ -3,8 +3,7 @@ import 'catalogue_element.dart';
 
 enum Categories { drinks, food, utilities }
 
-
-/// Is the class which manages the catalogue
+/// The class which manages the party catalogue
 class Catalogue {
   Catalogue({this.catalogue});
 
@@ -36,10 +35,18 @@ class Catalogue {
   ];
 
   /// Names for the different categories
-  static const List<String> names = const <String>["Drinks", "Food", "Utilities"];
+  static const List<String> names = const <String>[
+    "Drinks",
+    "Food",
+    "Utilities"
+  ];
 
   /// Names on the database of the different categories paths
-  static const List<String> dbNames = const <String>["drinks", "food", "utilities"];
+  static const List<String> dbNames = const <String>[
+    "drinks",
+    "food",
+    "utilities"
+  ];
 
   /// Paths for the different subcategories
   static const List<List<String>> dbSubCategories = const <List<String>>[
@@ -61,20 +68,33 @@ class Catalogue {
   /// Number of cateogries in the [Catalogue] instance
   int get numberOfCategories => catalogue.length;
 
-  /// Returns the number of Pinder-points for the current [Catalogue] instance
+  /// Returns the number of Pinder-points per person needed for the current [Catalogue] instance
   int ppp(int numberOfPeople) => (totalPoints / numberOfPeople).ceil();
+
+  /// Checks if the [catalogue] and its [List]s are empty
+  bool get isEmpty => _isEmpty();
+
+  /// implementation of [isEmpty]
+  bool _isEmpty() {
+    for (int i = 0; i < Catalogue.names.length; ++i) {
+      if (catalogue[i].isNotEmpty) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   /// Creates a matrix of Maps representing each [CatalogueElement]
   Map<String, Map<String, Map<String, dynamic>>> catalogueMatrixMapper() {
     Map<String, Map<String, Map<String, dynamic>>> catalogueMatrixMap = {};
     for (int i = 0; i < catalogue.length; ++i) {
-      catalogueMatrixMap[i.toString()] = catalogueListMapper(catalogue[i]);
+      catalogueMatrixMap[i.toString()] = _catalogueListMapper(catalogue[i]);
     }
     return catalogueMatrixMap;
   }
 
   /// Creates a list of Maps representing each [CatalogueElement] to be added with the [CatalogueMatrixMapper()]
-  Map<String, Map<String, dynamic>> catalogueListMapper(
+  Map<String, Map<String, dynamic>> _catalogueListMapper(
       List<CatalogueElement> catalogueList) {
     Map<String, Map<String, dynamic>> catalogueListMap = {};
     for (int i = 0; i < catalogueList.length; ++i) {
@@ -93,7 +113,7 @@ class Catalogue {
     return catalogueList;
   }
 
-  /// Creates a [List] from a Map of [CatalogueElement]s
+  /// Creates a [List] from a Map composed by a row of [CatalogueElement]s
   List<CatalogueElement> _catalogueMapLister(Map catalogueMap) {
     List<CatalogueElement> catalogueList = <CatalogueElement>[];
     for (int i = 0; catalogueMap[i.toString()] != null; ++i) {
@@ -103,25 +123,29 @@ class Catalogue {
     return catalogueList;
   }
 
-  /// Checks if the [catalogue] and its [List]s are empty
-  bool get isEmpty => _isEmpty();
-
-  /// implementation of [isEmpty]
-  bool _isEmpty() {
-    for (int i = 0; i < Catalogue.names.length; ++i) {
-      if (catalogue[i].isNotEmpty) {
-        return false;
+  /// Updates the [chosenQuantity] fields in all the elements of the catalogue
+  /// based on the [locallyChosenQuantyty] fields. It takes an up-to-date [Catalogue] instance,
+  /// syncronized with Firestore, and adds up the quantity of every element chosen
+  /// by the participants.
+  void update(Catalogue upToDateCatalogue) {
+    debugPrint('\nIn update:\nupToDateCatalogue:');
+    upToDateCatalogue.printCatalogue();
+    debugPrint('\nlocalCatalogue:');
+    printCatalogue();
+    for (int i = 0; i < this.catalogue.length; ++i) {
+      for (int j = 0; j < this.catalogue[i].length; ++j) {
+        catalogue[i][j].chosenQuantity += upToDateCatalogue.catalogue[i][j].locallyChosenQuantity;
       }
     }
-    return true;
   }
 
   /// Prints the [catalogue] field, for debuggng purposes
   void printCatalogue() {
     for (int i = 0; i < catalogue.length; ++i) {
-      print(i);
+      debugPrint(i.toString());
       for (int j = 0; j < catalogue[i].length; ++j) {
-        print(catalogue[i][j].elementName);
+        debugPrint(
+            '${catalogue[i][j].elementName} locallyChosen: ${catalogue[i][j].locallyChosenQuantity}, chosen: ${catalogue[i][j].chosenQuantity}');
       }
     }
   }

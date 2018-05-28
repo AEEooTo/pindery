@@ -2,17 +2,26 @@
 /// This file contains the code for every party's basic infos card in Pindery's homepage
 ///
 
+// Core imports
+import 'dart:async';
+// External imports
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
+
+// Internal imports
 import '../party.dart';
 import '../party_page.dart';
 import '../theme.dart';
 
 class PartyCard extends StatelessWidget {
-  PartyCard({this.party});
+  PartyCard({this.party, this.observer, this.analytics});
 
   final Party party;
   final double cardHeight = 200.0;
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +52,7 @@ class PartyCard extends StatelessWidget {
                     child: new Text(
                       party.name,
                       overflow: TextOverflow.ellipsis,
-                      style: new TextStyle(
-                          fontSize: 28.0, color: Colors.white),
+                      style: new TextStyle(fontSize: 28.0, color: Colors.white),
                     ),
                   ),
                   new Row(
@@ -66,7 +74,8 @@ class PartyCard extends StatelessWidget {
                           ),
                         ),
                       ),
-                      new Container( //button
+                      new Container(
+                        //button
                         padding: new EdgeInsets.all(8.0),
                         child: new FlatButton(
                           onPressed: () {
@@ -78,14 +87,12 @@ class PartyCard extends StatelessWidget {
                                       )),
                             );
                           },
-                          child: new Text(
-                            'JOIN',
-                            style: new TextStyle(
-                              fontSize: 15.0,
-                                color: secondaryLight,
-                                fontWeight: FontWeight.w700,
-                            letterSpacing: 0.75)
-                          ),
+                          child: new Text('JOIN',
+                              style: new TextStyle(
+                                  fontSize: 15.0,
+                                  color: secondaryLight,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 0.75)),
                         ),
                       ),
                     ],
@@ -96,6 +103,13 @@ class PartyCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Future<Null> setOpenParty() async {
+    analytics.logEvent(
+      name: 'open_party',
+      parameters: {'name': party.name, 'id': party.id},
     );
   }
 }

@@ -38,10 +38,10 @@ class PartyImageContainerState extends State<PartyImageContainer> {
 
   @override
   Widget build(BuildContext context) {
-    if (party.imageLocalPath != null) {
+    if (party.localImageFile != null) {
       return new Container(
         child: Image.file(
-          party.imageLocalPath,
+          party.localImageFile,
           fit: BoxFit.cover,
         ),
       );
@@ -69,7 +69,7 @@ class PartyImageContainerState extends State<PartyImageContainer> {
                     ),
                     tooltip: 'Choose a picture from the gallery',
                     onPressed: () async {
-                      party.imageLocalPath = await PinderyDetailsUtils
+                      party.localImageFile = await PinderyDetailsUtils
                           .pickImage(ImageSource.gallery);
                       setState(() {});
                     },
@@ -84,7 +84,7 @@ class PartyImageContainerState extends State<PartyImageContainer> {
                       size: 45.0,
                     ),
                     onPressed: () async {
-                      party.imageLocalPath = await PinderyDetailsUtils
+                      party.localImageFile = await PinderyDetailsUtils
                           .pickImage(ImageSource.camera);
                       setState(() {});
                     },

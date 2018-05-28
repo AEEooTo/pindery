@@ -3,8 +3,8 @@
 
 import 'package:flutter/material.dart';
 import '../theme.dart';
-import 'package:pindery/first_actions/login.dart';
-import 'package:pindery/first_actions/signup.dart';
+import '../first_actions/login.dart';
+import '../first_actions/signup.dart';
 
 class WelcomePage extends StatelessWidget {
   static const routeName = '/welcome-page';

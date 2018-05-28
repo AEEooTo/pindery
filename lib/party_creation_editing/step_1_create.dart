@@ -9,6 +9,7 @@ import '../theme.dart';
 import '../party.dart';
 import 'step_2_catalogue.dart';
 import '../catalogue/catalogue.dart';
+import '../privacy.dart';
 
 /// Page used to create a new party
 class CreatePartyPage extends StatefulWidget {
@@ -51,8 +52,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   bool cancelled = false;
 
   // Privacy options
-  final List<String> _allPrivacyOptions = Party.privacyOptions;
-  String _privacyOption = Party.privacyOptions[0];
+  final List<String> _allPrivacyOptions = Privacy.options;
+  String _privacyOption = Privacy.options[0];
   
   Widget build(BuildContext context) {
     return new Theme(
@@ -213,8 +214,8 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                                             child: Row(
                                               children: <Widget>[
                                                 new Icon(
-                                                    Party.privacyOptionsIcons[
-                                                        Party.privacyOptions
+                                                    Privacy.optionsIcons[
+                                                        Privacy.options
                                                             .indexOf(value)]),
                                                 const SizedBox(width: 12.0),
                                                 new Text(value),
@@ -242,7 +243,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                         style: new TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        formKey.currentState.validate() && party.imageLocalPath != null
+                        formKey.currentState.validate() && party.localImageFile != null
                           ? _handleSubmitted()
                           : null;
                       },
@@ -278,6 +279,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   void assignPartyFields() {
     party.fromDayTime = dateTimeParser(_fromTime, _fromDate);
     party.toDayTime = dateTimeParser(_toTime, _toDate);
-    party.privacy = _allPrivacyOptions.indexOf(_privacyOption);
+    party.privacy = new Privacy();
+    party.privacy.type = _allPrivacyOptions.indexOf(_privacyOption);
   }
 }
