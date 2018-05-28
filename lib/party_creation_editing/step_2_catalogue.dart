@@ -87,7 +87,6 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                 onPressed: () async {
                   if (catalogue.catalogue.isNotEmpty &&
                       chosenListFormKey.currentState.validate()) {
-                    print('entered the async');
                     final ScaffoldState scaffoldState =
                         scaffoldKey.currentState;
                     final ScaffoldState homePageState =

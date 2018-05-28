@@ -193,28 +193,33 @@ class SignUpButton extends StatelessWidget {
   }
 
   Future<Null> _handleSignUp(BuildContext context) async {
+    bool result = true;
     Navigator
         .of(context)
         .push(new MaterialPageRoute(builder: (context) => new SigningUpPage()));
-    bool result = await _trulyHandleSignUp(firebaseAuth, context);
-    if (result) {
-      imageLocalPath = null;
-      clearForm();
-      Navigator.popUntil(context, ModalRoute.withName('/'));
-    } else {
-      Navigator.pop(context);
-      Scaffold.of(context).showSnackBar(
-            new SnackBar(
-              content: new Text(
-                "Error",
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
-    }
+    await _trulyHandleSignUp(firebaseAuth, context).then((e) {
+      if (result) {
+        imageLocalPath = null;
+        clearForm();
+        Navigator.popUntil(context, ModalRoute.withName('/'));
+      }
+    })
+    .catchError(_handleError('Auth error', context), test: (e) => e is AuthUploadException);
   }
 
-  void clearForm(){
+  _handleError(String error, BuildContext context) {
+    Navigator.pop(context);
+    Scaffold.of(context).showSnackBar(
+      new SnackBar(
+        content: new Text(
+          error,
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
+  void clearForm() {
     final FormState formState = formKey.currentState;
     formState.reset();
     nameController.clear();
@@ -229,28 +234,34 @@ class SignUpButton extends StatelessWidget {
   }
 }
 
-Future<bool> _trulyHandleSignUp(
+Future<Null> _trulyHandleSignUp(
     FirebaseAuth firebaseAuth, BuildContext context) async {
   print('Entered _trulyHandleSignUp()'); //TODO: remove after debug
-  bool hasSucceeded = true;
-  try {
-    print('Trying to signup'); //TODO: remove after debug
-    //user creation as a firebase auth object
-    FirebaseUser user = await firebaseAuth.createUserWithEmailAndPassword(
-        email: _email, password: _password);
-    print("user firebase created"); //TODO: remove after debug
-    //user creation as our proprietary object
+  FirebaseUser user;
+  Uri downloadUrl;
+  StorageReference ref;
+
+  //user creation as Firebase User
+  await firebaseAuth
+      .createUserWithEmailAndPassword(email: _email, password: _password)
+      .then((newUser) => user = newUser)
+  .catchError((error) => throw AuthUploadException);
+
+  //user creation as our proprietary object
+  //our image upload
+  if (imageLocalPath != null) {
     int random = new Random().nextInt(100000);
-    StorageReference ref = FirebaseStorage.instance
+    ref = FirebaseStorage.instance
         .ref()
-        .child("/userProPics/dick_pic_$random.jpg");
-    print("reference taken"); //TODO: remove after debug
+        .child("/userProPics/profile_pic_$random.jpg");
     imageLocalPath = await cropImage(imageLocalPath);
     StorageUploadTask uploadTask = ref.putFile(imageLocalPath);
-    //TODO: consider to check timeout (even though the profile pic is very small)
     UploadTaskSnapshot task = await uploadTask.future;
-    Uri downloadUrl = task.downloadUrl;
-    print("l'urlo di download : $downloadUrl"); //TODO: remove after debug
+    downloadUrl = task.downloadUrl;
+  }
+
+  //actual user creation
+  if (user != null) {
     User databaseUser = new User(
         name: _name,
         surname: _surname,
@@ -258,23 +269,30 @@ Future<bool> _trulyHandleSignUp(
         uid: user.uid,
         profilePictureUrl: downloadUrl.toString());
     await databaseUser.sendUser();
-  } catch (error) {
-    // TODO: check the type of error and prompt the user consequently
-    hasSucceeded = false;
   }
-  return hasSucceeded;
+}
+
+class EmailException implements Exception {
+  @override
+  String toString() => 'Email creation exception!';
+}
+
+class AuthUploadException implements Exception {
+  @override
+  String toString() => 'Authentication upload exception!';
 }
 
 class PasswordField extends StatefulWidget {
-  const PasswordField(
-      {this.hintText,
-      this.labelText,
-      this.helperText,
-      this.onSaved,
-      this.validator,
-      this.onFieldSubmitted,
-      this.controller,
-      this.activateIcon,});
+  const PasswordField({
+    this.hintText,
+    this.labelText,
+    this.helperText,
+    this.onSaved,
+    this.validator,
+    this.onFieldSubmitted,
+    this.controller,
+    this.activateIcon,
+  });
 
   final String hintText;
   final String labelText;
