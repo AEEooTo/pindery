@@ -4,6 +4,8 @@
 
 # Pindery
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/10f5f6d7d1a148dd8ead27258dc186fd)](https://app.codacy.com/app/dedeswim/pindery?utm_source=github.com&utm_medium=referral&utm_content=AEEooTo/pindery&utm_campaign=badger)
+
 **Pindery** is an Android and iOS based social network designed to join and organise **parties**, mainly geared towards low-level student events.
 Each user will have the possibility to generate a ‘new party’ or join already existing ones nearby.
 The exchange of money will be replaced by a **point-based** system which will fairly divide the expenses for each party between the guests, who bring the necessary stuff. So **don't worry** about spending money and never getting payed back or buying everything!
