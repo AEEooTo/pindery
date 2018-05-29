@@ -10,6 +10,7 @@ import 'theme.dart';
 import 'user.dart';
 import 'utils.dart';
 import 'drawer.dart';
+import 'first_actions/welcome.dart';
 
 class SettingsPage extends StatelessWidget {
   SettingsPage({this.user});
@@ -97,7 +98,7 @@ class SettingsPage extends StatelessWidget {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => new SigninOutPage()));
             await FirebaseAuth.instance.signOut();
-            Navigator.popUntil(context, ModalRoute.withName('/'));
+            Navigator.pushReplacement(context, new MaterialPageRoute(builder: (_) => new WelcomePage()));
           },
         )
       ]),

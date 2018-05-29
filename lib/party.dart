@@ -129,7 +129,8 @@ class Party {
   Future<Null> _updateParty() async {
     print('Updating the party');
     Duration timeoutDuration = new Duration(seconds: 30);
-    final DocumentReference reference = _partiesCollectionReference.document(id);
+    final DocumentReference reference =
+        _partiesCollectionReference.document(id);
     try {
       await reference
           .setData(_partyMapper())
@@ -167,6 +168,7 @@ class Party {
     StorageReference ref = FirebaseStorage.instance
         .ref()
         .child("/partyImages/party_image_$random.jpg");
+    print(localImageFile);
     StorageUploadTask uploadTask = ref.putFile(localImageFile);
     Duration timeoutDuration = new Duration(seconds: 30);
     try {

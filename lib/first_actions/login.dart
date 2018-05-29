@@ -2,11 +2,15 @@
 ///
 ///
 
-import 'package:flutter/material.dart';
-import '../theme.dart';
-import 'package:validator/validator.dart';
 import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:validator/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+
+import '../theme.dart';
+import '../user.dart';
+import '../home_page/home_page.dart';
 
 TextEditingController usernameController = new TextEditingController();
 TextEditingController passwordController = new TextEditingController();
@@ -33,7 +37,6 @@ class _LoginPageState extends State<LoginPage> {
         accentColor: Colors.white,
         buttonTheme: new ButtonThemeData(textTheme: ButtonTextTheme.accent),
         brightness: Brightness.light,
-
       ),
       child: new Scaffold(
         backgroundColor: Colors.white,
@@ -148,7 +151,13 @@ class LogInButton extends StatelessWidget {
         .push(new MaterialPageRoute(builder: (context) => new LoggingInPage()));
     bool resultGood = await _trulyHandleLogin(_auth, context);
     if (resultGood) {
-      Navigator.popUntil(context, ModalRoute.withName('/'));
+      User user = await User.userDownloader();
+      Navigator.pushReplacement(
+          context,
+          new MaterialPageRoute(
+            settings: new RouteSettings(name: '/'),
+            builder: (_) => new HomePage(user: user),
+          ));
     } else {
       Navigator.pop(context);
       Scaffold.of(context).showSnackBar(new SnackBar(
@@ -165,8 +174,7 @@ Future<bool> _trulyHandleLogin(
     FirebaseAuth firebaseAuth, BuildContext context) async {
   bool hasSucceeded = true;
   try {
-    await _auth.signInWithEmailAndPassword(
-        email: _email, password: _password);
+    await _auth.signInWithEmailAndPassword(email: _email, password: _password);
   } catch (error) {
     // TODO: check the type of error and prompt the user consequently
     hasSucceeded = false;
@@ -236,7 +244,6 @@ class _PasswordFieldState extends State<PasswordField> {
 }
 
 class EmailField extends StatelessWidget {
-
   EmailField({
     this.hintText,
     this.labelText,
@@ -269,10 +276,7 @@ class EmailField extends StatelessWidget {
         ),
         labelText: labelText,
         labelStyle: new TextStyle(
-            color: dividerColor,
-            fontSize: 30.0,
-            fontWeight: FontWeight.w300
-        ),
+            color: dividerColor, fontSize: 30.0, fontWeight: FontWeight.w300),
         helperText: helperText,
         helperStyle: new TextStyle(
           color: dividerColor,
@@ -285,7 +289,6 @@ class EmailField extends StatelessWidget {
 
 ///////
 class LoggingInPage extends StatelessWidget {
-
   Widget build(BuildContext context) {
     return new Scaffold(
       body: Container(

@@ -93,6 +93,7 @@ class _PinderyHomePageState extends State<PinderyHomePage> {
 class HomePage extends StatelessWidget {
   HomePage({this.user, this.analytics, this.observer});
 
+  static const routeName = '/';
   final User user;
   final String title = 'Pindery';
   final GlobalKey<ScaffoldState> homeScaffoldKey =
@@ -102,52 +103,36 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      key: homeScaffoldKey,
-      appBar: new AppBar(
-        title: new Text(title),
-      ),
-      drawer: new Drawer(
-        child: new PinderyDrawer(user: user),
-      ),
-      body: new PartyCardList(observer: observer, analytics: analytics),
-      floatingActionButton: new Opacity(
-        opacity: 1.0,
-        child: new FloatingActionButton(
-          onPressed: () async {
-            await Navigator.push(
-              context,
-              new MaterialPageRoute(
-                builder: (context) => new CreatePartyPage(
-                      homePageKey: homeScaffoldKey,
-                    ),
-              ),
-            );
-          },
-          child: new Icon(Icons.add),
-          heroTag: null,
+    if (user != null) {
+      return new Scaffold(
+        key: homeScaffoldKey,
+        appBar: new AppBar(
+          title: new Text(title),
         ),
-      ),
-    );
+        drawer: new Drawer(
+          child: new PinderyDrawer(user: user),
+        ),
+        body: new PartyCardList(observer: observer, analytics: analytics),
+        floatingActionButton: new Opacity(
+          opacity: 1.0,
+          child: new FloatingActionButton(
+            onPressed: () async {
+              await Navigator.push(
+                context,
+                new MaterialPageRoute(
+                  builder: (context) => new CreatePartyPage(
+                        homePageKey: homeScaffoldKey,
+                      ),
+                ),
+              );
+            },
+            child: new Icon(Icons.add),
+            heroTag: null,
+          ),
+        ),
+      );
+    }
+    return new Navigator(
+      onGenerateRoute: (settings) => new MaterialPageRoute(builder: (_) => new WelcomePage()),);
   }
 }
-
-/*
-child: new FloatingActionButton(
-onPressed: () async {
-if (_isVisible==false) {
-await Navigator.push(
-context,
-new MaterialPageRoute(
-builder: (context) =>
-new CreatePartyPage(
-homePageKey: homeScaffoldKey,
-)),
-);
-}
-},
-child: new Icon(Icons.add),
-mini: _isVisible? true : false,
-heroTag: null,
-),
-*/

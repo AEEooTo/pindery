@@ -92,22 +92,22 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                     final ScaffoldState homePageState =
                         homePageKey.currentState;
                     cancelled = false;
-                    await _uploadingDialog(chosenListFormKey.currentState);
-                    print('cancelled = ' + cancelled.toString());
-                    if (!cancelled) {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      //Navigator.popUntil(context, ModalRoute.withName('/home-page')); //to implement after the user becomes stored in a redux
-                      // TODO: fix that snackbar
-                      homePageState.showSnackBar(new SnackBar(
-                        content: new Text("Great! The party was created!"),
-                      ));
-                    } else {
-                      scaffoldState.showSnackBar(new SnackBar(
-                        // TODO: really cancel the party
-                        content: new Text("Party creation cancelled"),
-                      ));
-                    }
+                    cancelled =
+                        await _uploadingDialog(chosenListFormKey.currentState)
+                            .whenComplete(() {
+                      print('cancelled = ' + cancelled.toString());
+                      if (!cancelled) {
+                        Navigator.popUntil(context, ModalRoute.withName('/'));
+                        homePageState.showSnackBar(new SnackBar(
+                          content: new Text("Great! The party was created!"),
+                        ));
+                      } else {
+                        scaffoldState.showSnackBar(new SnackBar(
+                          // TODO: really cancel the party
+                          content: new Text("Party creation cancelled"),
+                        ));
+                      }
+                    });
                   } else {
                     if (catalogue.catalogue.isEmpty) {
                       scaffoldKey.currentState.showSnackBar(
@@ -127,24 +127,23 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
   }
 
   /// Method to assign the different collected fields to the [Party] instance
-  Future<Null> _handleSubmitted(FormState formState) async {
+  Future<Null> _handleSubmitted(
+      FormState formState, BuildContext dialogueContext) async {
     formState.save();
     party.catalogue = catalogue;
-    await party.uploadImage();
-    if (!cancelled) {
-      party.addNewParty();
-      Navigator.of(context).pop();
-    }
+    party.uploadImage().whenComplete(() => party
+        .addNewParty()
+        .whenComplete(() => Navigator.of(dialogueContext).pop(false)));
   }
 
-  Future<Null> _uploadingDialog(FormState formState) async {
-    return showDialog<Null>(
+  Future<bool> _uploadingDialog(FormState formState) async {
+    return showDialog<bool>(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         compressImage(party.localImageFile)
             .then((image) => party.localImageFile = image)
-            .whenComplete(() => _handleSubmitted(formState));
+            .whenComplete(() => _handleSubmitted(formState, context));
         print("past the futures");
         return new AlertDialog(
           title: new Text('Loading'),
@@ -167,8 +166,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
             new FlatButton(
               child: new Text('CANCEL'),
               onPressed: () {
-                cancelled = true;
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(true);
               },
             ),
           ],
@@ -220,9 +218,9 @@ class _ChosenListState extends State<ChosenList> {
               padding: EdgeInsets.all(16.0),
               child: new Column(
                 children: chosenListColumnGenerator(),
-              )
-            )
-          )
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -236,12 +234,11 @@ class _ChosenListState extends State<ChosenList> {
           catalogueSubList: catalogue.catalogue[i],
           index: i,
           chosenListState: this,
-          ));
+        ));
       }
     }
     return children;
   }
-
 }
 
 /// A [Widget] for every row of each catalogue element
@@ -308,7 +305,6 @@ class CatalogueElementRow extends StatelessWidget {
   }
 }
 
-
 /// A [Widget] for the column of every category
 class CatalogueCategoryColumn extends StatelessWidget {
   CatalogueCategoryColumn(
@@ -327,11 +323,12 @@ class CatalogueCategoryColumn extends StatelessWidget {
   List<Widget> catalogueSubListBuilder() {
     List<Widget> catalogueElementColumnList = <Widget>[];
     for (int i = 0; i < catalogueSubList.length; ++i) {
-      catalogueElementColumnList.add(new CatalogueElementRow(
-        catalogue: catalogueSubList,
-        chosenListState: chosenListState,
-        index: i,
-        element: catalogueSubList[i],
+      catalogueElementColumnList.add(
+        new CatalogueElementRow(
+          catalogue: catalogueSubList,
+          chosenListState: chosenListState,
+          index: i,
+          element: catalogueSubList[i],
         ),
       );
     }

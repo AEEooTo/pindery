@@ -50,13 +50,12 @@ Im.Image _imageSquarer(Im.Image image){
 
 /// Compresses the image picture, passed as [File].
 Future<File> compressImage(File imageFile) async {
-  print("compressing image"); //todo: remove debug print
-  final tempDir = await getTemporaryDirectory();
-  final path = tempDir.path;
+  print("Getting tempdir"); //todo: remove debug print
+  final Directory tempDir = await getTemporaryDirectory();
+  print("Got tempdir: ${tempDir.path}");
+  final String path = tempDir.path;
   int rand = new Random().nextInt(10000);
-
   Im.Image image = Im.decodeImage(imageFile.readAsBytesSync());
-
   int widthFinal = 0;
   //algorithm to decide the image width
   if (image.height > image.width) {
@@ -69,9 +68,9 @@ Future<File> compressImage(File imageFile) async {
     if (image.height > 1080) {
       image = Im.copyResize(image, widthFinal);
     }
-  }
-  print("image compressed");//todo: remove debug print
+  }//todo: remove debug print
   imageFile = new File('$path/img_$rand.jpg')
     ..writeAsBytesSync(Im.encodeJpg(image, quality: 50));
+  print("compressed");
   return imageFile;
 }

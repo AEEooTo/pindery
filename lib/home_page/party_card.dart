@@ -8,7 +8,7 @@ import 'dart:async';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 // Internal imports
 import '../party.dart';
@@ -30,13 +30,12 @@ class PartyCard extends StatelessWidget {
         height: cardHeight,
         child: new Stack(
           children: <Widget>[
-            new Center(child: new CircularProgressIndicator()),
             new ConstrainedBox(
               constraints: BoxConstraints.expand(),
-              child: new FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: party.imageUrl,
+              child: new CachedNetworkImage(
+                imageUrl: party.imageUrl,
                 fit: BoxFit.cover,
+                placeholder: new Center(child: new CircularProgressIndicator()),
               ),
             ),
             new Container(
@@ -79,12 +78,12 @@ class PartyCard extends StatelessWidget {
                         padding: new EdgeInsets.all(8.0),
                         child: new FlatButton(
                           onPressed: () {
-                            Navigator.push(
-                              context,
+                            Navigator.of(context).push(
                               new MaterialPageRoute(
-                                  builder: (context) => new PartyPage(
-                                        party: party,
-                                      )),
+                                builder: (context) => new PartyPage(
+                                      party: party,
+                                    ),
+                              ),
                             );
                           },
                           child: new Text('JOIN',

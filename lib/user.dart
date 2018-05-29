@@ -6,6 +6,7 @@ import 'dart:async';
 
 // External libraries imports
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /// Class to define the application's user
 class User {
@@ -17,6 +18,19 @@ class User {
     surname = snapshot['surname'];
     profilePictureUrl = snapshot['profilePictureUrl'];
     uid = snapshot['uid'];
+  }
+
+  static Future<User> userDownloader() async {
+    User user;
+    FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+    if (firebaseUser != null) {
+      DocumentReference userReference = Firestore.instance
+          .collection(User.usersDbPath)
+          .document(firebaseUser.uid);
+      DocumentSnapshot userOnDb = await userReference.get();
+      user = new User.fromFirestore(userOnDb);
+    }
+    return user;
   }
 
   /// Unique ID used by [firebase_auth].

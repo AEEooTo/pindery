@@ -8,9 +8,9 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   firebase_core: ^0.2.3
-  cloud_firestore: ^0.7.0
+  cloud_firestore: ^0.7.2
   firebase_analytics: ^0.3.3
-  firebase_storage: ^0.3.4
+  firebase_storage: ^0.3.5
   image_picker:
   transparent_image:
   image:

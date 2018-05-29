@@ -18,6 +18,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../theme.dart';
 import '../user.dart';
 import '../image_compression.dart';
+import '../home_page/home_page.dart';
 
 String _name;
 String _surname;
@@ -197,26 +198,33 @@ class SignUpButton extends StatelessWidget {
     Navigator
         .of(context)
         .push(new MaterialPageRoute(builder: (context) => new SigningUpPage()));
-    await _trulyHandleSignUp(firebaseAuth, context).then((e) {
+    await _trulyHandleSignUp(firebaseAuth, context).then((e) async {
       if (result) {
         imageLocalPath = null;
         clearForm();
+        User user = await User.userDownloader();
+        Navigator.pushReplacement(
+            context,
+            new MaterialPageRoute(
+              settings: new RouteSettings(name: '/'),
+              builder: (_) => new HomePage(user: user),
+            ));
         Navigator.popUntil(context, ModalRoute.withName('/'));
       }
-    })
-    .catchError(_handleError('Auth error', context), test: (e) => e is AuthUploadException);
+    }).catchError(_handleError('Auth error', context),
+        test: (e) => e is AuthUploadException);
   }
 
   _handleError(String error, BuildContext context) {
     Navigator.pop(context);
     Scaffold.of(context).showSnackBar(
-      new SnackBar(
-        content: new Text(
-          error,
-          textAlign: TextAlign.center,
-        ),
-      ),
-    );
+          new SnackBar(
+            content: new Text(
+              error,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
   }
 
   void clearForm() {
@@ -245,7 +253,7 @@ Future<Null> _trulyHandleSignUp(
   await firebaseAuth
       .createUserWithEmailAndPassword(email: _email, password: _password)
       .then((newUser) => user = newUser)
-  .catchError((error) => throw AuthUploadException);
+      .catchError((error) => throw AuthUploadException);
 
   //user creation as our proprietary object
   //our image upload

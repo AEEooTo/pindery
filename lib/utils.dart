@@ -3,11 +3,11 @@
 
 // External libraries imports
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 // Internal imports
 import 'user.dart';
 import 'theme.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 
 /// A [CircleAvatar] which checks whether the user has a profile picture or not
 /// Actually if the user has a picture, it's not a [CircleAvatar], but a 

@@ -3,7 +3,7 @@
 
 // External libraries imports
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 // Internal imports
 import 'party.dart';
@@ -28,7 +28,7 @@ class PartyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-      backgroundColor: Colors.white,
+        backgroundColor: Colors.white,
         drawer: new Drawer(
           child: new PinderyDrawer(),
         ),
@@ -44,13 +44,11 @@ class PartyPage extends StatelessWidget {
               background: new Stack(
                 fit: StackFit.expand,
                 children: <Widget>[
-                  //todo : fix progress indicator (cannot be seen)
-                  new Center(child : new CircularProgressIndicator(),),
-                  new FadeInImage.memoryNetwork(
-                    placeholder: kTransparentImage,
-                    image: party.imageUrl,
+                  new CachedNetworkImage(
+                    imageUrl: party.imageUrl,
                     fit: BoxFit.cover,
-                    height: _appBarHeight,
+                    placeholder:
+                        new Center(child: new CircularProgressIndicator()),
                   ),
                   // This gradient ensures that the toolbar icons are distinct
                   // against the background image.
@@ -71,74 +69,70 @@ class PartyPage extends StatelessWidget {
             ),
           ),
           new SliverList(
-            delegate: new SliverChildListDelegate(
-              <Widget>[
-                new BlackPartyHeader(
-                  organiser: party.organiserUID,
-                  rating: party.rating,
-                  ratingNumber: party.ratingNumber,
-                  party: party,
+            delegate: new SliverChildListDelegate(<Widget>[
+              new BlackPartyHeader(
+                organiser: party.organiserUID,
+                rating: party.rating,
+                ratingNumber: party.ratingNumber,
+                party: party,
+              ),
+              new WhitePartyBlock(
+                data: party.place,
+                icon: const IconData(0xe0c8, fontFamily: 'MaterialIcons'),
+              ),
+              new WhitePartyBlock(
+                data: party.fromDayTime.day.toString() +
+                    '/' +
+                    party.fromDayTime.month.toString() +
+                    '/' +
+                    party.fromDayTime.year.toString(),
+                icon: const IconData(0xe192, fontFamily: 'MaterialIcons'),
+              ),
+              new WhitePartyBlock(
+                data: 'Necessary points: ' + party.pinderPoints.toString(),
+                icon: const IconData(0xe5ca, fontFamily: 'MaterialIcons'),
+              ),
+              new WhitePartyBlock(
+                data: Privacy.options[party.privacy.type],
+                icon: Privacy.optionsIcons[party.privacy.type],
+              ),
+              new Container(
+                decoration: new BoxDecoration(
+                  color: Colors.white,
                 ),
-                new WhitePartyBlock(
-                  data: party.place,
-                  icon: const IconData(0xe0c8, fontFamily: 'MaterialIcons'),
-                ),
-                new WhitePartyBlock(
-                  data: party.fromDayTime.day.toString() +
-                      '/' +
-                      party.fromDayTime.month.toString() +
-                      '/' +
-                      party.fromDayTime.year.toString(),
-                  icon: const IconData(0xe192, fontFamily: 'MaterialIcons'),
-                ),
-                new WhitePartyBlock(
-                  data: 'Necessary points: ' + party.pinderPoints.toString(),
-                  icon: const IconData(0xe5ca, fontFamily: 'MaterialIcons'),
-                ),
-                new WhitePartyBlock(
-                  data: Privacy.options[party.privacy.type],
-                  icon: Privacy.optionsIcons[party.privacy.type],
-                ),
-                new Container(
-                  decoration: new BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: new Padding(
-                    padding: const EdgeInsets.only(
-                        left: 26.0, top: 13.0, right: 26.0, bottom: 13.0),
-                    child: new Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        new Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: new Text(
-                            'Description',
-                            style: new TextStyle(
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.bold,
-                                color: primary),
-                          ),
+                child: new Padding(
+                  padding: const EdgeInsets.only(
+                      left: 26.0, top: 13.0, right: 26.0, bottom: 13.0),
+                  child: new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      new Padding(
+                        padding: const EdgeInsets.only(bottom: 8.0),
+                        child: new Text(
+                          'Description',
+                          style: new TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.bold,
+                              color: primary),
                         ),
-                        new Text(
-                          party.description,
-                          style: pinderyTextStyle,
-                        )
-                      ],
-                    ),
+                      ),
+                      new Text(
+                        party.description,
+                        style: pinderyTextStyle,
+                      )
+                    ],
                   ),
                 ),
-
-            ]
-          ),
-        )
-        ]
-        )
-    );
+              ),
+            ]),
+          )
+        ]));
   }
 }
 
 class BlackPartyHeader extends StatelessWidget {
-  BlackPartyHeader({this.organiser, this.rating, this.ratingNumber, this.party});
+  BlackPartyHeader(
+      {this.organiser, this.rating, this.ratingNumber, this.party});
 
   final Party party;
   final String organiser;
@@ -206,15 +200,12 @@ class BlackPartyHeader extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: new FloatingActionButton(
                   onPressed: () {
-                    /*Scaffold.of(context).showSnackBar(new SnackBar(
-                          content: new Text(
-                            "Pressed mate",
-                            textAlign: TextAlign.center,
-                          ),
-                        ));*/
                     Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => new TakePartPage(party: party,)),
-                    );
+                          MaterialPageRoute(
+                              builder: (context) => new TakePartPage(
+                                    party: party,
+                                  )),
+                        );
                   },
                   child: new Icon(Icons.local_bar),
                 ),
@@ -301,16 +292,37 @@ class RatingStars extends StatelessWidget {
     return new Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        new Icon( active[0]? (number<=0.5? Icons.star_half: Icons.star): Icons.star_border,
-            color: active[0] ? secondary : Colors.white, size: 14.0),
-        new Icon( active[1]? (number<=1.5? Icons.star_half: Icons.star): Icons.star_border,
-          color: active[1] ? secondary : Colors.white, size: 14.0, ),
-        new Icon(active[2]? (number<=2.5? Icons.star_half: Icons.star): Icons.star_border,
-            color: active[2] ? secondary : Colors.white, size: 14.0),
-        new Icon(active[3]? (number<=3.5? Icons.star_half: Icons.star): Icons.star_border,
-            color: active[3] ? secondary : Colors.white, size: 14.0),
-        new Icon(active[4]? (number<=4.5? Icons.star_half: Icons.star): Icons.star_border,
-            color: active[4] ? secondary : Colors.white, size: 14.0),
+        new Icon(
+            active[0]
+                ? (number <= 0.5 ? Icons.star_half : Icons.star)
+                : Icons.star_border,
+            color: active[0] ? secondary : Colors.white,
+            size: 14.0),
+        new Icon(
+          active[1]
+              ? (number <= 1.5 ? Icons.star_half : Icons.star)
+              : Icons.star_border,
+          color: active[1] ? secondary : Colors.white,
+          size: 14.0,
+        ),
+        new Icon(
+            active[2]
+                ? (number <= 2.5 ? Icons.star_half : Icons.star)
+                : Icons.star_border,
+            color: active[2] ? secondary : Colors.white,
+            size: 14.0),
+        new Icon(
+            active[3]
+                ? (number <= 3.5 ? Icons.star_half : Icons.star)
+                : Icons.star_border,
+            color: active[3] ? secondary : Colors.white,
+            size: 14.0),
+        new Icon(
+            active[4]
+                ? (number <= 4.5 ? Icons.star_half : Icons.star)
+                : Icons.star_border,
+            color: active[4] ? secondary : Colors.white,
+            size: 14.0),
       ],
     );
   }
