@@ -1,0 +1,28 @@
+language: dart
+dart: dev
+
+env:
+  global:
+  - USER="AEEooTO"
+  - EMAIL="deploy@travis-ci.org"
+  - DEPLOYMENT_USER="traviscibot"
+  - REPO="pindery-docs"
+  - DOC_FILES="./doc/*"
+  - GH_REPO="github.com/${USER}/${REPO}.git"
+
+script:
+  - dartdoc
+
+after_success:
+  - MESSAGE='Commit with Travis CI'
+  - git clone git://${GH_REPO}
+  - cd ${REPO}
+  - rm -rf `ls | grep -v 'md$' | grep -v '.git'
+  - cp -f -r ../${FILES} ./
+  - ls
+  - git remote
+  - git config user.email ${EMAIL}
+  - git config user.name ${DEPLOYMENT_USER}
+  - git add .
+  - git commit -m 'Commit with Travis CI'
+  - git push "https://${GITHUB_TOKEN}@${GH_REPO}" master
