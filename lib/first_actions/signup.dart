@@ -203,13 +203,12 @@ class SignUpButton extends StatelessWidget {
         imageLocalPath = null;
         clearForm();
         User user = await User.userDownloader();
-        Navigator.pushReplacement(
-            context,
+        Navigator.of(context).pushAndRemoveUntil(
             new MaterialPageRoute(
               settings: new RouteSettings(name: '/'),
               builder: (_) => new HomePage(user: user),
-            ));
-        Navigator.popUntil(context, ModalRoute.withName('/'));
+            ),
+            (_) => false);
       }
     }).catchError(_handleError('Auth error', context),
         test: (e) => e is AuthUploadException);

@@ -132,7 +132,6 @@ class HomePage extends StatelessWidget {
         ),
       );
     }
-    return new Navigator(
-      onGenerateRoute: (settings) => new MaterialPageRoute(builder: (_) => new WelcomePage()),);
+    return new WelcomePage();
   }
 }

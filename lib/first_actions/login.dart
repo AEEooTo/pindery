@@ -152,12 +152,11 @@ class LogInButton extends StatelessWidget {
     bool resultGood = await _trulyHandleLogin(_auth, context);
     if (resultGood) {
       User user = await User.userDownloader();
-      Navigator.pushReplacement(
-          context,
+      Navigator.of(context).pushAndRemoveUntil(
           new MaterialPageRoute(
             settings: new RouteSettings(name: '/'),
             builder: (_) => new HomePage(user: user),
-          ));
+          ), (_) => false);
     } else {
       Navigator.pop(context);
       Scaffold.of(context).showSnackBar(new SnackBar(
