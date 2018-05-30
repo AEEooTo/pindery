@@ -20,8 +20,8 @@ final String utilitiesCoverImagePath = "assets/img/kittens.jpeg";
 
 /// The page that displays the stuff that the participants have to bring
 class TakePartPage extends StatefulWidget {
-  TakePartPage({this.party});
-
+  TakePartPage({this.homeScaffoldKey, this.party});
+  final GlobalKey homeScaffoldKey;
   /// The [Party] instance the user wants to take part to
   final Party party;
 
@@ -30,9 +30,9 @@ class TakePartPage extends StatefulWidget {
 }
 
 class _TakePartPageState extends State<TakePartPage> {
-  final GlobalKey<ScaffoldState> scaffoldKey =
-      new GlobalKey<ScaffoldState>();
+
   ObtainedPoints obtainedPoints = new ObtainedPoints();
+  GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +139,8 @@ class _TakePartPageState extends State<TakePartPage> {
     bool success = true;
     await widget.party.handleParticipation();
     Navigator.of(context).popUntil(ModalRoute.withName('/'));
-    Scaffold.of(context).showSnackBar(new SnackBar(content: new Text('You are going to party hard, great!')));
+    ScaffoldState homeScaffoldState = widget.homeScaffoldKey.currentState;
+    homeScaffoldState.showSnackBar(new SnackBar(content: new Text('You are going to party hard, great!')));
     return success;
   }
 }

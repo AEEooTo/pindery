@@ -1,5 +1,3 @@
-// TODO: refractor the filename to 'party_card_list.dart'
-
 // External imports
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,17 +11,17 @@ import '../party.dart';
 const String testCity = "shanghai";
 
 class PartyCardList extends StatelessWidget {
-  PartyCardList({this.analytics, this.observer});
+  PartyCardList({this.analytics, this.observer, this.homeScaffoldKey});
 
   final String city = testCity;
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
-
+  final GlobalKey<ScaffoldState> homeScaffoldKey;
 
   CollectionReference get _partiesCollectionReference => Firestore.instance
-        .collection('cities')
-        .document(city)
-        .collection('parties');
+      .collection('cities')
+      .document(city)
+      .collection('parties');
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +74,12 @@ class PartyCardList extends StatelessWidget {
               });
               final DocumentSnapshot document = documentsList[index];
               Party party = new Party.fromSnapshot(document);
-              return new PartyCard(party: party, observer: observer, analytics: analytics,);
+              return new PartyCard(
+                party: party,
+                observer: observer,
+                analytics: analytics,
+                homeScaffoldKey: homeScaffoldKey,
+              );
             },
             itemCount: snapshot.data.documents.length,
             scrollDirection: Axis.vertical,

@@ -15,6 +15,8 @@ import 'privacy.dart';
 enum AppBarBehavior { normal, pinned, floating, snapping }
 
 class PartyPage extends StatelessWidget {
+  PartyPage({this.party, this.homeScaffoldKey});
+  
   final Party party;
 
   final String routeName = '/party-page';
@@ -23,7 +25,6 @@ class PartyPage extends StatelessWidget {
   final AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
   final double _appBarHeight = 256.0;
 
-  PartyPage({this.party, this.homeScaffoldKey});
 
   @override
   Widget build(BuildContext context) {
@@ -75,6 +76,7 @@ class PartyPage extends StatelessWidget {
                 rating: party.rating,
                 ratingNumber: party.ratingNumber,
                 party: party,
+                homeScaffoldKey: homeScaffoldKey,
               ),
               new WhitePartyBlock(
                 data: party.place,
@@ -132,8 +134,9 @@ class PartyPage extends StatelessWidget {
 
 class BlackPartyHeader extends StatelessWidget {
   BlackPartyHeader(
-      {this.organiser, this.rating, this.ratingNumber, this.party});
+      {this.organiser, this.rating, this.ratingNumber, this.party, this.homeScaffoldKey});
 
+  final homeScaffoldKey;
   final Party party;
   final String organiser;
   final num rating;
@@ -204,6 +207,7 @@ class BlackPartyHeader extends StatelessWidget {
                           MaterialPageRoute(
                               builder: (context) => new TakePartPage(
                                     party: party,
+                                    homeScaffoldKey: homeScaffoldKey,
                                   )),
                         );
                   },

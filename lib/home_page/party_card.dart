@@ -16,12 +16,13 @@ import '../party_page.dart';
 import '../theme.dart';
 
 class PartyCard extends StatelessWidget {
-  PartyCard({this.party, this.observer, this.analytics});
+  PartyCard({this.party, this.observer, this.analytics, this.homeScaffoldKey});
 
   final Party party;
   final double cardHeight = 200.0;
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
+  final GlobalKey homeScaffoldKey;
 
   @override
   Widget build(BuildContext context) {
@@ -82,6 +83,7 @@ class PartyCard extends StatelessWidget {
                               new MaterialPageRoute(
                                 builder: (context) => new PartyPage(
                                       party: party,
+                                      homeScaffoldKey: homeScaffoldKey,
                                     ),
                               ),
                             );
