@@ -19,7 +19,7 @@ after_success:
   - cd ${REPO}
   - rm -rf `ls | grep -v 'md$' | grep -v '.git'
   - cp -f -r ../${FILES} ./
-  - ls
+  - ls -a
   - git remote
   - git config user.email ${EMAIL}
   - git config user.name ${DEPLOYMENT_USER}
