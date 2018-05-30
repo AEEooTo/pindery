@@ -1,6 +1,3 @@
-language: dart
-dart: dev
-
 env:
   global:
   - USER="AEEooTO"
@@ -25,7 +22,8 @@ before_script:
 
 
 script:
-  - dartdoc
+  - flutter packages get
+  - ./flutter/bin/cache/dart-sdk/bin/dartdoc
 
 after_success:
   - MESSAGE='Commit with Travis CI'
