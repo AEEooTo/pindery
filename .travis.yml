@@ -4,7 +4,7 @@ env:
   - EMAIL="deploy@travis-ci.org"
   - DEPLOYMENT_USER="traviscibot"
   - REPO="pindery-docs"
-  - DOC_FILES="./doc/*"
+  - DOC_FILES="./doc/api/*"
   - GH_REPO="github.com/${USER}/${REPO}.git"
 
 addons:
