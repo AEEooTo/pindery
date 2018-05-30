@@ -15,21 +15,19 @@ import '../image_compression.dart';
 class ChooseCataloguePage extends StatefulWidget {
   static const String routeName = '/create-party/step-2';
 
-  ChooseCataloguePage({this.homePageKey, this.party, this.catalogue});
+  ChooseCataloguePage({this.homeScaffoldKey, this.party, this.catalogue});
 
-  final GlobalKey homePageKey;
+  final GlobalKey<ScaffoldState> homeScaffoldKey;
 
   final Catalogue catalogue;
   final Party party;
 
   _ChooseCataloguePageState createState() => new _ChooseCataloguePageState(
-      party: party, homePageKey: homePageKey, catalogue: catalogue);
+      party: party, catalogue: catalogue);
 }
 
 class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
-  _ChooseCataloguePageState({this.party, this.homePageKey, this.catalogue});
-
-  final GlobalKey homePageKey;
+  _ChooseCataloguePageState({this.party, this.catalogue});
 
   /// partially filled party (misses the [catalogue])
   Party party;
@@ -89,8 +87,6 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                       chosenListFormKey.currentState.validate()) {
                     final ScaffoldState scaffoldState =
                         scaffoldKey.currentState;
-                    final ScaffoldState homePageState =
-                        homePageKey.currentState;
                     cancelled = false;
                     cancelled =
                         await _uploadingDialog(chosenListFormKey.currentState)
@@ -98,6 +94,10 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                       print('cancelled = ' + cancelled.toString());
                       if (!cancelled) {
                         Navigator.popUntil(context, ModalRoute.withName('/'));
+                        assert(widget.homeScaffoldKey != null);
+                        ScaffoldState homePageState =
+                            widget.homeScaffoldKey.currentState;                            
+                        assert(homePageState != null);
                         homePageState.showSnackBar(new SnackBar(
                           content: new Text("Great! The party was created!"),
                         ));

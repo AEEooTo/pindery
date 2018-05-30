@@ -22,7 +22,7 @@ class PartyCard extends StatelessWidget {
   final double cardHeight = 200.0;
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
-  final GlobalKey homeScaffoldKey;
+  final GlobalKey<ScaffoldState> homeScaffoldKey;
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,16 @@
 name: pindery
-description: An amazing party app
+description: >- 
+  Pindery is an Android and iOS based social network
+  designed to join and organise parties, mainly geared
+  towards low-level student events. Each user will have
+  the possibility to generate a ‘new party’ or join
+  already existing ones nearby.
+homepage: https://aeeooto.gihtub.io/pindery/
 version: 0.0.1-alpha0
+authors:
+  - Anna Tranquillini
+  - Edoardo Debenedetti <edoardo.m.debenedetti@gmail.com>
+  - Edoardo Ghignone
 
 dependencies:
   flutter:
@@ -12,11 +22,10 @@ dependencies:
   firebase_analytics: ^0.3.3
   firebase_storage: ^0.3.5
   image_picker:
-  transparent_image:
   image:
   path_provider: ^0.4.0
   validator: ">=0.0.4 <0.1.0"
-  firebase_auth: ^0.5.9
+  firebase_auth: ^0.5.10
   google_sign_in: ^3.0.1
   cached_network_image: ^0.4.0
 

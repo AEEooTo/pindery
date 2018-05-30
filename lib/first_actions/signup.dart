@@ -262,7 +262,7 @@ Future<Null> _trulyHandleSignUp(
         .ref()
         .child("/userProPics/profile_pic_$random.jpg");
     imageLocalPath = await cropImage(imageLocalPath);
-    StorageUploadTask uploadTask = ref.putFile(imageLocalPath);
+    StorageFileUploadTask uploadTask = ref.putFile(imageLocalPath);
     UploadTaskSnapshot task = await uploadTask.future;
     downloadUrl = task.downloadUrl;
   }

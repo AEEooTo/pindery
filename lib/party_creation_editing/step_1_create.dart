@@ -13,20 +13,19 @@ import '../privacy.dart';
 
 /// Page used to create a new party
 class CreatePartyPage extends StatefulWidget {
-  CreatePartyPage({this.homePageKey});
-
+  CreatePartyPage({this.homeScaffoldKey});
   static const String routeName = '/create-party/step-1';
-  final GlobalKey homePageKey;
+  final GlobalKey homeScaffoldKey;
 
   @override
   _CreatePartyPageState createState() =>
-      new _CreatePartyPageState(homePageKey: homePageKey);
+      new _CreatePartyPageState(homeScaffoldKey: homeScaffoldKey);
 }
 
 class _CreatePartyPageState extends State<CreatePartyPage> {
-  _CreatePartyPageState({this.homePageKey});
+  _CreatePartyPageState({this.homeScaffoldKey});
 
-  final GlobalKey homePageKey;
+  final GlobalKey<ScaffoldState> homeScaffoldKey;
 
   // keys
   final GlobalKey scaffoldKey = new GlobalKey<ScaffoldState>();
@@ -266,7 +265,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
       context,
       new MaterialPageRoute(
         builder: (context) => new ChooseCataloguePage(
-              homePageKey: homePageKey,
+              homeScaffoldKey: homeScaffoldKey,
               party: party,
               catalogue: catalogue,
             ),

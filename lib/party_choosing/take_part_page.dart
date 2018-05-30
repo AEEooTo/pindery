@@ -21,7 +21,7 @@ final String utilitiesCoverImagePath = "assets/img/kittens.jpeg";
 /// The page that displays the stuff that the participants have to bring
 class TakePartPage extends StatefulWidget {
   TakePartPage({this.homeScaffoldKey, this.party});
-  final GlobalKey homeScaffoldKey;
+  final GlobalKey<ScaffoldState> homeScaffoldKey;
 
   /// The [Party] instance the user wants to take part to
   final Party party;
@@ -146,7 +146,7 @@ class _TakePartPageState extends State<TakePartPage> {
   }
 
   Future<Null> _showDialog() async {
-    await showDialog(
+    await showDialog<Null>(
         context: context,
         barrierDismissible: false,
         builder: (context) {

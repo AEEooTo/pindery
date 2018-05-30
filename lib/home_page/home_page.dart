@@ -49,7 +49,7 @@ class HomePage extends StatelessWidget {
                 context,
                 new MaterialPageRoute(
                   builder: (context) => new CreatePartyPage(
-                        homePageKey: homeScaffoldKey,
+                        homeScaffoldKey: homeScaffoldKey,
                       ),
                 ),
               );
