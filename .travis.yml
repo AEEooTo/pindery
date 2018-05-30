@@ -26,13 +26,12 @@ before_script:
   - sudo sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_unstable.list > /etc/apt/sources.list.d/dart_unstable.list'
   - sudo apt-get update
   - sudo apt-get install dart
-  - export PATH=/usr/lib/dart/bin/:$PATH
 
 
 
 script:
   - flutter packages get
-  - dartdoc
+  - /usr/lib/dart/bin/dartdoc
 
 after_success:
   - MESSAGE='Commit with Travis CI'
