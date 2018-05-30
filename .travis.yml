@@ -39,7 +39,7 @@ after_success:
   - cd ${REPO}
   - git pull
   - rm -rf `ls | grep -v 'md$' | grep -v '.git'
-  - cp -f -r ../${FILES} ./
+  - cp -f -r ../${DOC_FILES} ./
   - ls -a
   - git remote
   - git config user.email ${EMAIL}
