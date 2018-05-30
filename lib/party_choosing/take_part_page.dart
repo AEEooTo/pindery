@@ -22,6 +22,7 @@ final String utilitiesCoverImagePath = "assets/img/kittens.jpeg";
 class TakePartPage extends StatefulWidget {
   TakePartPage({this.homeScaffoldKey, this.party});
   final GlobalKey homeScaffoldKey;
+
   /// The [Party] instance the user wants to take part to
   final Party party;
 
@@ -30,7 +31,6 @@ class TakePartPage extends StatefulWidget {
 }
 
 class _TakePartPageState extends State<TakePartPage> {
-
   ObtainedPoints obtainedPoints = new ObtainedPoints();
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
@@ -135,13 +135,30 @@ class _TakePartPageState extends State<TakePartPage> {
     return itemCardList;
   }
 
-  Future<bool> _handleParticipation() async {
-    bool success = true;
+  void _handleParticipation() async {
+    _showDialog();
     await widget.party.handleParticipation();
+    Navigator.of(context).pop();
     Navigator.of(context).popUntil(ModalRoute.withName('/'));
     ScaffoldState homeScaffoldState = widget.homeScaffoldKey.currentState;
-    homeScaffoldState.showSnackBar(new SnackBar(content: new Text('You are going to party hard, great!')));
-    return success;
+    homeScaffoldState.showSnackBar(
+        new SnackBar(content: new Text('You are going to party hard, great!')));
+  }
+
+  Future<Null> _showDialog() async {
+    await showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return new AlertDialog(
+            title: new Text('Loading'),
+            content: new Container(
+              height: 1.5,
+              margin: EdgeInsets.only(top: 16.0),
+              child: new LinearProgressIndicator(),
+            ),
+          );
+        });
   }
 }
 
