@@ -27,6 +27,7 @@ class User {
       DocumentReference userReference = Firestore.instance
           .collection(User.usersDbPath)
           .document(firebaseUser.uid);
+          // TODO: catch exceptions
       DocumentSnapshot userOnDb = await userReference.get();
       user = new User.fromFirestore(userOnDb);
     }

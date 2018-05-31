@@ -3,8 +3,9 @@
 ///
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'user.dart';
+import 'package:connectivity/connectivity.dart';
 
+import 'user.dart';
 import 'theme.dart';
 import 'home_page/home_page.dart';
 
@@ -13,14 +14,21 @@ void main() async {
   // visual effect at the cost of performance.
   MaterialPageRoute.debugEnableFadingRoutes =
       true; // ignore: deprecated_member_use
-  User user = await User.userDownloader();
-  runApp(new Pindery(user: user));
+  ConnectivityResult connectivity =
+      await (new Connectivity().checkConnectivity());
+  User user;
+  if (connectivity != ConnectivityResult.none) {
+    user = await User.userDownloader();
+  }
+  runApp(new Pindery(user, connectivity));
 }
 
 class Pindery extends StatelessWidget {
-  Pindery({this.user});
+  Pindery(this.user, this.connectivity);
 
   final User user;
+  final ConnectivityResult connectivity;
+  final GlobalKey homeKey = new GlobalKey();
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -33,8 +41,12 @@ class Pindery extends StatelessWidget {
       theme: pinderyTheme,
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
-        '/': (BuildContext context) => new HomePage(user: user),
-      },    
+        '/': (BuildContext context) => new HomePage(
+              user: user,
+              connectivity: connectivity,
+              key: homeKey,
+            ),
+      },
     );
   }
 }
