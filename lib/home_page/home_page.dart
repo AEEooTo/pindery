@@ -12,15 +12,13 @@ import '../drawer.dart' show PinderyDrawer;
 import '../user.dart';
 import '../first_actions/welcome.dart';
 import '../party_creation_editing/step_1_create.dart';
-import 'offline_page.dart';
 
 /// This file contains the code for Pindery's homepage's structure.
 
 class HomePage extends StatefulWidget {
-  HomePage({this.user, this.analytics, this.observer, this.connectivity, this.key}) : super(key: key);
+  HomePage({this.user, this.analytics, this.observer, this.connectivity});
   static const routeName = '/';
-  
-  final GlobalKey key;
+
   final User user;
   final String title = 'Pindery';
   final GlobalKey<ScaffoldState> homeScaffoldKey =
@@ -70,9 +68,8 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       );
-    } else if (widget.connectivity != ConnectivityResult.none) {
-      return new WelcomePage();
     }
-    return new OfflinePage(user: widget.user, homePageKey: widget.key);
+      return new WelcomePage();
+
   }
 }

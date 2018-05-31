@@ -4,6 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import '../user.dart';
 import 'home_page.dart';
 
+/// Used as page to tell the user that is offline. It's not used, for the moment.
 class OfflinePage extends StatefulWidget {
   const OfflinePage({Key key, this.user, this.homePageKey}) : super(key: key);
   
