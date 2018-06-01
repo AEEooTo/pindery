@@ -90,6 +90,12 @@ class SettingsPage extends StatelessWidget {
             ],
           ),
         ),
+        new AboutListTile(
+          applicationName: 'Pindery',
+          applicationVersion: '0.0.1-alpha0',
+          applicationLegalese: 'By AEEooTo',
+          icon: new Icon(Icons.info, color: Colors.white,),
+        ),
         new ListTile(
           leading: new Icon(
             Icons.exit_to_app,
