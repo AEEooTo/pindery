@@ -57,7 +57,7 @@
     
       <li class="section-title"><a href="party_page/BlackPartyHeader-class.html#instance-methods">Methods</a></li>
       <li><a href="party_page/BlackPartyHeader/build.html">build</a></li>
-      <li><a href="party_page/BlackPartyHeader/ratingmethod.html">ratingmethod</a></li>
+      <li><a href="party_page/BlackPartyHeader/ratingMethod.html">ratingMethod</a></li>
       <li class="inherited"><a href="party_page/BlackPartyHeader/createElement.html">createElement</a></li>
       <li class="inherited"><a href="party_page/BlackPartyHeader/debugDescribeChildren.html">debugDescribeChildren</a></li>
       <li class="inherited"><a href="party_page/BlackPartyHeader/debugFillProperties.html">debugFillProperties</a></li>
@@ -118,23 +118,6 @@ and</li><li>any ambient state obtained from the <code>context</code> using
       future: _getOrganiser,
       initialData: new User(name: &#39;&#39;, surname: &#39;&#39;),
       builder: (BuildContext context, AsyncSnapshot&lt;User&gt; snapshot) {
-        if (!snapshot.hasData) {
-          return new Container(
-            margin: new EdgeInsets.all(16.0),
-            child: new Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: &lt;Widget&gt;[
-                new Text(&#39;Loading...&#39;, style: new TextStyle(color: primaryDark),),
-                new Container(
-                  height: 2.0,
-                  margin: new EdgeInsets.all(16.0),
-                  child: new LinearProgressIndicator(),
-                )
-              ],
-            ),
-          );
-        }
         party.organiser = snapshot.data;
         return new Container(
           decoration: new BoxDecoration(
@@ -198,10 +181,11 @@ and</li><li>any ambient state obtained from the <code>context</code> using
                       onPressed: () {
                         Navigator.of(context).push(
                               MaterialPageRoute(
-                                  builder: (context) =&gt; new TakePartPage(
-                                        party: party,
-                                        homeScaffoldKey: homeScaffoldKey,
-                                      )),
+                                builder: (context) =&gt; new TakePartPage(
+                                      party: party,
+                                      homeScaffoldKey: homeScaffoldKey,
+                                    ),
+                              ),
                             );
                       },
                       child: new Icon(Icons.local_bar),

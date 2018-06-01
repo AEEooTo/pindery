@@ -88,13 +88,11 @@
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span> </h2>
       <pre class="language-dart"><code class="language-dart">static Future&lt;User&gt; userDownloader({User user, String uid}) async {
-  if (user == null) {
-    user = new User();
-  }
+  user ??= new User();
   if (uid == null) {
     FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
     if (firebaseUser == null) {
-      return null;
+      return user;
     }
     uid = firebaseUser.uid;
   }
