@@ -6,6 +6,8 @@ import 'theme.dart';
 import 'home_page/home_page.dart';
 import 'party_creation_editing/step_1_create.dart';
 import 'user.dart';
+import 'drawer.dart';
+import 'settings.dart';
 
 class Pindery extends StatelessWidget {
   Pindery(this.user);
@@ -33,6 +35,8 @@ class Pindery extends StatelessWidget {
             ),
         '/create-party': (BuildContext context) =>
             new CreatePartyPage(homeScaffoldKey, user.uid),
+        '/drawer': (BuildContext context) => new PinderyDrawer(user: user),
+        '/settings': (BuildContext context) => new SettingsPage(user: user),
       },
     );
   }

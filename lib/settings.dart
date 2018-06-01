@@ -15,6 +15,8 @@ import 'first_actions/welcome.dart';
 class SettingsPage extends StatelessWidget {
   SettingsPage({this.user});
 
+  static const routeName = '/settings';
+
   final User user;
 
   @override
@@ -23,7 +25,7 @@ class SettingsPage extends StatelessWidget {
       appBar: new AppBar(
         title: new Text('Settings'),
       ),
-      drawer: new PinderyDrawer(user: user),
+      drawer: new PinderyDrawer(user: user, previousRoute: routeName,),
       body: new Column(children: <Widget>[
         new Container(
           height: 175.0,

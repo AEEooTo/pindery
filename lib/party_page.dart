@@ -31,9 +31,6 @@ class PartyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return new Scaffold(
         backgroundColor: Colors.white,
-        drawer: new Drawer(
-          child: new PinderyDrawer(),
-        ),
         body: new CustomScrollView(slivers: <Widget>[
           new SliverAppBar(
             expandedHeight: _appBarHeight,

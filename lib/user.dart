@@ -22,7 +22,6 @@ class User {
 
   static Future<User> userDownloader([String uid]) async {
     User user;
-    print("Entered userDownloader");
     if (uid == null) {
       FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
       uid = firebaseUser.uid;
@@ -30,7 +29,6 @@ class User {
         return null;
       }
     }
-    print("UID: $uid");
       DocumentReference userReference = Firestore.instance
           .collection(User.usersDbPath)
           .document(uid);

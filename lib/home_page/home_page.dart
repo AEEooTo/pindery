@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
           title: new Text(widget.title),
         ),
         drawer: new Drawer(
-          child: new PinderyDrawer(user: widget.user),
+          child: new PinderyDrawer(user: widget.user, previousRoute: HomePage.routeName,),
         ),
         body: new PartyCardList(
           observer: widget.observer,

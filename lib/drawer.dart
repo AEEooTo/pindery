@@ -9,14 +9,13 @@ import 'package:flutter/material.dart';
 import 'theme.dart';
 import 'user.dart';
 import 'utils.dart';
-import 'home_page/home_page.dart';
-import 'settings.dart';
 
 /// Default drawer for Pindery app
 class PinderyDrawer extends StatelessWidget {
-  PinderyDrawer({this.user});
+  PinderyDrawer({this.user, this.previousRoute});
   static const String coverImagePath = "assets/img/movingParty.jpeg";
 
+  final String previousRoute;
   final User user;
   final GlobalKey<DrawerControllerState> drawerKey =
       new GlobalKey<DrawerControllerState>();
@@ -47,20 +46,23 @@ class PinderyDrawer extends StatelessWidget {
                 new DrawerBlock(
                   icon: Icons.star,
                   data: 'Parties',
-                  widgetBuilder: (context) => new HomePage(user: user),
+                  route: '/',
                   drawerKey: drawerKey,
+                  previousRoute: previousRoute,
                 ),
                 new DrawerBlock(
                   icon: Icons.face,
                   data: 'My parties',
                   // widgetBuilder: (context) => new WelcomePage(),
                   drawerKey: drawerKey,
+                  previousRoute: previousRoute,
                 ),
                 new DrawerBlock(
                   icon: Icons.settings,
                   data: 'Settings',
-                  widgetBuilder: (context) => new SettingsPage(user: user),
+                  route: '/settings',
                   drawerKey: drawerKey,
+                  previousRoute: previousRoute,
                 ),
               ],
             ),
@@ -72,43 +74,66 @@ class PinderyDrawer extends StatelessWidget {
 }
 
 class DrawerBlock extends StatelessWidget {
-  DrawerBlock({this.data, this.icon, this.widgetBuilder, this.drawerKey});
+  DrawerBlock(
+      {this.data, this.icon, this.route, this.drawerKey, this.previousRoute});
 
   final String data;
   final IconData icon;
-  final WidgetBuilder widgetBuilder;
+  final String route;
   final GlobalKey<DrawerControllerState> drawerKey;
+  final String previousRoute;
 
   Widget build(BuildContext context) {
-    return new Container(
-      height: 60.0,
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      decoration: new BoxDecoration(
-          border: new Border(bottom: new BorderSide(color: dividerColor))),
-      child: new DefaultTextStyle(
-        style: Theme.of(context).textTheme.subhead,
-        child: new SafeArea(
-          top: false,
-          bottom: false,
-          child: new ListTile(
-            leading: new Icon(icon, color: secondary, size: 24.0),
-            title: new Text(
-              data,
-              textAlign: TextAlign.start,
-              style: new TextStyle(
-                  fontSize: 14.0,
-                  color: primaryLight,
-                  fontWeight: FontWeight.w600),
+    return new DefaultTextStyle(
+      style: Theme.of(context).textTheme.subhead,
+      child: new SafeArea(
+        top: false,
+        bottom: false,
+        child: new Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: new Container(
+            padding: const EdgeInsets.all(8.0),
+            height: 40.0,
+            decoration: new BoxDecoration(
+                borderRadius:
+                    const BorderRadius.all(const Radius.circular(6.0)),
+                color: tileColor()),
+            child: new ListTileTheme(
+              style: ListTileStyle.drawer,
+              textColor: Colors.black,
+              iconColor: const Color(0xFF757575),
+              dense: false,
+              child: new ListTile(
+                selected: (previousRoute == route),
+                leading: new Icon(icon),
+                title: new Text(
+                  data,
+                  textAlign: TextAlign.start,
+                  style: new TextStyle(
+                      fontSize: 14.0, fontWeight: FontWeight.w600),
+                ),
+                onTap: () {
+                  if (route != previousRoute) {
+                    Navigator.of(context).popUntil((ModalRoute.withName('/')));
+                    if (route != '/') {
+                      Navigator.of(context).pushNamed(route);
+                    }
+                  } else {
+                    Navigator.pop(context);
+                  }
+                },
+              ),
             ),
-            onTap: () {
-              Navigator.pop(context);
-              Navigator.of(context).push(
-                    MaterialPageRoute(builder: widgetBuilder),
-                  );
-            },
           ),
         ),
       ),
     );
+  }
+
+  Color tileColor() {
+    if (route == previousRoute) {
+      return const Color(0xFFffcce6);
+    }
+    return Colors.white;
   }
 }
