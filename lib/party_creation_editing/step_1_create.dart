@@ -247,17 +247,13 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                       ),
                       onPressed: () {
                         if (formKey.currentState.validate() &&
-                            party.localImageFile != null && _checkTime()) {
+                            party.localImageFile != null) {
                           _handleSubmitted();
                         } else if (party.localImageFile == null) {
                           scaffoldKey.currentState.showSnackBar(new SnackBar(
                               content: new Text(
                                   'The picture is missing!11!1')));
-                        } else if (!_checkTime()) {
-                          scaffoldKey.currentState.showSnackBar(new SnackBar(
-                              content: new Text(
-                                  'How can that be the time of the party?!')));
-                        }
+                        } 
                       },
                     ),
                   ),
