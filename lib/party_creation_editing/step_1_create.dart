@@ -13,9 +13,10 @@ import '../privacy.dart';
 
 /// Page used to create a new party
 class CreatePartyPage extends StatefulWidget {
-  CreatePartyPage({this.homeScaffoldKey});
-  static const String routeName = '/create-party/step-1';
+  CreatePartyPage(this.homeScaffoldKey, this.organiserUid);
+  static const String routeName = '/create-party';
   final GlobalKey homeScaffoldKey;
+  final String organiserUid;
 
   @override
   _CreatePartyPageState createState() =>
@@ -259,6 +260,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
 
   void _handleSubmitted() {
     final FormState form = formKey.currentState;
+    party.organiserUid = widget.organiserUid;
     form.save();
     assignPartyFields();
     Navigator.push(

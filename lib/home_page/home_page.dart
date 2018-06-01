@@ -11,18 +11,16 @@ import 'package:connectivity/connectivity.dart';
 import '../drawer.dart' show PinderyDrawer;
 import '../user.dart';
 import '../first_actions/welcome.dart';
-import '../party_creation_editing/step_1_create.dart';
 
 /// This file contains the code for Pindery's homepage's structure.
 
 class HomePage extends StatefulWidget {
-  HomePage({this.user, this.analytics, this.observer, this.connectivity});
+  HomePage({this.user, this.analytics, this.observer, this.connectivity, this.homeScaffoldKey});
   static const routeName = '/';
 
   final User user;
   final String title = 'Pindery';
-  final GlobalKey<ScaffoldState> homeScaffoldKey =
-      new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> homeScaffoldKey;
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
   final ConnectivityResult connectivity;
@@ -54,13 +52,9 @@ class _HomePageState extends State<HomePage> {
           opacity: 1.0,
           child: new FloatingActionButton(
             onPressed: () async {
-              await Navigator.push(
+              await Navigator.pushNamed(
                 context,
-                new MaterialPageRoute(
-                  builder: (context) => new CreatePartyPage(
-                        homeScaffoldKey: widget.homeScaffoldKey,
-                      ),
-                ),
+                '/create-party'
               );
             },
             child: new Icon(Icons.add),

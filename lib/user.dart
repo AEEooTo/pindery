@@ -20,17 +20,23 @@ class User {
     uid = snapshot['uid'];
   }
 
-  static Future<User> userDownloader() async {
+  static Future<User> userDownloader([String uid]) async {
     User user;
-    FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
-    if (firebaseUser != null) {
+    print("Entered userDownloader");
+    if (uid == null) {
+      FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+      uid = firebaseUser.uid;
+      if (firebaseUser == null) {
+        return null;
+      }
+    }
+    print("UID: $uid");
       DocumentReference userReference = Firestore.instance
           .collection(User.usersDbPath)
-          .document(firebaseUser.uid);
-          // TODO: catch exceptions
+          .document(uid);
+      // TODO: catch exceptions
       DocumentSnapshot userOnDb = await userReference.get();
       user = new User.fromFirestore(userOnDb);
-    }
     return user;
   }
 

@@ -4,6 +4,7 @@
 // External libraries imports
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:async';
 
 // Internal imports
 import 'party.dart';
@@ -11,12 +12,13 @@ import 'drawer.dart';
 import 'theme.dart';
 import 'party_choosing/take_part_page.dart';
 import 'privacy.dart';
+import 'user.dart';
 
 enum AppBarBehavior { normal, pinned, floating, snapping }
 
 class PartyPage extends StatelessWidget {
   PartyPage({this.party, this.homeScaffoldKey});
-  
+
   final Party party;
 
   final String routeName = '/party-page';
@@ -24,7 +26,6 @@ class PartyPage extends StatelessWidget {
 
   final AppBarBehavior _appBarBehavior = AppBarBehavior.pinned;
   final double _appBarHeight = 256.0;
-
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +73,7 @@ class PartyPage extends StatelessWidget {
           new SliverList(
             delegate: new SliverChildListDelegate(<Widget>[
               new BlackPartyHeader(
-                organiser: party.organiserUID,
+                organiserUid: party.organiserUid,
                 rating: party.rating,
                 ratingNumber: party.ratingNumber,
                 party: party,
@@ -134,91 +135,127 @@ class PartyPage extends StatelessWidget {
 
 class BlackPartyHeader extends StatelessWidget {
   BlackPartyHeader(
-      {this.organiser, this.rating, this.ratingNumber, this.party, this.homeScaffoldKey});
+      {this.organiserUid,
+      this.rating,
+      this.ratingNumber,
+      this.party,
+      this.homeScaffoldKey});
 
   final homeScaffoldKey;
   final Party party;
-  final String organiser;
+  final String organiserUid;
   final num rating;
   final int ratingNumber;
   final List<Icon> stars = new List(5);
 
   Widget build(BuildContext context) {
-    return new Container(
-      decoration: new BoxDecoration(
-        color: primary,
-      ),
-      height: 86.0,
-      child: new Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: new Row(
-          children: <Widget>[
-            new Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Text(
-                  'by ' + organiser,
-                  style: new TextStyle(
-                    color: secondary,
-                    fontSize: 14.0,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                new Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: new Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+    return new FutureBuilder(
+        future: _getOrganiser,
+        initialData: new User(name: '', surname: ''),
+        builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+          if (!snapshot.hasData) {
+            return new Container(
+              margin: new EdgeInsets.all(16.0),
+              child: new Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  new Text('Loading...', style: new TextStyle(color: primaryDark),),
+                  new Container(
+                    height: 2.0,
+                    margin: new EdgeInsets.all(16.0),
+                    child: new LinearProgressIndicator(),
+                  )
+                ],
+              ),
+            );
+          }
+          party.organiser = snapshot.data;
+          return new Container(
+            decoration: new BoxDecoration(
+              color: primary,
+            ),
+            height: 86.0,
+            child: new Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: new Row(
+                children: <Widget>[
+                  new Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       new Text(
-                        rating.toString(),
+                        'by ${party.organiser.name} ${party.organiser.surname}',
                         style: new TextStyle(
-                          color: Colors.white,
+                          color: secondary,
                           fontSize: 14.0,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                       new Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                        child: new RatingStars(
-                          number: rating,
-                        ),
-                      ),
-                      new Text(
-                        ratingNumber.toString() + ' reviews',
-                        style: new TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.0,
-                          fontWeight: FontWeight.w400,
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: new Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            new Text(
+                              rating.toString(),
+                              style: new TextStyle(
+                                color: Colors.white,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            new Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12.0),
+                              child: new RatingStars(
+                                number: rating,
+                              ),
+                            ),
+                            new Text(
+                              ratingNumber.toString() + ' reviews',
+                              style: new TextStyle(
+                                color: Colors.white,
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            )
+                          ],
                         ),
                       )
                     ],
                   ),
-                )
-              ],
-            ),
-            new Expanded(
-              child: new Container(
-                alignment: Alignment.centerRight,
-                child: new FloatingActionButton(
-                  onPressed: () {
-                    Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => new TakePartPage(
-                                    party: party,
-                                    homeScaffoldKey: homeScaffoldKey,
-                                  )),
-                        );
-                  },
-                  child: new Icon(Icons.local_bar),
-                ),
+                  new Expanded(
+                    child: new Container(
+                      alignment: Alignment.centerRight,
+                      child: new FloatingActionButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => new TakePartPage(
+                                          party: party,
+                                          homeScaffoldKey: homeScaffoldKey,
+                                        )),
+                              );
+                        },
+                        child: new Icon(Icons.local_bar),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
+        });
+  }
+
+  Future<User> get _getOrganiser async {
+    if (organiserUid == null) {
+      return new User(name: 'Not an', surname: 'Organiser NaO');
+    }
+    debugPrint("We have $organiserUid");
+    return await User.userDownloader(organiserUid);
   }
 
   int ratingmethod(int rating) {

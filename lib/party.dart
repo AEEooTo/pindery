@@ -10,6 +10,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 // Internal imports
 import 'catalogue/catalogue.dart';
 import 'privacy.dart';
+import 'user.dart';
 
 /// Class that defines every Party object in the app.
 class Party {
@@ -17,7 +18,7 @@ class Party {
     this.name,
     this.fromDayTime,
     this.toDayTime,
-    this.organiserUID,
+    this.organiserUid,
     this.place,
     this.rating,
     this.ratingNumber,
@@ -43,10 +44,12 @@ class Party {
     toDayTime = snapshot['toDayTime'];
     privacy.type = snapshot['privacy'];
     catalogue = new Catalogue.fromFirestore(snapshot['catalogue']);
+    if (snapshot['organiserUid'] != null) {
+      organiserUid = snapshot['organiserUid'];
+    }
     id = snapshot.documentID;
 
     // TODO: implement the user and the Pinder-points
-    organiserUID = 'Anna';
     rating = 3.5;
     ratingNumber = 23;
     pinderPoints = 6;
@@ -59,7 +62,7 @@ class Party {
   DateTime fromDayTime;
 
   /// The UID of the organiser.
-  String organiserUID;
+  String organiserUid;
 
   /// The place of the party.
   String place;
@@ -100,6 +103,8 @@ class Party {
 
   /// The [Catalogue] of the party.
   Catalogue catalogue;
+
+  User organiser;
 
   CollectionReference get _partiesCollectionReference => Firestore.instance
       .collection('cities')
@@ -157,6 +162,7 @@ class Party {
       "maxPeople": maxPeople,
       "privacy": privacy.type,
       "catalogue": catalogue.catalogueMatrixMapper(),
+      "organiserUid": organiserUid,
     };
     return partyMap;
   }
