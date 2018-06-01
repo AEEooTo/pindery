@@ -50,6 +50,7 @@
       <li><a href="party_details_utils/DateTimePicker/selectedDate.html">selectedDate</a></li>
       <li><a href="party_details_utils/DateTimePicker/selectedTime.html">selectedTime</a></li>
       <li><a href="party_details_utils/DateTimePicker/selectTime.html">selectTime</a></li>
+      <li><a href="party_details_utils/DateTimePicker/showDay.html">showDay</a></li>
       <li class="inherited"><a href="party_details_utils/DateTimePicker/hashCode.html">hashCode</a></li>
       <li class="inherited"><a href="party_details_utils/DateTimePicker/key.html">key</a></li>
       <li class="inherited"><a href="party_details_utils/DateTimePicker/runtimeType.html">runtimeType</a></li>
@@ -118,33 +119,9 @@ and</li><li>any ambient state obtained from the <code>context</code> using
       <h2><span>Implementation</span> </h2>
       <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  final TextStyle valueStyle = Theme.of(context).textTheme.title;
   return new Row(
     crossAxisAlignment: CrossAxisAlignment.end,
-    children: &lt;Widget&gt;[
-      new Expanded(
-        flex: 4,
-        child: new InputDropdown(
-          labelText: labelText,
-          valueText: new DateFormat.yMMMd().format(selectedDate),
-          valueStyle: valueStyle,
-          onPressed: () {
-            _selectDate(context);
-          },
-        ),
-      ),
-      const SizedBox(width: 12.0),
-      new Expanded(
-        flex: 3,
-        child: new InputDropdown(
-          valueText: selectedTime.format(context),
-          valueStyle: valueStyle,
-          onPressed: () {
-            _selectTime(context);
-          },
-        ),
-      ),
-    ],
+    children: _dateTimeChildren(context),
   );
 }</code></pre>
     </section>

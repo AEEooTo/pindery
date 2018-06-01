@@ -50,6 +50,7 @@
       <li><a href="party_details_utils/DateTimePicker/selectedDate.html">selectedDate</a></li>
       <li><a href="party_details_utils/DateTimePicker/selectedTime.html">selectedTime</a></li>
       <li><a href="party_details_utils/DateTimePicker/selectTime.html">selectTime</a></li>
+      <li><a href="party_details_utils/DateTimePicker/showDay.html">showDay</a></li>
       <li class="inherited"><a href="party_details_utils/DateTimePicker/hashCode.html">hashCode</a></li>
       <li class="inherited"><a href="party_details_utils/DateTimePicker/key.html">key</a></li>
       <li class="inherited"><a href="party_details_utils/DateTimePicker/runtimeType.html">runtimeType</a></li>
@@ -79,20 +80,21 @@
 
     <section class="multi-line-signature">
       const
-      <span class="name ">DateTimePicker</span>(<wbr>{<span class="parameter" id="-param-key"><span class="type-annotation">Key</span> <span class="parameter-name">key</span>, </span> <span class="parameter" id="-param-labelText"><span class="type-annotation">String</span> <span class="parameter-name">labelText</span>, </span> <span class="parameter" id="-param-selectedDate"><span class="type-annotation">DateTime</span> <span class="parameter-name">selectedDate</span>, </span> <span class="parameter" id="-param-selectedTime"><span class="type-annotation">TimeOfDay</span> <span class="parameter-name">selectedTime</span>, </span> <span class="parameter" id="-param-selectDate"><span class="type-annotation">ValueChanged<span class="signature">&lt;<wbr><span class="type-parameter">DateTime</span>&gt;</span></span> <span class="parameter-name">selectDate</span>, </span> <span class="parameter" id="-param-selectTime"><span class="type-annotation">ValueChanged<span class="signature">&lt;<wbr><span class="type-parameter">TimeOfDay</span>&gt;</span></span> <span class="parameter-name">selectTime</span></span> })
+      <span class="name ">DateTimePicker</span>(<wbr>{<span class="parameter" id="-param-key"><span class="type-annotation">Key</span> <span class="parameter-name">key</span>, </span> <span class="parameter" id="-param-labelText"><span class="type-annotation">String</span> <span class="parameter-name">labelText</span>, </span> <span class="parameter" id="-param-selectedDate"><span class="type-annotation">DateTime</span> <span class="parameter-name">selectedDate</span>, </span> <span class="parameter" id="-param-selectedTime"><span class="type-annotation">TimeOfDay</span> <span class="parameter-name">selectedTime</span>, </span> <span class="parameter" id="-param-selectDate"><span class="type-annotation">ValueChanged<span class="signature">&lt;<wbr><span class="type-parameter">DateTime</span>&gt;</span></span> <span class="parameter-name">selectDate</span>, </span> <span class="parameter" id="-param-selectTime"><span class="type-annotation">ValueChanged<span class="signature">&lt;<wbr><span class="type-parameter">TimeOfDay</span>&gt;</span></span> <span class="parameter-name">selectTime</span>, </span> <span class="parameter" id="-param-showDay"><span class="type-annotation">bool</span> <span class="parameter-name">showDay</span>: <span class="default-value">true</span></span> })
     </section>
 
     
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span> </h2>
-      <pre class="language-dart"><code class="language-dart">const DateTimePicker(
-    {Key key,
-    this.labelText,
-    this.selectedDate,
-    this.selectedTime,
-    this.selectDate,
-    this.selectTime})
-    : super(key: key);</code></pre>
+      <pre class="language-dart"><code class="language-dart">const DateTimePicker({
+  Key key,
+  this.labelText,
+  this.selectedDate,
+  this.selectedTime,
+  this.selectDate,
+  this.selectTime,
+  this.showDay = true,
+}) : super(key: key);</code></pre>
     </section>
 
   </div> <!-- /.main-content -->
