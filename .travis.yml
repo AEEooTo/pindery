@@ -48,4 +48,4 @@ after_success:
   - git config user.name ${DEPLOYMENT_USER}
   - git add .
   - git commit -m 'Commit with Travis CI'
-  - git push "https://${GITHUB_TOKEN}@${GH_REPO}" ${REPO}
+  - git push "https://${GITHUB_TOKEN}@${GH_REPO}" ${BRANCH}
