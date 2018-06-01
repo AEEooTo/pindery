@@ -2,12 +2,17 @@
 ///
 
 import 'package:flutter/material.dart';
+
 import '../theme.dart';
 import '../first_actions/login.dart';
 import '../first_actions/signup.dart';
+import '../user.dart';
 
 class WelcomePage extends StatelessWidget {
+  const WelcomePage({Key key, this.user}) : super(key: key);
+
   static const routeName = '/welcome-page';
+  final User user;
 
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -26,6 +31,7 @@ class WelcomePage extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 96.0),
                   child: new Container(
+                    margin: const EdgeInsets.only(bottom: 20.0),
                     height: 214.0,
                     width: 214.0,
                     decoration: new BoxDecoration(
@@ -54,7 +60,7 @@ class WelcomePage extends StatelessWidget {
                           child: new WelcomeButton(
                             text: '  LOG IN  ',
                             color: primary,
-                            widgetBuilder: (context) => new LoginPage(),
+                            widgetBuilder: (context) => new LoginPage(user: user),
                           ),
                         ),
                         Padding(
@@ -62,7 +68,7 @@ class WelcomePage extends StatelessWidget {
                           child: new WelcomeButton(
                             text: 'SIGN UP',
                             color: secondary,
-                            widgetBuilder: (context) => new SignupPage(),
+                            widgetBuilder: (context) => new SignupPage(user: user),
                           ),
                         )
                       ],

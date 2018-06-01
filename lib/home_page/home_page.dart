@@ -15,7 +15,12 @@ import '../first_actions/welcome.dart';
 /// This file contains the code for Pindery's homepage's structure.
 
 class HomePage extends StatefulWidget {
-  HomePage({this.user, this.analytics, this.observer, this.connectivity, this.homeScaffoldKey});
+  HomePage(
+      {this.user,
+      this.analytics,
+      this.observer,
+      this.connectivity,
+      this.homeScaffoldKey});
   static const routeName = '/';
 
   final User user;
@@ -27,21 +32,22 @@ class HomePage extends StatefulWidget {
 
   @override
   State<HomePage> createState() => new _HomePageState();
-
 }
 
 class _HomePageState extends State<HomePage> {
-  
   @override
   Widget build(BuildContext context) {
-    if (widget.user != null) {
+    if (widget.user.name != null) {
       return new Scaffold(
         key: widget.homeScaffoldKey,
         appBar: new AppBar(
           title: new Text(widget.title),
         ),
         drawer: new Drawer(
-          child: new PinderyDrawer(user: widget.user, previousRoute: HomePage.routeName,),
+          child: new PinderyDrawer(
+            user: widget.user,
+            previousRoute: HomePage.routeName,
+          ),
         ),
         body: new PartyCardList(
           observer: widget.observer,
@@ -52,10 +58,7 @@ class _HomePageState extends State<HomePage> {
           opacity: 1.0,
           child: new FloatingActionButton(
             onPressed: () async {
-              await Navigator.pushNamed(
-                context,
-                '/create-party'
-              );
+              await Navigator.pushNamed(context, '/create-party');
             },
             child: new Icon(Icons.add),
             heroTag: null,
@@ -63,7 +66,6 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
-      return new WelcomePage();
-
+    return new WelcomePage(user: widget.user);
   }
 }

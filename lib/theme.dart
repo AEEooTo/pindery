@@ -17,6 +17,7 @@ Color secondaryDark = const Color(0xFFB70449);
 // Functional colors 
 const Color dividerColor = const Color(0x2F000000);
 const Color inputFieldColor = const Color(0x99FFFFFF);
+const Color tileBackgroundColor = const Color(0xFFffcce6);
 
 
 ThemeData pinderyTheme = new ThemeData(
@@ -30,7 +31,6 @@ ThemeData pinderyTheme = new ThemeData(
   backgroundColor: primaryLight,
   highlightColor: secondaryLight,
   errorColor: secondaryDark,
-  splashColor: secondaryLight,
   
 );
 

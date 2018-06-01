@@ -91,37 +91,45 @@ class DrawerBlock extends StatelessWidget {
         bottom: false,
         child: new Padding(
           padding: const EdgeInsets.all(8.0),
-          child: new Container(
-            padding: const EdgeInsets.all(8.0),
-            height: 40.0,
-            decoration: new BoxDecoration(
-                borderRadius:
-                    const BorderRadius.all(const Radius.circular(6.0)),
-                color: tileColor()),
-            child: new ListTileTheme(
-              style: ListTileStyle.drawer,
-              textColor: Colors.black,
-              iconColor: const Color(0xFF757575),
-              dense: false,
-              child: new ListTile(
-                selected: (previousRoute == route),
-                leading: new Icon(icon),
-                title: new Text(
-                  data,
-                  textAlign: TextAlign.start,
-                  style: new TextStyle(
-                      fontSize: 14.0, fontWeight: FontWeight.w600),
-                ),
-                onTap: () {
-                  if (route != previousRoute) {
-                    Navigator.of(context).popUntil((ModalRoute.withName('/')));
-                    if (route != '/') {
-                      Navigator.of(context).pushNamed(route);
+          child: new InkWell(
+            splashColor: tileBackgroundColor,
+            highlightColor: tileBackgroundColor,
+            enableFeedback: true,
+            onTap: () => print('pippo'),
+            child: new Container(
+              padding: const EdgeInsets.all(8.0),
+              height: 40.0,
+              decoration: new BoxDecoration(
+                  borderRadius:
+                      const BorderRadius.all(const Radius.circular(6.0)),
+                  color: tileColor()),
+              child: new ListTileTheme(
+                style: ListTileStyle.drawer,
+                textColor: Colors.black,
+                iconColor: const Color(0xFF757575),
+                dense: false,
+                child: new ListTile(
+                  selected: (previousRoute == route),
+                  leading: new Icon(icon),
+                  title: new Text(
+                    data,
+                    textAlign: TextAlign.start,
+                    style: new TextStyle(
+                        fontSize: 14.0, fontWeight: FontWeight.w600),
+                  ),
+                  onTap: () {
+                    if (route != previousRoute) {
+                      Navigator
+                          .of(context)
+                          .popUntil((ModalRoute.withName('/')));
+                      if (route != '/') {
+                        Navigator.of(context).pushNamed(route);
+                      }
+                    } else {
+                      Navigator.pop(context);
                     }
-                  } else {
-                    Navigator.pop(context);
-                  }
-                },
+                  },
+                ),
               ),
             ),
           ),
@@ -132,7 +140,7 @@ class DrawerBlock extends StatelessWidget {
 
   Color tileColor() {
     if (route == previousRoute) {
-      return const Color(0xFFffcce6);
+      return tileBackgroundColor;
     }
     return Colors.white;
   }

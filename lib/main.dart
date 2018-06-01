@@ -11,7 +11,7 @@ void main() async {
   // visual effect at the cost of performance.
   MaterialPageRoute.debugEnableFadingRoutes =
       true; // ignore: deprecated_member_use
-  User user;
-  user = await User.userDownloader();
+  User user = new User();
+  user = await User.userDownloader(user: user);
   runApp(new Pindery(user));
 }

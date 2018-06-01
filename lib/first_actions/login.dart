@@ -19,7 +19,10 @@ String _password;
 FirebaseAuth _auth = FirebaseAuth.instance;
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({Key key, this.user}) : super(key: key);
+
   static const routeName = '/login-page';
+  final User user;
 
   @override
   _LoginPageState createState() => new _LoginPageState();
@@ -99,6 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                                       text: '  LOGIN  ',
                                       color: primary,
                                       formKey: formKey,
+                                      user: widget.user,
                                     ),
                                   ),
                                   // TODO: add forgot password
@@ -120,23 +124,33 @@ class _LoginPageState extends State<LoginPage> {
   }
 }
 
-class LogInButton extends StatelessWidget {
-  LogInButton({this.text, this.color, this.formKey});
+class LogInButton extends StatefulWidget {
+  LogInButton({this.text, this.color, this.formKey, this.user});
 
   final String text;
   final Color color;
   final formKey;
+  final User user;
 
+  @override
+  State<LogInButton> createState() => new _LogInButtonState(user);
+}
+
+class _LogInButtonState extends State<LogInButton> {
+  _LogInButtonState(this.user);
+  User user;
+
+  @override
   Widget build(BuildContext context) {
     return new RaisedButton(
       padding: EdgeInsets.symmetric(horizontal: 100.0),
-      color: color,
+      color: widget.color,
       child: new Text(
-        text,
+        widget.text,
         style: new TextStyle(color: Colors.white),
       ),
       onPressed: () {
-        final formState = formKey.currentState;
+        final formState = widget.formKey.currentState;
         if (formState.validate()) {
           formState.save();
           _handleLogin(context);
@@ -151,12 +165,8 @@ class LogInButton extends StatelessWidget {
         .push(new MaterialPageRoute(builder: (context) => new LoggingInPage()));
     bool resultGood = await _trulyHandleLogin(_auth, context);
     if (resultGood) {
-      User user = await User.userDownloader();
-      Navigator.of(context).pushAndRemoveUntil(
-          new MaterialPageRoute(
-            settings: new RouteSettings(name: '/'),
-            builder: (_) => new HomePage(user: user),
-          ), (_) => false);
+      user = await User.userDownloader(user: user);
+      Navigator.of(context).pushNamedAndRemoveUntil('/', (_) => false);
     } else {
       Navigator.pop(context);
       Scaffold.of(context).showSnackBar(new SnackBar(

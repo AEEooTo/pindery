@@ -10,7 +10,6 @@ import 'theme.dart';
 import 'user.dart';
 import 'utils.dart';
 import 'drawer.dart';
-import 'first_actions/welcome.dart';
 
 class SettingsPage extends StatelessWidget {
   SettingsPage({this.user});
@@ -95,18 +94,23 @@ class SettingsPage extends StatelessWidget {
           applicationVersion: '0.0.1-alpha0',
           applicationLegalese: 'By AEEooTo',
           icon: new Icon(Icons.info, color: Colors.white,),
+          applicationIcon: new Container(
+            height: 50.0,
+            width: 50.0,
+            child: Image.asset('assets/img/logo_v_2_rosso.png')
+            ),
         ),
         new ListTile(
           leading: new Icon(
             Icons.exit_to_app,
             color: Colors.white,
           ),
-          title: new Text('Logout'),
+          title: new Text('Log Out'),
           onTap: () async {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => new SigninOutPage()));
             await FirebaseAuth.instance.signOut();
-            Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (_) => new WelcomePage()), (_) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil('/welcome-page', (_) => false);
           },
         )
       ]),
@@ -123,10 +127,6 @@ class SettingsBlock extends StatelessWidget {
 
   Widget build(BuildContext context) {
     return new Container(
-      height: 60.0,
-      padding: const EdgeInsets.symmetric(vertical: 16.0),
-      decoration: new BoxDecoration(
-          border: new Border(bottom: new BorderSide(color: dividerColor))),
       child: new DefaultTextStyle(
         style: Theme.of(context).textTheme.subhead,
         child: new SafeArea(

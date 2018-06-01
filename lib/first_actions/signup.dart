@@ -35,6 +35,9 @@ final GlobalKey<FormState> formKey = new GlobalKey<FormState>();
 enum Choose { gallery, camera }
 
 class SignupPage extends StatefulWidget {
+  const SignupPage({Key key, this.user}) : super(key: key);
+
+  final User user;
   static final routeName = '/login-page';
 
   @override
@@ -141,6 +144,7 @@ class _SignUpPageState extends State<SignupPage> {
                                 text: '  SIGN UP  ',
                                 color: secondary,
                                 formKey: formKey,
+                                user: widget.user,
                               ),
                             ),
                           ],
@@ -158,25 +162,35 @@ class _SignUpPageState extends State<SignupPage> {
   }
 }
 
-class SignUpButton extends StatelessWidget {
-  SignUpButton({this.text, this.color, this.formKey});
+class SignUpButton extends StatefulWidget {
+  SignUpButton({this.text, this.color, this.formKey, this.user});
 
   final String text;
   final Color color;
   final GlobalKey<FormState> formKey;
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final User user;
+
+  @override
+  State<SignUpButton> createState() => new _SignUpButtonState(user);
+}
+
+class _SignUpButtonState extends State<SignUpButton> {
+  _SignUpButtonState(this.user);
+
+  User user;
 
   Widget build(BuildContext context) {
     print("inizio build : " + _email.toString());
     return new RaisedButton(
       padding: EdgeInsets.symmetric(horizontal: 100.0),
-      color: color,
+      color: widget.color,
       child: new Text(
-        text,
+        widget.text,
         style: new TextStyle(color: Colors.white, fontWeight: FontWeight.w800),
       ),
       onPressed: () async {
-        final FormState formState = formKey.currentState;
+        final FormState formState = widget.formKey.currentState;
         formState.save();
         // TODO: add a decent controller, pls
         if (_confirmPasswordController.text == _passwordController.text) {
@@ -198,17 +212,13 @@ class SignUpButton extends StatelessWidget {
     Navigator
         .of(context)
         .push(new MaterialPageRoute(builder: (context) => new SigningUpPage()));
-    await _trulyHandleSignUp(firebaseAuth, context).then((e) async {
+    await _trulyHandleSignUp(widget.firebaseAuth, context).then((e) async {
       if (result) {
         imageLocalPath = null;
+        user = await User.userDownloader(user: user);
+        Navigator.of(context).pushNamedAndRemoveUntil('/', (_) => false);
+
         clearForm();
-        User user = await User.userDownloader();
-        Navigator.of(context).pushAndRemoveUntil(
-            new MaterialPageRoute(
-              settings: new RouteSettings(name: '/'),
-              builder: (_) => new HomePage(user: user),
-            ),
-            (_) => false);
       }
     }).catchError(_handleError('Auth error', context),
         test: (e) => e is AuthUploadException);
@@ -227,7 +237,7 @@ class SignUpButton extends StatelessWidget {
   }
 
   void clearForm() {
-    final FormState formState = formKey.currentState;
+    final FormState formState = widget.formKey.currentState;
     formState.reset();
     nameController.clear();
     surnameController.clear();

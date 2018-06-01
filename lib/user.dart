@@ -12,7 +12,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 class User {
   User({this.email, this.name, this.surname, this.profilePictureUrl, this.uid});
 
-  User.fromFirestore(DocumentSnapshot snapshot) {
+  void fromFirestore(DocumentSnapshot snapshot) {
     email = snapshot['email'];
     name = snapshot['name'];
     surname = snapshot['surname'];
@@ -20,21 +20,20 @@ class User {
     uid = snapshot['uid'];
   }
 
-  static Future<User> userDownloader([String uid]) async {
-    User user;
+  static Future<User> userDownloader({User user, String uid}) async {
+    user ??= new User();
     if (uid == null) {
       FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
-      uid = firebaseUser.uid;
       if (firebaseUser == null) {
-        return null;
+        return user;
       }
+      uid = firebaseUser.uid;
     }
-      DocumentReference userReference = Firestore.instance
-          .collection(User.usersDbPath)
-          .document(uid);
-      // TODO: catch exceptions
-      DocumentSnapshot userOnDb = await userReference.get();
-      user = new User.fromFirestore(userOnDb);
+    DocumentReference userReference =
+        Firestore.instance.collection(User.usersDbPath).document(uid);
+    // TODO: catch exceptions
+    DocumentSnapshot userOnDb = await userReference.get();
+    user.fromFirestore(userOnDb);
     return user;
   }
 

@@ -8,7 +8,6 @@ import 'dart:async';
 
 // Internal imports
 import 'party.dart';
-import 'drawer.dart';
 import 'theme.dart';
 import 'party_choosing/take_part_page.dart';
 import 'privacy.dart';
@@ -150,23 +149,6 @@ class BlackPartyHeader extends StatelessWidget {
         future: _getOrganiser,
         initialData: new User(name: '', surname: ''),
         builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-          if (!snapshot.hasData) {
-            return new Container(
-              margin: new EdgeInsets.all(16.0),
-              child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  new Text('Loading...', style: new TextStyle(color: primaryDark),),
-                  new Container(
-                    height: 2.0,
-                    margin: new EdgeInsets.all(16.0),
-                    child: new LinearProgressIndicator(),
-                  )
-                ],
-              ),
-            );
-          }
           party.organiser = snapshot.data;
           return new Container(
             decoration: new BoxDecoration(
@@ -230,10 +212,11 @@ class BlackPartyHeader extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context).push(
                                 MaterialPageRoute(
-                                    builder: (context) => new TakePartPage(
-                                          party: party,
-                                          homeScaffoldKey: homeScaffoldKey,
-                                        )),
+                                  builder: (context) => new TakePartPage(
+                                        party: party,
+                                        homeScaffoldKey: homeScaffoldKey,
+                                      ),
+                                ),
                               );
                         },
                         child: new Icon(Icons.local_bar),
@@ -251,11 +234,10 @@ class BlackPartyHeader extends StatelessWidget {
     if (organiserUid == null) {
       return new User(name: 'Not an', surname: 'Organiser NaO');
     }
-    debugPrint("We have $organiserUid");
-    return await User.userDownloader(organiserUid);
+    return await User.userDownloader(uid: organiserUid);
   }
 
-  int ratingmethod(int rating) {
+  int ratingMethod(int rating) {
     if (rating == 1) {}
     return 1;
   }
