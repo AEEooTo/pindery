@@ -42,9 +42,10 @@
       <li class="section-title"><a href="first_actions_welcome/WelcomePage-class.html#constructors">Constructors</a></li>
       <li><a href="first_actions_welcome/WelcomePage/WelcomePage.html">WelcomePage</a></li>
     
-      <li class="section-title inherited">
+      <li class="section-title">
         <a href="first_actions_welcome/WelcomePage-class.html#instance-properties">Properties</a>
       </li>
+      <li><a href="first_actions_welcome/WelcomePage/user.html">user</a></li>
       <li class="inherited"><a href="first_actions_welcome/WelcomePage/hashCode.html">hashCode</a></li>
       <li class="inherited"><a href="first_actions_welcome/WelcomePage/key.html">key</a></li>
       <li class="inherited"><a href="first_actions_welcome/WelcomePage/runtimeType.html">runtimeType</a></li>
@@ -125,6 +126,7 @@ and</li><li>any ambient state obtained from the <code>context</code> using
               Padding(
                 padding: const EdgeInsets.only(top: 96.0),
                 child: new Container(
+                  margin: const EdgeInsets.only(bottom: 20.0),
                   height: 214.0,
                   width: 214.0,
                   decoration: new BoxDecoration(
@@ -153,7 +155,7 @@ and</li><li>any ambient state obtained from the <code>context</code> using
                         child: new WelcomeButton(
                           text: &#39;  LOG IN  &#39;,
                           color: primary,
-                          widgetBuilder: (context) =&gt; new LoginPage(),
+                          widgetBuilder: (context) =&gt; new LoginPage(user: user),
                         ),
                       ),
                       Padding(
@@ -161,7 +163,7 @@ and</li><li>any ambient state obtained from the <code>context</code> using
                         child: new WelcomeButton(
                           text: &#39;SIGN UP&#39;,
                           color: secondary,
-                          widgetBuilder: (context) =&gt; new SignupPage(),
+                          widgetBuilder: (context) =&gt; new SignupPage(user: user),
                         ),
                       )
                     ],

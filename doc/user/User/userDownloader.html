@@ -41,7 +41,6 @@
     <ol>
       <li class="section-title"><a href="user/User-class.html#constructors">Constructors</a></li>
       <li><a href="user/User/User.html">User</a></li>
-      <li><a href="user/User/User.fromFirestore.html">fromFirestore</a></li>
     
       <li class="section-title">
         <a href="user/User-class.html#instance-properties">Properties</a>
@@ -60,6 +59,7 @@
       <li class="inherited"><a href="user/User/runtimeType.html">runtimeType</a></li>
     
       <li class="section-title"><a href="user/User-class.html#instance-methods">Methods</a></li>
+      <li><a href="user/User/fromFirestore.html">fromFirestore</a></li>
       <li><a href="user/User/sendUser.html">sendUser</a></li>
       <li class="inherited"><a href="user/User/noSuchMethod.html">noSuchMethod</a></li>
       <li class="inherited"><a href="user/User/toString.html">toString</a></li>
@@ -82,26 +82,27 @@
     <section class="multi-line-signature">
       <span class="returntype">Future<span class="signature">&lt;<wbr><span class="type-parameter"><a href="user/User-class.html">User</a></span>&gt;</span></span>
       <span class="name ">userDownloader</span>
-(<wbr>[<span class="parameter" id="userDownloader-param-uid"><span class="type-annotation">String</span> <span class="parameter-name">uid</span></span> ])
+(<wbr>{<span class="parameter" id="userDownloader-param-user"><span class="type-annotation"><a href="user/User-class.html">User</a></span> <span class="parameter-name">user</span>, </span> <span class="parameter" id="userDownloader-param-uid"><span class="type-annotation">String</span> <span class="parameter-name">uid</span></span> })
     </section>
     
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span> </h2>
-      <pre class="language-dart"><code class="language-dart">static Future&lt;User&gt; userDownloader([String uid]) async {
-  User user;
+      <pre class="language-dart"><code class="language-dart">static Future&lt;User&gt; userDownloader({User user, String uid}) async {
+  if (user == null) {
+    user = new User();
+  }
   if (uid == null) {
     FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
-    uid = firebaseUser.uid;
     if (firebaseUser == null) {
       return null;
     }
+    uid = firebaseUser.uid;
   }
-    DocumentReference userReference = Firestore.instance
-        .collection(User.usersDbPath)
-        .document(uid);
-    &#47;&#47; TODO: catch exceptions
-    DocumentSnapshot userOnDb = await userReference.get();
-    user = new User.fromFirestore(userOnDb);
+  DocumentReference userReference =
+      Firestore.instance.collection(User.usersDbPath).document(uid);
+  &#47;&#47; TODO: catch exceptions
+  DocumentSnapshot userOnDb = await userReference.get();
+  user.fromFirestore(userOnDb);
   return user;
 }</code></pre>
     </section>

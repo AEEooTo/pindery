@@ -190,18 +190,23 @@ Widget build(BuildContext context) {
         applicationVersion: &#39;0.0.1-alpha0&#39;,
         applicationLegalese: &#39;By AEEooTo&#39;,
         icon: new Icon(Icons.info, color: Colors.white,),
+        applicationIcon: new Container(
+          height: 50.0,
+          width: 50.0,
+          child: Image.asset(&#39;assets&#47;img&#47;logo_v_2_rosso.png&#39;)
+          ),
       ),
       new ListTile(
         leading: new Icon(
           Icons.exit_to_app,
           color: Colors.white,
         ),
-        title: new Text(&#39;Logout&#39;),
+        title: new Text(&#39;Log Out&#39;),
         onTap: () async {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) =&gt; new SigninOutPage()));
           await FirebaseAuth.instance.signOut();
-          Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(builder: (_) =&gt; new WelcomePage()), (_) =&gt; false);
+          Navigator.of(context).pushNamedAndRemoveUntil(&#39;&#47;welcome-page&#39;, (_) =&gt; false);
         },
       )
     ]),

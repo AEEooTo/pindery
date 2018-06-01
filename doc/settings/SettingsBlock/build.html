@@ -111,10 +111,6 @@ and</li><li>any ambient state obtained from the <code>context</code> using
       <h2><span>Implementation</span> </h2>
       <pre class="language-dart"><code class="language-dart">Widget build(BuildContext context) {
   return new Container(
-    height: 60.0,
-    padding: const EdgeInsets.symmetric(vertical: 16.0),
-    decoration: new BoxDecoration(
-        border: new Border(bottom: new BorderSide(color: dividerColor))),
     child: new DefaultTextStyle(
       style: Theme.of(context).textTheme.subhead,
       child: new SafeArea(
