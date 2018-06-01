@@ -29,7 +29,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
   final GlobalKey<ScaffoldState> homeScaffoldKey;
 
   // keys
-  final GlobalKey scaffoldKey = new GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
   final formKey = new GlobalKey<FormState>();
 
   // To be filled party instance
@@ -44,9 +44,11 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
 
   // DateTime variables
   DateTime _fromDate = new DateTime.now();
-  TimeOfDay _fromTime = const TimeOfDay(hour: 21, minute: 00);
+  TimeOfDay _fromTime = new TimeOfDay(
+      hour: new DateTime.now().hour, minute: new DateTime.now().minute);
   DateTime _toDate = new DateTime.now();
-  TimeOfDay _toTime = const TimeOfDay(hour: 00, minute: 00);
+  TimeOfDay _toTime = new TimeOfDay(
+      hour: new DateTime.now().hour, minute: (new DateTime.now().minute + 1));
 
   // bool to check if the process was cancelled
   bool cancelled = false;
@@ -170,6 +172,7 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                                     _toTime = time;
                                   });
                                 },
+                                showDay: false,
                               ),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -243,9 +246,18 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
                         style: new TextStyle(color: Colors.white),
                       ),
                       onPressed: () {
-                        formKey.currentState.validate() && party.localImageFile != null
-                          ? _handleSubmitted()
-                          : null;
+                        if (formKey.currentState.validate() &&
+                            party.localImageFile != null && _checkTime()) {
+                          _handleSubmitted();
+                        } else if (party.localImageFile == null) {
+                          scaffoldKey.currentState.showSnackBar(new SnackBar(
+                              content: new Text(
+                                  'The picture is missing!11!1')));
+                        } else if (!_checkTime()) {
+                          scaffoldKey.currentState.showSnackBar(new SnackBar(
+                              content: new Text(
+                                  'How can that be the time of the party?!')));
+                        }
                       },
                     ),
                   ),
@@ -282,5 +294,12 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     party.toDayTime = dateTimeParser(_toTime, _toDate);
     party.privacy = new Privacy();
     party.privacy.type = _allPrivacyOptions.indexOf(_privacyOption);
+  }
+
+  bool _checkTime() {
+    return _fromTime.hour > new DateTime.now().hour
+        && _fromTime.minute > new DateTime.now().minute
+        && _toTime.hour > _fromTime.hour
+        && _toTime.minute > _fromTime.minute;
   }
 }

@@ -60,7 +60,8 @@ class PartyImageContainerState extends State<PartyImageContainer> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 new Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 0.0, vertical: 8.0),
                   child: new IconButton(
                     icon: new Icon(
                       Icons.photo,
@@ -76,7 +77,8 @@ class PartyImageContainerState extends State<PartyImageContainer> {
                   ),
                 ),
                 new Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 0.0, vertical: 8.0),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 0.0, vertical: 8.0),
                   child: new IconButton(
                     icon: new Icon(
                       Icons.camera,
@@ -110,20 +112,22 @@ class PartyImageContainerState extends State<PartyImageContainer> {
 
 /// DateTime picker object, used to create a DateTime picker
 class DateTimePicker extends StatelessWidget {
-  const DateTimePicker(
-      {Key key,
-      this.labelText,
-      this.selectedDate,
-      this.selectedTime,
-      this.selectDate,
-      this.selectTime})
-      : super(key: key);
+  const DateTimePicker({
+    Key key,
+    this.labelText,
+    this.selectedDate,
+    this.selectedTime,
+    this.selectDate,
+    this.selectTime,
+    this.showDay = true,
+  }) : super(key: key);
 
   final String labelText;
   final DateTime selectedDate;
   final TimeOfDay selectedTime;
   final ValueChanged<DateTime> selectDate;
   final ValueChanged<TimeOfDay> selectTime;
+  final bool showDay;
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -143,10 +147,20 @@ class DateTimePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle valueStyle = Theme.of(context).textTheme.title;
     return new Row(
       crossAxisAlignment: CrossAxisAlignment.end,
-      children: <Widget>[
+      children: _dateTimeChildren(context),
+    );
+  }
+
+  List<Widget> _dateTimeChildren(BuildContext context) {
+    final TextStyle valueStyle = Theme
+        .of(context)
+        .textTheme
+        .title;
+    List<Widget> children = <Widget>[];
+    if (showDay == true) {
+      children.add(
         new Expanded(
           flex: 4,
           child: new InputDropdown(
@@ -158,19 +172,35 @@ class DateTimePicker extends StatelessWidget {
             },
           ),
         ),
-        const SizedBox(width: 12.0),
-        new Expanded(
-          flex: 3,
-          child: new InputDropdown(
-            valueText: selectedTime.format(context),
-            valueStyle: valueStyle,
-            onPressed: () {
-              _selectTime(context);
-            },
-          ),
+      );
+    } else {
+      children.add(new Expanded(
+        flex: 4,
+        child: new Container(),
+      ));
+    }
+    children.add(const SizedBox(width: 12.0));
+    children.add(
+      new Expanded(
+        flex: 3,
+        child: new InputDropdown(
+          labelText: _timeLabelText(),
+          valueText: selectedTime.format(context),
+          valueStyle: valueStyle,
+          onPressed: () {
+            _selectTime(context);
+          },
         ),
-      ],
+      ),
     );
+    return children;
+  }
+
+  String _timeLabelText() {
+    if (showDay == true) {
+      return '';
+    }
+    return labelText;
   }
 }
 
