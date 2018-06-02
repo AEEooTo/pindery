@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://firebasestorage.googleapis.com/v0/b/pindery-7cf58.appspot.com/o/ic_launcher.png?alt=media&token=f7abc09d-d56c-4229-b614-f3d7beca5a10"/>
+  <img src="https://raw.githubusercontent.com/AEEooTo/pindery/gh-pages/img/logo.png"/>
 </p>
 
 # Pindery
