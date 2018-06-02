@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="API docs for the handleParticipation method from the Party class, for the Dart programming language.">
+  <title>handleParticipation method - Party class - party library - Dart API</title>
+  <!-- required because all the links are pseudo-absolute -->
+  <base href="../..">
+
+  <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500,400i,400,300|Source+Sans+Pro:400,300,700" rel="stylesheet">
+  <link rel="stylesheet" href="static-assets/github.css">
+  <link rel="stylesheet" href="static-assets/styles.css">
+  <link rel="icon" href="static-assets/favicon.png">
+
+</head>
+
+<body>
+
+<div id="overlay-under-drawer"></div>
+
+<header id="title">
+  <button id="sidenav-left-toggle" type="button">&nbsp;</button>
+  <ol class="breadcrumbs gt-separated dark hidden-xs">
+    <li><a href="index.html">pindery</a></li>
+    <li><a href="party/party-library.html">party</a></li>
+    <li><a href="party/Party-class.html">Party</a></li>
+    <li class="self-crumb">handleParticipation method</li>
+  </ol>
+  <div class="self-name">handleParticipation</div>
+  <form class="search navbar-right" role="search">
+    <input type="text" id="search-box" autocomplete="off" disabled class="form-control typeahead" placeholder="Loading search...">
+  </form>
+</header>
+
+<main>
+
+  <div class="col-xs-6 col-sm-3 col-md-2 sidebar sidebar-offcanvas-left">
+    <h5>Party class</h5>
+    <ol>
+      <li class="section-title"><a href="party/Party-class.html#constructors">Constructors</a></li>
+      <li><a href="party/Party/Party.html">Party</a></li>
+      <li><a href="party/Party/Party.fromSnapshot.html">fromSnapshot</a></li>
+    
+      <li class="section-title">
+        <a href="party/Party-class.html#instance-properties">Properties</a>
+      </li>
+      <li><a href="party/Party/catalogue.html">catalogue</a></li>
+      <li><a href="party/Party/description.html">description</a></li>
+      <li><a href="party/Party/fromDayTime.html">fromDayTime</a></li>
+      <li><a href="party/Party/id.html">id</a></li>
+      <li><a href="party/Party/imageUrl.html">imageUrl</a></li>
+      <li><a href="party/Party/localImageFile.html">localImageFile</a></li>
+      <li><a href="party/Party/maxPeople.html">maxPeople</a></li>
+      <li><a href="party/Party/name.html">name</a></li>
+      <li><a href="party/Party/organiser.html">organiser</a></li>
+      <li><a href="party/Party/organiserUid.html">organiserUid</a></li>
+      <li><a href="party/Party/pinderPoints.html">pinderPoints</a></li>
+      <li><a href="party/Party/place.html">place</a></li>
+      <li><a href="party/Party/privacy.html">privacy</a></li>
+      <li><a href="party/Party/rating.html">rating</a></li>
+      <li><a href="party/Party/ratingNumber.html">ratingNumber</a></li>
+      <li><a href="party/Party/toDayTime.html">toDayTime</a></li>
+      <li class="inherited"><a href="party/Party/hashCode.html">hashCode</a></li>
+      <li class="inherited"><a href="party/Party/runtimeType.html">runtimeType</a></li>
+    
+      <li class="section-title"><a href="party/Party-class.html#instance-methods">Methods</a></li>
+      <li><a href="party/Party/addNewParty.html">addNewParty</a></li>
+      <li><a href="party/Party/handleParticipation.html">handleParticipation</a></li>
+      <li><a href="party/Party/uploadImage.html">uploadImage</a></li>
+      <li class="inherited"><a href="party/Party/noSuchMethod.html">noSuchMethod</a></li>
+      <li class="inherited"><a href="party/Party/toString.html">toString</a></li>
+    
+      <li class="section-title inherited"><a href="party/Party-class.html#operators">Operators</a></li>
+      <li class="inherited"><a href="party/Party/operator_equals.html">operator ==</a></li>
+    
+    
+    
+      <li class="section-title"><a href="party/Party-class.html#constants">Constants</a></li>
+      <li><a href="party/Party/city-constant.html">city</a></li>
+    </ol>
+  </div><!--/.sidebar-offcanvas-->
+
+  <div class="col-xs-12 col-sm-9 col-md-8 main-content">
+    <h1>handleParticipation method</h1>
+
+    <section class="multi-line-signature">
+      <span class="returntype">Future<span class="signature">&lt;<wbr><span class="type-parameter">Null</span>&gt;</span></span>
+      <span class="name ">handleParticipation</span>
+(<wbr>)
+    </section>
+    <section class="desc markdown">
+      <p>Handles the participation to the party, updating the catalogue
+(adding the number of stuff that the participant is going to bring).
+TODO: In the future it will even handle the participants' profiles.</p>
+    </section>
+    
+    <section class="summary source-code" id="source">
+      <h2><span>Implementation</span> </h2>
+      <pre class="language-dart"><code class="language-dart">Future&lt;Null&gt; handleParticipation() async {
+  print(&#39;Handling participation&#39;);
+  Party party = await _getPartyFromFirestore(id);
+  print(&#39;\nIn handleParticipation the local catalogue is:&#39;);
+  catalogue.printCatalogue();
+  party.catalogue.update(catalogue);
+  print(&#39;\nAfter update:&#39;);
+  party.catalogue.printCatalogue();
+  await party._updateParty();
+  print(&#39;Done, theoretically&#39;);
+}</code></pre>
+    </section>
+
+  </div> <!-- /.main-content -->
+
+  <div class="col-xs-6 col-sm-6 col-md-2 sidebar sidebar-offcanvas-right">
+  </div><!--/.sidebar-offcanvas-->
+
+</main>
+
+<footer>
+  <span class="no-break">
+    pindery 0.0.1-alpha0
+  </span>
+
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="static-assets/typeahead.bundle.min.js"></script>
+<script src="static-assets/highlight.pack.js"></script>
+<script src="static-assets/URI.js"></script>
+<script src="static-assets/script.js"></script>
+
+
+</body>
+
+</html>
