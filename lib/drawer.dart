@@ -72,6 +72,7 @@ class PinderyDrawer extends StatelessWidget {
   }
 }
 
+/// A block for the drawer
 class DrawerBlock extends StatelessWidget {
   DrawerBlock(
       {this.data, this.icon, this.route, this.drawerKey, this.previousRoute});
