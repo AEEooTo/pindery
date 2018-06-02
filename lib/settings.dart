@@ -110,7 +110,7 @@ class SettingsPage extends StatelessWidget {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => new SigninOutPage()));
             await FirebaseAuth.instance.signOut();
-            Navigator.of(context).pushNamedAndRemoveUntil('/welcome-page', (_) => false);
+            Navigator.of(context).pushNamedAndRemoveUntil('/welcome', (_) => false);
           },
         )
       ]),

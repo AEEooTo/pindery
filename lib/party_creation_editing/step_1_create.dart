@@ -292,10 +292,10 @@ class _CreatePartyPageState extends State<CreatePartyPage> {
     party.privacy.type = _allPrivacyOptions.indexOf(_privacyOption);
   }
 
-  bool _checkTime() {
+  /* bool _checkTime() {
     return _fromTime.hour > new DateTime.now().hour
         && _fromTime.minute > new DateTime.now().minute
         && _toTime.hour > _fromTime.hour
         && _toTime.minute > _fromTime.minute;
-  }
+  } */
 }

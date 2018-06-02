@@ -4,15 +4,11 @@
 import 'package:flutter/material.dart';
 
 import '../theme.dart';
-import '../first_actions/login.dart';
-import '../first_actions/signup.dart';
-import '../user.dart';
 
 class WelcomePage extends StatelessWidget {
-  const WelcomePage({Key key, this.user}) : super(key: key);
+  const WelcomePage({Key key}) : super(key: key);
 
-  static const routeName = '/welcome-page';
-  final User user;
+  static const routeName = '/welcome';
 
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -60,7 +56,7 @@ class WelcomePage extends StatelessWidget {
                           child: new WelcomeButton(
                             text: '  LOG IN  ',
                             color: primary,
-                            widgetBuilder: (context) => new LoginPage(user: user),
+                            route: '/login',
                           ),
                         ),
                         Padding(
@@ -68,7 +64,7 @@ class WelcomePage extends StatelessWidget {
                           child: new WelcomeButton(
                             text: 'SIGN UP',
                             color: secondary,
-                            widgetBuilder: (context) => new SignupPage(user: user),
+                            route: '/signup',
                           ),
                         )
                       ],
@@ -81,11 +77,11 @@ class WelcomePage extends StatelessWidget {
 }
 
 class WelcomeButton extends StatelessWidget {
-  WelcomeButton({this.text, this.color, this.widgetBuilder});
+  WelcomeButton({this.text, this.color, this.route});
 
   final String text;
   final Color color;
-  final WidgetBuilder widgetBuilder;
+  final String route;
 
   Widget build(BuildContext context) {
     return new RaisedButton(
@@ -96,10 +92,7 @@ class WelcomeButton extends StatelessWidget {
         style: new TextStyle(color: Colors.white),
       ),
       onPressed: () {
-        Navigator.push(
-          context,
-          new MaterialPageRoute(builder: widgetBuilder),
-        );
+        Navigator.of(context).pushNamed(route);
       },
     );
   }

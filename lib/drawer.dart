@@ -15,23 +15,35 @@ class PinderyDrawer extends StatelessWidget {
   PinderyDrawer({this.user, this.previousRoute});
   static const String coverImagePath = "assets/img/movingParty.jpeg";
 
+  /// The route of the page on which the drawer was openes
   final String previousRoute;
+
+  /// The user, used for the drawer's header
   final User user;
   final GlobalKey<DrawerControllerState> drawerKey =
       new GlobalKey<DrawerControllerState>();
 
+  /// The elements of the drawer
+  static const List<Map<String, dynamic>> _drawerContents = const [
+    {'icon': Icons.star, 'data': 'Parties', 'route': '/'},
+    {'icon': Icons.face, 'data': 'My Parties', 'route': 'null'},
+    {'icon': Icons.settings, 'data': 'Settings', 'route': '/settings'},
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return new Drawer(
-      key: drawerKey,
-      child: new Container(
-        decoration: new BoxDecoration(
-          color: Colors.white,
-        ),
+    return new Theme(
+      data: new ThemeData(
+          brightness: Brightness.light,
+          accentColor: secondary,
+          primaryColor: secondary,
+          splashColor: tileBackgroundColor,
+          selectedRowColor: tileBackgroundColor),
+      child: new Drawer(
+        key: drawerKey,
         child: new Column(
           children: <Widget>[
             new UserAccountsDrawerHeader(
-              margin: null,
               accountName: new Text('${user.name} ${user.surname}'),
               accountEmail: new Text(user.email),
               currentAccountPicture: new PinderyCircleAvatar(user: user),
@@ -41,30 +53,17 @@ class PinderyDrawer extends StatelessWidget {
               ),
             ),
             new Column(
-              children: <Widget>[
-                // TODO: understand how to make the drawer close is the user is already on the selected page
-                new DrawerBlock(
-                  icon: Icons.star,
-                  data: 'Parties',
-                  route: '/',
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: _drawerContents.map((Map<String, dynamic> contents) {
+                return new DrawerBlock(
+                  data: contents['data'],
+                  icon: contents['icon'],
+                  route: contents['route'],
                   drawerKey: drawerKey,
                   previousRoute: previousRoute,
-                ),
-                new DrawerBlock(
-                  icon: Icons.face,
-                  data: 'My parties',
-                  // widgetBuilder: (context) => new WelcomePage(),
-                  drawerKey: drawerKey,
-                  previousRoute: previousRoute,
-                ),
-                new DrawerBlock(
-                  icon: Icons.settings,
-                  data: 'Settings',
-                  route: '/settings',
-                  drawerKey: drawerKey,
-                  previousRoute: previousRoute,
-                ),
-              ],
+                );
+              }).toList(),
             ),
           ],
         ),
@@ -84,64 +83,30 @@ class DrawerBlock extends StatelessWidget {
   final String previousRoute;
 
   Widget build(BuildContext context) {
-    return new DefaultTextStyle(
-      style: Theme.of(context).textTheme.subhead,
-      child: new SafeArea(
-        top: false,
-        bottom: false,
-        child: new Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: new InkWell(
-            splashColor: tileBackgroundColor,
-            highlightColor: tileBackgroundColor,
-            enableFeedback: true,
-            onTap: () => print('pippo'),
-            child: new Container(
-              padding: const EdgeInsets.all(8.0),
-              height: 40.0,
-              decoration: new BoxDecoration(
-                  borderRadius:
-                      const BorderRadius.all(const Radius.circular(6.0)),
-                  color: tileColor()),
-              child: new ListTileTheme(
-                style: ListTileStyle.drawer,
-                textColor: Colors.black,
-                iconColor: const Color(0xFF757575),
-                dense: false,
-                child: new ListTile(
-                  selected: (previousRoute == route),
-                  leading: new Icon(icon),
-                  title: new Text(
-                    data,
-                    textAlign: TextAlign.start,
-                    style: new TextStyle(
-                        fontSize: 14.0, fontWeight: FontWeight.w600),
-                  ),
-                  onTap: () {
-                    if (route != previousRoute) {
-                      Navigator
-                          .of(context)
-                          .popUntil((ModalRoute.withName('/')));
-                      if (route != '/') {
-                        Navigator.of(context).pushNamed(route);
-                      }
-                    } else {
-                      Navigator.pop(context);
-                    }
-                  },
-                ),
-              ),
-            ),
-          ),
+    return new ListTileTheme(
+      style: ListTileStyle.drawer,
+      textColor: Colors.black,
+      iconColor: const Color(0xFF757575),
+      dense: false,
+      child: new ListTile(
+        selected: (previousRoute == route),
+        leading: new Icon(icon),
+        title: new Text(
+          data,
+          textAlign: TextAlign.start,
+          style: new TextStyle(fontSize: 14.0, fontWeight: FontWeight.w600),
         ),
+        onTap: () {
+          if (route != previousRoute) {
+            Navigator.popUntil(context, ModalRoute.withName('/'));
+            if (route != '/') {
+              Navigator.pushNamed(context, route);
+            }
+          } else {
+            Navigator.pop(context);
+          }
+        },
       ),
     );
-  }
-
-  Color tileColor() {
-    if (route == previousRoute) {
-      return tileBackgroundColor;
-    }
-    return Colors.white;
   }
 }

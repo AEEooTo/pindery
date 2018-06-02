@@ -2,12 +2,14 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
 
 import 'theme.dart';
-import 'home_page/home_page.dart';
+import 'home_page/home_page.dart' show HomePage;
 import 'party_creation_editing/step_1_create.dart';
 import 'user.dart';
-import 'drawer.dart';
-import 'settings.dart';
-import 'first_actions/welcome.dart';
+import 'drawer.dart' show PinderyDrawer;
+import 'settings.dart' show SettingsPage;
+import 'first_actions/welcome.dart' show WelcomePage;
+import 'first_actions/login.dart' show LoginPage;
+import 'first_actions/signup.dart' show SignupPage;
 
 ///
 /// The pindery application
@@ -39,7 +41,9 @@ class Pindery extends StatelessWidget {
             new CreatePartyPage(homeScaffoldKey, user.uid),
         '/drawer': (BuildContext context) => new PinderyDrawer(user: user),
         '/settings': (BuildContext context) => new SettingsPage(user: user),
-        '/welcome-page': (BuildContext context) => new WelcomePage(user: user),
+        '/welcome': (BuildContext context) => new WelcomePage(),
+        '/login': (BuildContext context) => new LoginPage(user: user),
+        '/signup': (BuildContext context) => new SignupPage(user: user),
       },
     );
   }

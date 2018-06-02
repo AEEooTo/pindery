@@ -36,7 +36,7 @@ class CatalogueChoosingList extends StatelessWidget {
   List<CategoryTilesBlock> categoryTilesGenerator() {
     List<CategoryTilesBlock> categoryTilesList = <CategoryTilesBlock>[];
     for (int i = 0; i < Catalogue.names.length; ++i) {
-      categoryTilesList.add(new CategoryTilesBlock(i, catalogue.catalogue[i]));
+      categoryTilesList.add(new CategoryTilesBlock(i, catalogue.catalogue[i], new Category(i)));
     }
 
     return categoryTilesList;
@@ -179,15 +179,11 @@ class CatalogueTile extends StatelessWidget {
 }
 
 class CategoryTilesBlock extends StatelessWidget {
-  CategoryTilesBlock(int index, List<CatalogueElement> catalogue) {
-    this.index = index;
-    this.catalogue = catalogue;
-    this.category = new Category(index);
-  }
+  CategoryTilesBlock(this.index,this.catalogue, this.category);
   
-  int index;
-  Category category;
-  List<CatalogueElement> catalogue;
+  final int index;
+  final Category category;
+  final List<CatalogueElement> catalogue;
 
   @override
   Widget build(BuildContext context) {

@@ -21,6 +21,7 @@ class HomePage extends StatefulWidget {
       this.observer,
       this.connectivity,
       this.homeScaffoldKey});
+  
   static const routeName = '/';
 
   final User user;
@@ -66,6 +67,6 @@ class _HomePageState extends State<HomePage> {
         ),
       );
     }
-    return new WelcomePage(user: widget.user);
+    return new WelcomePage();
   }
 }

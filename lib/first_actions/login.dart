@@ -10,7 +10,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 import '../theme.dart';
 import '../user.dart';
-import '../home_page/home_page.dart';
 
 TextEditingController usernameController = new TextEditingController();
 TextEditingController passwordController = new TextEditingController();
@@ -31,97 +30,109 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final formKey = new GlobalKey<FormState>();
 
-  Widget build(BuildContext context) {
-    return new Theme(
-      data: new ThemeData(
-        primaryColor: primary,
-        primaryColorLight: primaryLight,
-        primaryColorDark: primaryDark,
-        accentColor: Colors.white,
-        buttonTheme: new ButtonThemeData(textTheme: ButtonTextTheme.accent),
-        brightness: Brightness.light,
-      ),
-      child: new Scaffold(
-        backgroundColor: Colors.white,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: new Form(
-            autovalidate: true,
-            child: DropdownButtonHideUnderline(
-              child: new SafeArea(
-                top: false,
-                bottom: false,
-                child: ListView(children: <Widget>[
-                  new Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      new Container(
-                        padding: const EdgeInsets.all(80.0),
-                        child: new Text(
-                          'Log In!',
-                          style: new TextStyle(
-                              fontSize: 40.0,
-                              color: secondary,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                      new Container(
-                        child: new Column(
-                          children: [
-                            new Form(
-                              key: formKey,
-                              child: new Column(
-                                children: <Widget>[
-                                  new Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 16.0),
-                                    child: new EmailField(
-                                      labelText: 'E-mail',
-                                      validator: (val) => !isEmail(val)
-                                          ? 'You must insert a valid email'
-                                          : null,
-                                      helperText: 'Insert your e-mail',
-                                      onSaved: (String value) {
-                                        _email = value;
-                                      },
-                                    ),
-                                  ),
-                                  new PasswordField(
-                                    validator: (val) => val.isEmpty
-                                        ? 'You must insert a password'
-                                        : null,
-                                    labelText: 'Password',
-                                    helperText: 'Insert your password',
-                                    onSaved: (String value) {
-                                      _password = value;
-                                    },
-                                  ),
-                                  new Padding(
-                                    padding: const EdgeInsets.only(top: 80.0),
-                                    child: new LogInButton(
-                                      text: '  LOGIN  ',
-                                      color: primary,
-                                      formKey: formKey,
-                                      user: widget.user,
-                                    ),
-                                  ),
-                                  // TODO: add forgot password
-                                ],
-                              ),
+  @override
+  void dispose() {
+    super.dispose();
+    _clearForm();
+      }
+    
+      @override
+      Widget build(BuildContext context) {
+        return new Theme(
+          data: new ThemeData(
+            primaryColor: primary,
+            primaryColorLight: primaryLight,
+            primaryColorDark: primaryDark,
+            accentColor: Colors.white,
+            buttonTheme: new ButtonThemeData(textTheme: ButtonTextTheme.accent),
+            brightness: Brightness.light,
+          ),
+          child: new Scaffold(
+            backgroundColor: Colors.white,
+            body: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: new Form(
+                autovalidate: true,
+                child: DropdownButtonHideUnderline(
+                  child: new SafeArea(
+                    top: false,
+                    bottom: false,
+                    child: ListView(children: <Widget>[
+                      new Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          new Container(
+                            padding: const EdgeInsets.all(80.0),
+                            child: new Text(
+                              'Log In!',
+                              style: new TextStyle(
+                                  fontSize: 40.0,
+                                  color: secondary,
+                                  fontWeight: FontWeight.w600),
                             ),
-                          ],
-                        ),
-                      )
-                    ],
+                          ),
+                          new Container(
+                            child: new Column(
+                              children: [
+                                new Form(
+                                  key: formKey,
+                                  child: new Column(
+                                    children: <Widget>[
+                                      new Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 16.0),
+                                        child: new EmailField(
+                                          labelText: 'E-mail',
+                                          validator: (val) => !isEmail(val)
+                                              ? 'You must insert a valid email'
+                                              : null,
+                                          helperText: 'Insert your e-mail',
+                                          onSaved: (String value) {
+                                            _email = value;
+                                          },
+                                        ),
+                                      ),
+                                      new PasswordField(
+                                        validator: (val) => val.isEmpty
+                                            ? 'You must insert a password'
+                                            : null,
+                                        labelText: 'Password',
+                                        helperText: 'Insert your password',
+                                        onSaved: (String value) {
+                                          _password = value;
+                                        },
+                                      ),
+                                      new Padding(
+                                        padding: const EdgeInsets.only(top: 80.0),
+                                        child: new LogInButton(
+                                          text: '  LOGIN  ',
+                                          color: primary,
+                                          formKey: formKey,
+                                          user: widget.user,
+                                        ),
+                                      ),
+                                      // TODO: add forgot password
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ]),
                   ),
-                ]),
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
+        );
+      }
+    
+      void _clearForm() {
+        usernameController.clear();
+        passwordController.clear();
+      }
 }
 
 class LogInButton extends StatefulWidget {

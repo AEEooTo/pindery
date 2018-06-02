@@ -18,7 +18,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../theme.dart';
 import '../user.dart';
 import '../image_compression.dart';
-import '../home_page/home_page.dart';
 
 String _name;
 String _surname;
@@ -49,6 +48,13 @@ class _SignUpPageState extends State<SignupPage> {
 
   final formKey = new GlobalKey<FormState>();
 
+  @override
+  void dispose() {
+    super.dispose();
+    clearForm();
+  }
+  
+  @override
   Widget build(BuildContext context) {
     return new Theme(
       data: new ThemeData(
@@ -160,6 +166,20 @@ class _SignUpPageState extends State<SignupPage> {
       ),
     );
   }
+
+  void clearForm() {
+    final FormState formState = formKey.currentState;
+    formState.reset();
+    nameController.clear();
+    surnameController.clear();
+    emailController.clear();
+    _passwordController.clear();
+    _confirmPasswordController.clear();
+    _name = null;
+    _surname = null;
+    _email = null;
+    _password = null;
+  }
 }
 
 class SignUpButton extends StatefulWidget {
@@ -217,8 +237,6 @@ class _SignUpButtonState extends State<SignUpButton> {
         imageLocalPath = null;
         user = await User.userDownloader(user: user);
         Navigator.of(context).pushNamedAndRemoveUntil('/', (_) => false);
-
-        clearForm();
       }
     }).catchError(_handleError('Auth error', context),
         test: (e) => e is AuthUploadException);
@@ -234,20 +252,6 @@ class _SignUpButtonState extends State<SignUpButton> {
             ),
           ),
         );
-  }
-
-  void clearForm() {
-    final FormState formState = widget.formKey.currentState;
-    formState.reset();
-    nameController.clear();
-    surnameController.clear();
-    emailController.clear();
-    _passwordController.clear();
-    _confirmPasswordController.clear();
-    _name = null;
-    _surname = null;
-    _email = null;
-    _password = null;
   }
 }
 
