@@ -39,8 +39,7 @@ after_success:
   - git clone git://${GH_REPO}
   - cd ${REPO}
   - git checkout ${BRANCH}
-  - git pull
-  - rm -rf `ls | grep -v 'md$' | grep -v '.git'`
+  - rm -rf ./doc
   - mkdir doc
   - cp -f -r ../${DOC_FILES} ./doc/
   - ls -a
