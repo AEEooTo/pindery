@@ -40,7 +40,8 @@ after_success:
   - cd ${REPO}
   - git checkout ${BRANCH}
   - git pull
-  - rm -rf `ls | grep -v 'md$' | grep -v '.git'
+  - rm -rf `ls | grep -v 'md$' | grep -v '.git'`
+  - mkdir doc
   - cp -f -r ../${DOC_FILES} ./doc/
   - ls -a
   - git remote
