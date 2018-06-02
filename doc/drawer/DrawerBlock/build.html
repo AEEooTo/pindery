@@ -56,7 +56,6 @@
     
       <li class="section-title"><a href="drawer/DrawerBlock-class.html#instance-methods">Methods</a></li>
       <li><a href="drawer/DrawerBlock/build.html">build</a></li>
-      <li><a href="drawer/DrawerBlock/tileColor.html">tileColor</a></li>
       <li class="inherited"><a href="drawer/DrawerBlock/createElement.html">createElement</a></li>
       <li class="inherited"><a href="drawer/DrawerBlock/debugDescribeChildren.html">debugDescribeChildren</a></li>
       <li class="inherited"><a href="drawer/DrawerBlock/debugFillProperties.html">debugFillProperties</a></li>
@@ -113,56 +112,29 @@ and</li><li>any ambient state obtained from the <code>context</code> using
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span> </h2>
       <pre class="language-dart"><code class="language-dart">Widget build(BuildContext context) {
-  return new DefaultTextStyle(
-    style: Theme.of(context).textTheme.subhead,
-    child: new SafeArea(
-      top: false,
-      bottom: false,
-      child: new Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: new InkWell(
-          splashColor: tileBackgroundColor,
-          highlightColor: tileBackgroundColor,
-          enableFeedback: true,
-          onTap: () =&gt; print(&#39;pippo&#39;),
-          child: new Container(
-            padding: const EdgeInsets.all(8.0),
-            height: 40.0,
-            decoration: new BoxDecoration(
-                borderRadius:
-                    const BorderRadius.all(const Radius.circular(6.0)),
-                color: tileColor()),
-            child: new ListTileTheme(
-              style: ListTileStyle.drawer,
-              textColor: Colors.black,
-              iconColor: const Color(0xFF757575),
-              dense: false,
-              child: new ListTile(
-                selected: (previousRoute == route),
-                leading: new Icon(icon),
-                title: new Text(
-                  data,
-                  textAlign: TextAlign.start,
-                  style: new TextStyle(
-                      fontSize: 14.0, fontWeight: FontWeight.w600),
-                ),
-                onTap: () {
-                  if (route != previousRoute) {
-                    Navigator
-                        .of(context)
-                        .popUntil((ModalRoute.withName(&#39;&#47;&#39;)));
-                    if (route != &#39;&#47;&#39;) {
-                      Navigator.of(context).pushNamed(route);
-                    }
-                  } else {
-                    Navigator.pop(context);
-                  }
-                },
-              ),
-            ),
-          ),
-        ),
+  return new ListTileTheme(
+    style: ListTileStyle.drawer,
+    textColor: Colors.black,
+    iconColor: const Color(0xFF757575),
+    dense: false,
+    child: new ListTile(
+      selected: (previousRoute == route),
+      leading: new Icon(icon),
+      title: new Text(
+        data,
+        textAlign: TextAlign.start,
+        style: new TextStyle(fontSize: 14.0, fontWeight: FontWeight.w600),
       ),
+      onTap: () {
+        if (route != previousRoute) {
+          Navigator.popUntil(context, ModalRoute.withName(&#39;&#47;&#39;));
+          if (route != &#39;&#47;&#39;) {
+            Navigator.pushNamed(context, route);
+          }
+        } else {
+          Navigator.pop(context);
+        }
+      },
     ),
   );
 }</code></pre>

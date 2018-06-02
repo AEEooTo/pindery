@@ -46,8 +46,8 @@
         <a href="first_actions_welcome/WelcomeButton-class.html#instance-properties">Properties</a>
       </li>
       <li><a href="first_actions_welcome/WelcomeButton/color.html">color</a></li>
+      <li><a href="first_actions_welcome/WelcomeButton/route.html">route</a></li>
       <li><a href="first_actions_welcome/WelcomeButton/text.html">text</a></li>
-      <li><a href="first_actions_welcome/WelcomeButton/widgetBuilder.html">widgetBuilder</a></li>
       <li class="inherited"><a href="first_actions_welcome/WelcomeButton/hashCode.html">hashCode</a></li>
       <li class="inherited"><a href="first_actions_welcome/WelcomeButton/key.html">key</a></li>
       <li class="inherited"><a href="first_actions_welcome/WelcomeButton/runtimeType.html">runtimeType</a></li>
@@ -118,10 +118,7 @@ and</li><li>any ambient state obtained from the <code>context</code> using
       style: new TextStyle(color: Colors.white),
     ),
     onPressed: () {
-      Navigator.push(
-        context,
-        new MaterialPageRoute(builder: widgetBuilder),
-      );
+      Navigator.of(context).pushNamed(route);
     },
   );
 }</code></pre>

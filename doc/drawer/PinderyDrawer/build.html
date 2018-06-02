@@ -118,16 +118,18 @@ and</li><li>any ambient state obtained from the <code>context</code> using
       <h2><span>Implementation</span> </h2>
       <pre class="language-dart"><code class="language-dart">@override
 Widget build(BuildContext context) {
-  return new Drawer(
-    key: drawerKey,
-    child: new Container(
-      decoration: new BoxDecoration(
-        color: Colors.white,
-      ),
+  return new Theme(
+    data: new ThemeData(
+        brightness: Brightness.light,
+        accentColor: secondary,
+        primaryColor: secondary,
+        splashColor: tileBackgroundColor,
+        selectedRowColor: tileBackgroundColor),
+    child: new Drawer(
+      key: drawerKey,
       child: new Column(
         children: &lt;Widget&gt;[
           new UserAccountsDrawerHeader(
-            margin: null,
             accountName: new Text(&#39;${user.name} ${user.surname}&#39;),
             accountEmail: new Text(user.email),
             currentAccountPicture: new PinderyCircleAvatar(user: user),
@@ -137,30 +139,17 @@ Widget build(BuildContext context) {
             ),
           ),
           new Column(
-            children: &lt;Widget&gt;[
-              &#47;&#47; TODO: understand how to make the drawer close is the user is already on the selected page
-              new DrawerBlock(
-                icon: Icons.star,
-                data: &#39;Parties&#39;,
-                route: &#39;&#47;&#39;,
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: _drawerContents.map((Map&lt;String, dynamic&gt; contents) {
+              return new DrawerBlock(
+                data: contents[&#39;data&#39;],
+                icon: contents[&#39;icon&#39;],
+                route: contents[&#39;route&#39;],
                 drawerKey: drawerKey,
                 previousRoute: previousRoute,
-              ),
-              new DrawerBlock(
-                icon: Icons.face,
-                data: &#39;My parties&#39;,
-                &#47;&#47; widgetBuilder: (context) =&gt; new WelcomePage(),
-                drawerKey: drawerKey,
-                previousRoute: previousRoute,
-              ),
-              new DrawerBlock(
-                icon: Icons.settings,
-                data: &#39;Settings&#39;,
-                route: &#39;&#47;settings&#39;,
-                drawerKey: drawerKey,
-                previousRoute: previousRoute,
-              ),
-            ],
+              );
+            }).toList(),
           ),
         ],
       ),

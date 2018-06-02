@@ -91,7 +91,7 @@
       <pre class="language-dart"><code class="language-dart">List&lt;CategoryTilesBlock&gt; categoryTilesGenerator() {
   List&lt;CategoryTilesBlock&gt; categoryTilesList = &lt;CategoryTilesBlock&gt;[];
   for (int i = 0; i &lt; Catalogue.names.length; ++i) {
-    categoryTilesList.add(new CategoryTilesBlock(i, catalogue.catalogue[i]));
+    categoryTilesList.add(new CategoryTilesBlock(i, catalogue.catalogue[i], new Category(i)));
   }
 
   return categoryTilesList;

@@ -206,7 +206,7 @@ Widget build(BuildContext context) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) =&gt; new SigninOutPage()));
           await FirebaseAuth.instance.signOut();
-          Navigator.of(context).pushNamedAndRemoveUntil(&#39;&#47;welcome-page&#39;, (_) =&gt; false);
+          Navigator.of(context).pushNamedAndRemoveUntil(&#39;&#47;welcome&#39;, (_) =&gt; false);
         },
       )
     ]),
