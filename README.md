@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AEEooTo/pindery/gh-pages/img/logo.png"/>
+  <img src="https://raw.githubusercontent.com/AEEooTo/pindery/gh-pages/images/logo.png"/>
 </p>
 
 # Pindery
