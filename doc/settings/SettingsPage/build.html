@@ -45,6 +45,7 @@
       <li class="section-title">
         <a href="settings/SettingsPage-class.html#instance-properties">Properties</a>
       </li>
+      <li><a href="settings/SettingsPage/firebaseMessaging.html">firebaseMessaging</a></li>
       <li><a href="settings/SettingsPage/user.html">user</a></li>
       <li class="inherited"><a href="settings/SettingsPage/hashCode.html">hashCode</a></li>
       <li class="inherited"><a href="settings/SettingsPage/key.html">key</a></li>
@@ -120,7 +121,10 @@ Widget build(BuildContext context) {
     appBar: new AppBar(
       title: new Text(&#39;Settings&#39;),
     ),
-    drawer: new PinderyDrawer(user: user, previousRoute: routeName,),
+    drawer: new PinderyDrawer(
+      user: user,
+      previousRoute: routeName,
+    ),
     body: new Column(children: &lt;Widget&gt;[
       new Container(
         height: 175.0,
@@ -165,36 +169,26 @@ Widget build(BuildContext context) {
         ),
       ),
       new Expanded(
-        child: new Column(
-          children: &lt;Widget&gt;[
-            new SettingsBlock(
-              icon: Icons.lock,
-              data: &#39;Change password&#39;,
-              widgetBuilder: null,
-            ),
-            new SettingsBlock(
-              icon: Icons.mail,
-              data: &#39;Change email&#39;,
-              widgetBuilder: null,
-            ),
-            new SettingsBlock(
-              icon: Icons.photo_camera,
-              data: &#39;Change profile picture&#39;,
-              widgetBuilder: null,
-            )
-          ],
-        ),
-      ),
+          child: new Column(
+              children: _settingsTiles.map((Map&lt;String, dynamic&gt; tile) {
+        return new SettingsBlock(
+          data: tile[&#39;data&#39;],
+          icon: tile[&#39;icon&#39;],
+          widgetBuilder: tile[&#39;widgetBuilder&#39;],
+        );
+      }).toList())),
       new AboutListTile(
         applicationName: &#39;Pindery&#39;,
         applicationVersion: &#39;0.0.1-alpha0&#39;,
         applicationLegalese: &#39;By AEEooTo&#39;,
-        icon: new Icon(Icons.info, color: Colors.white,),
+        icon: new Icon(
+          Icons.info,
+          color: Colors.white,
+        ),
         applicationIcon: new Container(
-          height: 50.0,
-          width: 50.0,
-          child: Image.asset(&#39;assets&#47;img&#47;logo_v_2_rosso.png&#39;)
-          ),
+            height: 50.0,
+            width: 50.0,
+            child: Image.asset(&#39;assets&#47;img&#47;logo_v_2_rosso.png&#39;)),
       ),
       new ListTile(
         leading: new Icon(
@@ -206,7 +200,9 @@ Widget build(BuildContext context) {
           Navigator.push(context,
               MaterialPageRoute(builder: (context) =&gt; new SigninOutPage()));
           await FirebaseAuth.instance.signOut();
-          Navigator.of(context).pushNamedAndRemoveUntil(&#39;&#47;welcome&#39;, (_) =&gt; false);
+          Navigator
+              .of(context)
+              .pushNamedAndRemoveUntil(&#39;&#47;welcome&#39;, (_) =&gt; false);
         },
       )
     ]),

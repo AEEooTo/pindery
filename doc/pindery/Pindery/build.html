@@ -128,11 +128,15 @@ Widget build(BuildContext context) {
       &#39;&#47;&#39;: (BuildContext context) =&gt; new HomePage(
             user: user,
             homeScaffoldKey: homeScaffoldKey,
+            firebaseMessaging: _firebaseMessaging,
           ),
       &#39;&#47;create-party&#39;: (BuildContext context) =&gt;
           new CreatePartyPage(homeScaffoldKey, user.uid),
       &#39;&#47;drawer&#39;: (BuildContext context) =&gt; new PinderyDrawer(user: user),
-      &#39;&#47;settings&#39;: (BuildContext context) =&gt; new SettingsPage(user: user),
+      &#39;&#47;settings&#39;: (BuildContext context) =&gt; new SettingsPage(
+            user: user,
+            firebaseMessaging: _firebaseMessaging,
+          ),
       &#39;&#47;welcome&#39;: (BuildContext context) =&gt; new WelcomePage(),
       &#39;&#47;login&#39;: (BuildContext context) =&gt; new LoginPage(user: user),
       &#39;&#47;signup&#39;: (BuildContext context) =&gt; new SignupPage(user: user),
