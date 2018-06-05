@@ -101,6 +101,12 @@
     transform: skewY(1.5deg);
     transform-origin: 0 100%;
   }
+
+  .logo {
+    height: 20rem;
+    width: 20rem;
+    margin-bottom: 7rem;
+  }
   
   .edge--top {
     position: relative;
