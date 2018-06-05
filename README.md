@@ -11,6 +11,7 @@ A review system will also be implemented both towards the party organisers and t
 To promote the creation of new events, ‘party-organisers’ will be **awarded points** for successful parties, so that they won't need to buy stuff to take part to other parties.
 
 ## People
+
 **Anna Tranquillini**, **Chief of Design Production** with her passion for the detail, She is in charge of uniforming the visual language and control the details.
 **Edoardo Debenedetti**, **Chief of Sowtware Developing Learning**, with his past experience, He is teaching the team how to use the most efficient software in order to develop the product with efficiency.
 **Edoardo Ghignone**, **Chief of External Communication**, with his analytical midset, He controls the reports so that everything is always said, no more no less, and in the most efficient way.

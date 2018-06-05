@@ -1,3 +1,4 @@
+library party;
 // Core imports
 import 'dart:async';
 import 'dart:math';

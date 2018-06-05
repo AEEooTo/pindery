@@ -1,3 +1,5 @@
+library party;
+
 /// This page contains the code for the specific page of every party.
 ///
 
@@ -5,6 +7,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:async';
+import 'package:intl/intl.dart';
 
 // Internal imports
 import 'party.dart';
@@ -80,11 +83,7 @@ class PartyPage extends StatelessWidget {
                 icon: const IconData(0xe0c8, fontFamily: 'MaterialIcons'),
               ),
               new WhitePartyBlock(
-                data: party.fromDayTime.day.toString() +
-                    '/' +
-                    party.fromDayTime.month.toString() +
-                    '/' +
-                    party.fromDayTime.year.toString(),
+                data: _partyDateTime(context),
                 icon: const IconData(0xe192, fontFamily: 'MaterialIcons'),
               ),
               new WhitePartyBlock(
@@ -126,6 +125,18 @@ class PartyPage extends StatelessWidget {
             ]),
           )
         ]));
+  }
+
+  String _partyDateTime(BuildContext context) {
+    party.fromDayTime.toLocal();
+    party.toDayTime.toLocal();
+    String date =
+        new DateFormat.yMMMd(Localizations.localeOf(context).toString())
+            .format(party.fromDayTime);
+    String fromTime =
+        new TimeOfDay.fromDateTime(party.fromDayTime).format(context);
+    String toTime = new TimeOfDay.fromDateTime(party.toDayTime).format(context);
+    return '$date - $fromTime to $toTime';
   }
 }
 
@@ -210,14 +221,27 @@ class BlackPartyHeader extends StatelessWidget {
                       alignment: Alignment.centerRight,
                       child: new FloatingActionButton(
                         onPressed: () {
-                          Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => new TakePartPage(
-                                        party: party,
-                                        homeScaffoldKey: homeScaffoldKey,
-                                      ),
-                                ),
-                              );
+                          if (new DateTime.now().isAfter(party.fromDayTime)) {
+                            String partyState = 'begun';
+                            if (new DateTime.now().isAfter(party.toDayTime)) {
+                              partyState = 'finished';
+                            }
+                            Scaffold.of(context).showSnackBar(
+                                  new SnackBar(
+                                    content: new Text(
+                                        'Hey, this party has already $partyState! Too late, mate.'),
+                                  ),
+                                );
+                          } else {
+                            Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => new TakePartPage(
+                                          party: party,
+                                          homeScaffoldKey: homeScaffoldKey,
+                                        ),
+                                  ),
+                                );
+                          }
                         },
                         child: new Icon(Icons.local_bar),
                       ),

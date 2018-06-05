@@ -154,18 +154,17 @@ class DateTimePicker extends StatelessWidget {
   }
 
   List<Widget> _dateTimeChildren(BuildContext context) {
-    final TextStyle valueStyle = Theme
-        .of(context)
-        .textTheme
-        .title;
+    final TextStyle valueStyle = Theme.of(context).textTheme.title;
     List<Widget> children = <Widget>[];
     if (showDay == true) {
       children.add(
         new Expanded(
           flex: 4,
           child: new InputDropdown(
-            labelText: labelText,
-            valueText: new DateFormat.yMMMd().format(selectedDate),
+            labelText: 'Day',
+            valueText:
+                new DateFormat.yMMMd(Localizations.localeOf(context).toString())
+                    .format(selectedDate),
             valueStyle: valueStyle,
             onPressed: () {
               _selectDate(context);
@@ -184,7 +183,7 @@ class DateTimePicker extends StatelessWidget {
       new Expanded(
         flex: 3,
         child: new InputDropdown(
-          labelText: _timeLabelText(),
+          labelText: labelText,
           valueText: selectedTime.format(context),
           valueStyle: valueStyle,
           onPressed: () {
@@ -194,13 +193,6 @@ class DateTimePicker extends StatelessWidget {
       ),
     );
     return children;
-  }
-
-  String _timeLabelText() {
-    if (showDay == true) {
-      return '';
-    }
-    return labelText;
   }
 }
 

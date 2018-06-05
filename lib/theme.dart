@@ -1,18 +1,20 @@
 /// theme.dart
-/// This file contains all the data for Flutter's theming
+/// All the data for Pindery's theming, like colors and [ThemeData] and various styles.
 ///
+
+library theme;
 
 import 'package:flutter/material.dart';
 
 // Primary colors
-Color primary = const Color(0xFF212121);
-Color primaryLight = const Color(0xFF484848);
-Color primaryDark = const Color(0xFF000000);
+const Color primary = const Color(0xFF212121);
+const Color primaryLight = const Color(0xFF484848);
+const Color primaryDark = const Color(0xFF000000);
 
 // Secondary colors
-Color secondary = const Color(0xFFE52059);
-Color secondaryLight = const Color(0xFFED2467);
-Color secondaryDark = const Color(0xFFB70449);
+const Color secondary = const Color(0xFFE52059);
+const Color secondaryLight = const Color(0xFFED2467);
+const Color secondaryDark = const Color(0xFFB70449);
 
 // Functional colors 
 const Color dividerColor = const Color(0x2F000000);
@@ -31,7 +33,6 @@ ThemeData pinderyTheme = new ThemeData(
   backgroundColor: primaryLight,
   highlightColor: secondaryLight,
   errorColor: secondaryDark,
-  
 );
 
 TextStyle pinderyTextStyle = new TextStyle(
