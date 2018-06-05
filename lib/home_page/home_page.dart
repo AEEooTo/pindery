@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'party_card_list.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:connectivity/connectivity.dart';
 
 // Internal imports
@@ -20,8 +21,9 @@ class HomePage extends StatefulWidget {
       this.analytics,
       this.observer,
       this.connectivity,
-      this.homeScaffoldKey});
-  
+      this.homeScaffoldKey,
+      this.firebaseMessaging});
+
   static const routeName = '/';
 
   final User user;
@@ -30,12 +32,36 @@ class HomePage extends StatefulWidget {
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
   final ConnectivityResult connectivity;
+  final FirebaseMessaging firebaseMessaging;
 
   @override
   State<HomePage> createState() => new _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  @override
+  
+  void initState() {
+    super.initState();
+    if (widget.user.name != null) {
+      widget.firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true)
+      );
+
+      widget.firebaseMessaging.subscribeToTopic(testCity);
+
+      widget.firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) {
+        },
+        onLaunch: (Map<String, dynamic> message) {
+        },
+        onResume: (Map<String, dynamic> message) {
+        }
+      );
+      widget.firebaseMessaging.getToken().then((token) => print(token));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.user.name != null) {

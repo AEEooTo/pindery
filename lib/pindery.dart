@@ -1,5 +1,6 @@
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'theme.dart';
 import 'home_page/home_page.dart' show HomePage;
@@ -18,6 +19,7 @@ class Pindery extends StatelessWidget {
 
   final GlobalKey<ScaffoldState> homeScaffoldKey =
       new GlobalKey<ScaffoldState>();
+  final FirebaseMessaging _firebaseMessaging = new FirebaseMessaging();
 
   /// The User of the app
   final User user;
@@ -36,11 +38,15 @@ class Pindery extends StatelessWidget {
         '/': (BuildContext context) => new HomePage(
               user: user,
               homeScaffoldKey: homeScaffoldKey,
+              firebaseMessaging: _firebaseMessaging,
             ),
         '/create-party': (BuildContext context) =>
             new CreatePartyPage(homeScaffoldKey, user.uid),
         '/drawer': (BuildContext context) => new PinderyDrawer(user: user),
-        '/settings': (BuildContext context) => new SettingsPage(user: user),
+        '/settings': (BuildContext context) => new SettingsPage(
+              user: user,
+              firebaseMessaging: _firebaseMessaging,
+            ),
         '/welcome': (BuildContext context) => new WelcomePage(),
         '/login': (BuildContext context) => new LoginPage(user: user),
         '/signup': (BuildContext context) => new SignupPage(user: user),

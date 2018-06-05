@@ -4,6 +4,7 @@
 // External libraries imports
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 // Internal imports
 import 'theme.dart';
@@ -12,11 +13,22 @@ import 'utils.dart';
 import 'drawer.dart';
 
 class SettingsPage extends StatelessWidget {
-  SettingsPage({this.user});
+  SettingsPage({this.user, this.firebaseMessaging});
 
   static const routeName = '/settings';
 
   final User user;
+  final FirebaseMessaging firebaseMessaging;
+
+  static const List<Map<String, dynamic>> _settingsTiles = const [
+    {'icon': Icons.lock, 'data': 'Change password', 'widgedBuilder': null},
+    {'icon': Icons.mail, 'data': 'Change email', 'widgedBuilder': null},
+    {
+      'icon': Icons.photo_camera,
+      'data': 'Change profile picture',
+      'widgedBuilder': null
+    }
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +36,10 @@ class SettingsPage extends StatelessWidget {
       appBar: new AppBar(
         title: new Text('Settings'),
       ),
-      drawer: new PinderyDrawer(user: user, previousRoute: routeName,),
+      drawer: new PinderyDrawer(
+        user: user,
+        previousRoute: routeName,
+      ),
       body: new Column(children: <Widget>[
         new Container(
           height: 175.0,
@@ -69,36 +84,26 @@ class SettingsPage extends StatelessWidget {
           ),
         ),
         new Expanded(
-          child: new Column(
-            children: <Widget>[
-              new SettingsBlock(
-                icon: Icons.lock,
-                data: 'Change password',
-                widgetBuilder: null,
-              ),
-              new SettingsBlock(
-                icon: Icons.mail,
-                data: 'Change email',
-                widgetBuilder: null,
-              ),
-              new SettingsBlock(
-                icon: Icons.photo_camera,
-                data: 'Change profile picture',
-                widgetBuilder: null,
-              )
-            ],
-          ),
-        ),
+            child: new Column(
+                children: _settingsTiles.map((Map<String, dynamic> tile) {
+          return new SettingsBlock(
+            data: tile['data'],
+            icon: tile['icon'],
+            widgetBuilder: tile['widgetBuilder'],
+          );
+        }).toList())),
         new AboutListTile(
           applicationName: 'Pindery',
           applicationVersion: '0.0.1-alpha0',
           applicationLegalese: 'By AEEooTo',
-          icon: new Icon(Icons.info, color: Colors.white,),
+          icon: new Icon(
+            Icons.info,
+            color: Colors.white,
+          ),
           applicationIcon: new Container(
-            height: 50.0,
-            width: 50.0,
-            child: Image.asset('assets/img/logo_v_2_rosso.png')
-            ),
+              height: 50.0,
+              width: 50.0,
+              child: Image.asset('assets/img/logo_v_2_rosso.png')),
         ),
         new ListTile(
           leading: new Icon(
@@ -110,7 +115,9 @@ class SettingsPage extends StatelessWidget {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => new SigninOutPage()));
             await FirebaseAuth.instance.signOut();
-            Navigator.of(context).pushNamedAndRemoveUntil('/welcome', (_) => false);
+            Navigator
+                .of(context)
+                .pushNamedAndRemoveUntil('/welcome', (_) => false);
           },
         )
       ]),
