@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/AEEooTo/pindery/gh-pages/images/logo.png"/>
+  <img src="https://raw.githubusercontent.com/AEEooTo/pindery/gh-pages/images/logo.png" style="height: 10rem; width: 10rem;"/>
 </p>
 
 # Pindery
@@ -20,4 +20,4 @@ To promote the creation of new events, ‘party-organisers’ will be **awarded 
 ## Let's party!
 
 The frontend of the app will be developed with [Flutter](https://flutter.io), in [Dart language](https://dartlang.org).
-For the backend we will use [Google Firebase](https://firebase.google.com), using [Node.js](https://nodejs.org) and you can find the repository [here](https://github.com/AEEooTo/pindery-backend)
+For the backend we will use [Google Firebase](https://firebase.google.com) and TypeScript, using [Node.js](https://nodejs.org) and you can find the repository [here](https://github.com/AEEooTo/pindery-backend)
