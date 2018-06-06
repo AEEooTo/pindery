@@ -182,7 +182,7 @@ class _LogInButtonState extends State<LogInButton> {
       Navigator.pop(context);
       Scaffold.of(context).showSnackBar(new SnackBar(
             content: new Text(
-              "This email is not registered",
+              "Wrong username or password",
               textAlign: TextAlign.center,
             ),
           ));
