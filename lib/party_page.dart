@@ -1,5 +1,3 @@
-library party;
-
 /// This page contains the code for the specific page of every party.
 ///
 

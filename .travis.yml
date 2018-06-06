@@ -32,6 +32,7 @@ before_script:
 
 script:
   - flutter packages get
+  - flutter test
   - /usr/lib/dart/bin/dartdoc
 
 after_success:
