@@ -462,16 +462,18 @@
   
   #fh5co-intro {
     position: relative;
-    bottom: 0;
-    margin-top: -150px;
+    margin: auto;
     z-index: 10;
-    padding-bottom: 7em;
   }
-  @media screen and (max-width: 768px) {
-    #fh5co-intro {
-      padding-bottom: 3em;
+
+  @media screen and (max-width: 480px) {
+    .youtube-video {
+      height: 160px;
+      width: 290px;
+      margin: auto;
     }
   }
+
   #fh5co-intro > div {
     display: -webkit-box;
     display: -moz-box;
@@ -482,6 +484,7 @@
     -webkit-flex-wrap: wrap;
     -moz-flex-wrap: wrap;
   }
+
   #fh5co-intro .fh5co-block {
     width: 33.33%;
     float: left;
@@ -571,6 +574,7 @@
     width: 100%;
     display: block;
     float: left;
+    margin: auto;
   }
   .watch-video span {
     display: block;
