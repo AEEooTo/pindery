@@ -624,6 +624,12 @@
       padding: 2em 0;
     }
   }
+
+  #fh5co-about h4 {
+    font-weight: 100;
+    line-height: 1;
+    color: #929292;
+  }
   
   #fh5co-services, #fh5co-work, #fh5co-counters {
     padding: 7em 0;
