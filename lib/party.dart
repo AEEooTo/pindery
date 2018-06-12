@@ -15,6 +15,7 @@ import 'user.dart';
 
 /// Class that defines every Party object in the app.
 class Party {
+  // ... continuation of the class ...
   Party({
     this.name,
     this.fromDayTime,
@@ -76,6 +77,9 @@ class Party {
 
   /// The file of the image chosen locally by the party organiser.
   File localImageFile;
+
+  /// The file of the compressed image chosen locally by the party organiser.
+  File compressedImageFile;
 
   /// The default city used to show parties until we will introduce the possibility to choose the city.
   static const String city = "Shanghai";
@@ -176,7 +180,7 @@ class Party {
         .ref()
         .child("/partyImages/party_image_$random.jpg");
     print(localImageFile);
-    StorageFileUploadTask uploadTask = ref.putFile(localImageFile);
+    StorageFileUploadTask uploadTask = ref.putFile(compressedImageFile);
     Duration timeoutDuration = new Duration(seconds: 30);
     try {
       UploadTaskSnapshot task = await uploadTask.future

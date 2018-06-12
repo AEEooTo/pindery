@@ -141,9 +141,11 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        compressImage(party.localImageFile)
+        /* compressImage(party.localImageFile)
             .then((image) => party.localImageFile = image)
-            .whenComplete(() => _handleSubmitted(formState, context));
+            .whenComplete(() => _handleSubmitted(formState, context)); */
+        
+        _handleSubmitted(formState, context);
         print("past the futures");
         return new AlertDialog(
           title: new Text('Loading'),

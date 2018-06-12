@@ -26,27 +26,26 @@ before_script:
   - sudo sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list'
   - sudo sh -c 'curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_unstable.list > /etc/apt/sources.list.d/dart_unstable.list'
   - sudo apt-get update
-  - sudo apt-get install dart
+  - sudo apt-get install dart # Install Dart (for dartdoc)
 
 
 
 script:
-  - flutter packages get
-  - flutter test
-  - /usr/lib/dart/bin/dartdoc
+  - flutter packages get # Install dependencies
+  - flutter test # Run tests
+  - /usr/lib/dart/bin/dartdoc # Generate documentation
 
 after_success:
-  - MESSAGE='Commit with Travis CI'
-  - git clone git://${GH_REPO}
-  - cd ${REPO}
-  - git checkout ${BRANCH}
-  - rm -rf ./doc
-  - mkdir doc
-  - cp -f -r ../${DOC_FILES} ./doc/
-  - ls -a
-  - git remote
+  - git clone git://${GH_REPO} # Clone the target repo locally
+  - cd ${REPO} # Enter the repo folder
+  - git checkout ${BRANCH} # Go to the $BRANCH branch (declared previously)
+  - rm -rf ./doc # Delete the previous docs folder
+  - mkdir doc # Create the new folder
+  - cp -f -r ../${DOC_FILES} ./doc/ # Copy the previously generated documentation
+  - ls -a # List folder element for debug purposes
+  - git remote # Configure git
   - git config user.email ${EMAIL}
   - git config user.name ${DEPLOYMENT_USER}
-  - git add .
-  - git commit -m 'Commit with Travis CI'
-  - git push "https://${GITHUB_TOKEN}@${GH_REPO}" ${BRANCH}
+  - git add . # Add new changes to git
+  - git commit -m 'Commit with Travis CI' # Commit
+  - git push "https://${GITHUB_TOKEN}@${GH_REPO}" ${BRANCH} # Push on the repo
