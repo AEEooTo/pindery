@@ -104,7 +104,7 @@
       .ref()
       .child(&quot;&#47;partyImages&#47;party_image_$random.jpg&quot;);
   print(localImageFile);
-  StorageFileUploadTask uploadTask = ref.putFile(compressedImageFile);
+  StorageFileUploadTask uploadTask = ref.putFile(localImageFile);
   Duration timeoutDuration = new Duration(seconds: 30);
   try {
     UploadTaskSnapshot task = await uploadTask.future
