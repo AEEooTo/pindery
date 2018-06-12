@@ -180,7 +180,7 @@ class Party {
         .ref()
         .child("/partyImages/party_image_$random.jpg");
     print(localImageFile);
-    StorageFileUploadTask uploadTask = ref.putFile(compressedImageFile);
+    StorageFileUploadTask uploadTask = ref.putFile(localImageFile);
     Duration timeoutDuration = new Duration(seconds: 30);
     try {
       UploadTaskSnapshot task = await uploadTask.future
