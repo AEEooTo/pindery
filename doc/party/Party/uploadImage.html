@@ -47,6 +47,7 @@
         <a href="party/Party-class.html#instance-properties">Properties</a>
       </li>
       <li><a href="party/Party/catalogue.html">catalogue</a></li>
+      <li><a href="party/Party/compressedImageFile.html">compressedImageFile</a></li>
       <li><a href="party/Party/description.html">description</a></li>
       <li><a href="party/Party/fromDayTime.html">fromDayTime</a></li>
       <li><a href="party/Party/id.html">id</a></li>
@@ -103,7 +104,7 @@
       .ref()
       .child(&quot;&#47;partyImages&#47;party_image_$random.jpg&quot;);
   print(localImageFile);
-  StorageFileUploadTask uploadTask = ref.putFile(localImageFile);
+  StorageFileUploadTask uploadTask = ref.putFile(compressedImageFile);
   Duration timeoutDuration = new Duration(seconds: 30);
   try {
     UploadTaskSnapshot task = await uploadTask.future
