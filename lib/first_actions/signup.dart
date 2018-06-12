@@ -169,7 +169,7 @@ class _SignUpPageState extends State<SignupPage> {
 
   void clearForm() {
     final FormState formState = formKey.currentState;
-    formState.reset();
+    //formState.reset();
     nameController.clear();
     surnameController.clear();
     emailController.clear();
@@ -232,7 +232,8 @@ class _SignUpButtonState extends State<SignUpButton> {
     Navigator
         .of(context)
         .push(new MaterialPageRoute(builder: (context) => new SigningUpPage()));
-    await _trulyHandleSignUp(widget.firebaseAuth, context).then((e) async {
+    final future = _trulyHandleSignUp(widget.firebaseAuth, context).then((
+        e) async {
       if (result) {
         imageLocalPath = null;
         user = await User.userDownloader(user: user);
@@ -240,6 +241,7 @@ class _SignUpButtonState extends State<SignUpButton> {
       }
     }).catchError(_handleError('Auth error', context),
         test: (e) => e is AuthUploadException);
+    await future;
   }
 
   _handleError(String error, BuildContext context) {
