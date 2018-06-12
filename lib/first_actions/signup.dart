@@ -53,7 +53,7 @@ class _SignUpPageState extends State<SignupPage> {
     super.dispose();
     clearForm();
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return new Theme(
@@ -201,7 +201,6 @@ class _SignUpButtonState extends State<SignUpButton> {
   User user;
 
   Widget build(BuildContext context) {
-    print("inizio build : " + _email.toString());
     return new RaisedButton(
       padding: EdgeInsets.symmetric(horizontal: 100.0),
       color: widget.color,
@@ -212,19 +211,40 @@ class _SignUpButtonState extends State<SignUpButton> {
       onPressed: () async {
         final FormState formState = widget.formKey.currentState;
         formState.save();
-        // TODO: add a decent controller, pls
-        if (_confirmPasswordController.text == _passwordController.text) {
+        if (_valid(context)) {
           _handleSignUp(context);
-        } else {
-          Scaffold.of(context).showSnackBar(new SnackBar(
-                content: new Text(
-                  "The two passwords are different!",
-                  textAlign: TextAlign.center,
-                ),
-              ));
         }
       },
     );
+  }
+
+  bool _valid(BuildContext context) {
+    String message;
+    bool valid = true;
+    if (nameController.text.isEmpty || surnameController.text.isEmpty) {
+      message = "All the fields are mandatory";
+      valid = false;
+    } else if (!isEmail(emailController.text)) {
+      message = "The email is not valid";
+      valid = false;
+    } else if (_passwordController.text.isEmpty) {
+      message = "Insert a password";
+      valid = false;
+    } else if (_confirmPasswordController.text != _passwordController.text) {
+      message = "The two passwords are different!";
+      valid = false;
+    }
+
+    if (valid == false) {
+      Scaffold.of(context).showSnackBar(new SnackBar(
+            content: new Text(
+              message,
+              textAlign: TextAlign.center,
+            ),
+          ));
+      return valid;
+    }
+    return valid;
   }
 
   Future<Null> _handleSignUp(BuildContext context) async {
@@ -259,7 +279,6 @@ class _SignUpButtonState extends State<SignUpButton> {
 
 Future<Null> _trulyHandleSignUp(
     FirebaseAuth firebaseAuth, BuildContext context) async {
-  print('Entered _trulyHandleSignUp()'); //TODO: remove after debug
   FirebaseUser user;
   Uri downloadUrl;
   StorageReference ref;
@@ -291,7 +310,7 @@ Future<Null> _trulyHandleSignUp(
         email: _email,
         uid: user.uid,
         profilePictureUrl: downloadUrl.toString());
-    await databaseUser.sendUser();
+     await databaseUser.sendUser();
   }
 }
 
