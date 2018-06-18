@@ -79,7 +79,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                   top: 20.0, bottom: 20.0, left: 80.0, right: 80.0),
               child: new RaisedButton(
                 child: new Text(
-                  'NEXT',
+                  "LET'S PARTY!",
                   style: new TextStyle(color: Colors.white),
                 ),
                 onPressed: () async {
