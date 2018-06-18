@@ -249,10 +249,11 @@ class _SignUpButtonState extends State<SignUpButton> {
 
   Future<Null> _handleSignUp(BuildContext context) async {
     bool result = true;
-    Navigator.push(context,
-        new MaterialPageRoute(builder: (context) => new SigningUpPage()));
-
-    await _trulyHandleSignUp(widget.firebaseAuth, context).then((_) async {
+    Navigator
+        .of(context)
+        .push(new MaterialPageRoute(builder: (context) => new SigningUpPage()));
+    final future = _trulyHandleSignUp(widget.firebaseAuth, context).then((
+        e) async {
       if (result) {
         imageLocalPath = null;
         user = await User.userDownloader(user: user);
@@ -260,6 +261,7 @@ class _SignUpButtonState extends State<SignUpButton> {
       }
     }).catchError(_handleError('Auth error', context),
         test: (e) => e is AuthUploadException);
+    await future;
   }
 
   _handleError(String error, BuildContext context) {
