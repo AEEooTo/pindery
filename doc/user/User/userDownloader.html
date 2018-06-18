@@ -84,10 +84,19 @@
       <span class="name ">userDownloader</span>
 (<wbr>{<span class="parameter" id="userDownloader-param-user"><span class="type-annotation"><a href="user/User-class.html">User</a></span> <span class="parameter-name">user</span>, </span> <span class="parameter" id="userDownloader-param-uid"><span class="type-annotation">String</span> <span class="parameter-name">uid</span></span> })
     </section>
+    <section class="desc markdown">
+      <p>Downloads a user from Firestore. If the <code>uid</code> field is given, it takes
+the gets the user with the given UID, otherwise it will look for the 
+Firebase current user instance.
+If the given <a href="user/User-class.html">User</a> is <code>null</code> or is not inserted, the method creates a new
+instance of <a href="user/User-class.html">User</a>. The methos will save the user's data using the
+<a href="user/User/fromFirestore.html">fromFirestore</a> method.</p>
+    </section>
     
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span> </h2>
       <pre class="language-dart"><code class="language-dart">static Future&lt;User&gt; userDownloader({User user, String uid}) async {
+  &#47;&#47; ... continuation of the method ...
   user ??= new User();
   if (uid == null) {
     FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
