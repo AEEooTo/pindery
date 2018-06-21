@@ -244,7 +244,12 @@ within <a href="first_actions_signup/SignUpButton-class.html">SignUpButton</a>.
           </span>
         </dt>
         <dd>
-          
+          Downloads a user from Firestore. If the <code>uid</code> field is given, it takes
+the gets the user with the given UID, otherwise it will look for the 
+Firebase current user instance.
+If the given <a href="user/User-class.html">User</a> is <code>null</code> or is not inserted, the method creates a new
+instance of <a href="user/User-class.html">User</a>. The methos will save the user's data using the
+<a href="user/User/fromFirestore.html">fromFirestore</a> method.
           
 </dd>
       </dl>
