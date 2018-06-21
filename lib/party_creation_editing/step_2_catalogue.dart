@@ -22,8 +22,8 @@ class ChooseCataloguePage extends StatefulWidget {
   final Catalogue catalogue;
   final Party party;
 
-  _ChooseCataloguePageState createState() => new _ChooseCataloguePageState(
-      party: party, catalogue: catalogue);
+  _ChooseCataloguePageState createState() =>
+      new _ChooseCataloguePageState(party: party, catalogue: catalogue);
 }
 
 class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
@@ -96,7 +96,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
                         Navigator.popUntil(context, ModalRoute.withName('/'));
                         assert(widget.homeScaffoldKey != null);
                         ScaffoldState homePageState =
-                            widget.homeScaffoldKey.currentState;                            
+                            widget.homeScaffoldKey.currentState;
                         assert(homePageState != null);
                         homePageState.showSnackBar(new SnackBar(
                           content: new Text("Great! The party was created!"),
@@ -131,9 +131,8 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
       FormState formState, BuildContext dialogueContext) async {
     formState.save();
     party.catalogue = catalogue;
-    party.uploadImage().whenComplete(() => party
-        .addNewParty()
-        .whenComplete(() => Navigator.of(dialogueContext).pop(false)));
+    party.addNewParty()
+        .whenComplete(() => Navigator.of(dialogueContext).pop(false));
   }
 
   Future<bool> _uploadingDialog(FormState formState) async {
@@ -144,7 +143,7 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
         /* compressImage(party.localImageFile)
             .then((image) => party.localImageFile = image)
             .whenComplete(() => _handleSubmitted(formState, context)); */
-        
+
         _handleSubmitted(formState, context);
         print("past the futures");
         return new AlertDialog(
