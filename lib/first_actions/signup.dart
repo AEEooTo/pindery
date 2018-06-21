@@ -168,7 +168,7 @@ class _SignUpPageState extends State<SignupPage> {
   }
 
   void clearForm() {
-    final FormState formState = formKey.currentState;
+    // final FormState formState = formKey.currentState;
     //formState.reset();
     nameController.clear();
     surnameController.clear();

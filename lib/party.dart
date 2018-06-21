@@ -163,7 +163,7 @@ class Party {
       "description": description,
       "fromDayTime": fromDayTime,
       "toDayTime": toDayTime,
-      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/pindery-7cf58.appspot.com/o/partyImages%2Fbowl-chopsticks-close-up-955137.jpg?alt=media&token=666c3842-8b04-4735-8a8f-14f55dbb63ac",
+      "imageUrl": imageUrl,
       "maxPeople": maxPeople,
       "privacy": privacy.type,
       "catalogue": catalogue.catalogueMatrixMapper(),

@@ -131,7 +131,8 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
       FormState formState, BuildContext dialogueContext) async {
     formState.save();
     party.catalogue = catalogue;
-    party.addNewParty()
+    party
+        .addNewParty()
         .whenComplete(() => Navigator.of(dialogueContext).pop(false));
   }
 
@@ -140,11 +141,9 @@ class _ChooseCataloguePageState extends State<ChooseCataloguePage> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        /* compressImage(party.localImageFile)
+        compressImage(party.localImageFile)
             .then((image) => party.localImageFile = image)
-            .whenComplete(() => _handleSubmitted(formState, context)); */
-
-        _handleSubmitted(formState, context);
+            .whenComplete(() => _handleSubmitted(formState, context));
         print("past the futures");
         return new AlertDialog(
           title: new Text('Loading'),
