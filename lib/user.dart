@@ -20,7 +20,14 @@ class User {
     uid = snapshot['uid'];
   }
 
+  /// Downloads a user from Firestore. If the [uid] field is given, it takes
+  /// the gets the user with the given UID, otherwise it will look for the 
+  /// Firebase current user instance.
+  /// If the given [User] is [null] or is not inserted, the method creates a new
+  /// instance of [User]. The methos will save the user's data using the
+  /// [fromFirestore] method.
   static Future<User> userDownloader({User user, String uid}) async {
+    // ... continuation of the method ...
     user ??= new User();
     if (uid == null) {
       FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();

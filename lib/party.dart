@@ -15,6 +15,7 @@ import 'user.dart';
 
 /// Class that defines every Party object in the app.
 class Party {
+  // ... continuation of the class ...
   Party({
     this.name,
     this.fromDayTime,
@@ -76,6 +77,9 @@ class Party {
 
   /// The file of the image chosen locally by the party organiser.
   File localImageFile;
+
+  /// The file of the compressed image chosen locally by the party organiser.
+  File compressedImageFile;
 
   /// The default city used to show parties until we will introduce the possibility to choose the city.
   static const String city = "Shanghai";
@@ -159,7 +163,7 @@ class Party {
       "description": description,
       "fromDayTime": fromDayTime,
       "toDayTime": toDayTime,
-      "imageUrl": imageUrl,
+      "imageUrl": "https://firebasestorage.googleapis.com/v0/b/pindery-7cf58.appspot.com/o/partyImages%2Fbowl-chopsticks-close-up-955137.jpg?alt=media&token=666c3842-8b04-4735-8a8f-14f55dbb63ac",
       "maxPeople": maxPeople,
       "privacy": privacy.type,
       "catalogue": catalogue.catalogueMatrixMapper(),
