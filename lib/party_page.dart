@@ -320,10 +320,11 @@ class RatingStars extends StatelessWidget {
 
   void starsMethod(num number) {
     int i = 0;
-    for (i; i < 5 && i < number; i++) {
+    for (; i < 5 && i < number; i++) {
       active[i] = true;
     }
-    for (i + 1; i < 5; i++) {
+    
+    for (; i < 5; i++) {
       active[i] = false;
     }
   }

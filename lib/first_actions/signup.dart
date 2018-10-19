@@ -9,7 +9,6 @@ import 'dart:math';
 
 // External libraries imports
 import 'package:flutter/material.dart';
-import 'package:validator/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -18,6 +17,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import '../theme.dart';
 import '../user.dart';
 import '../image_compression.dart';
+import '../utils.dart';
 
 String _name;
 String _surname;
@@ -101,7 +101,7 @@ class _SignUpPageState extends State<SignupPage> {
                             new InformationField(
                               labelText: 'Name',
                               controller: nameController,
-                              validator: (val) => (!isAlpha(val) || val.isEmpty
+                              validator: (val) => (!isAlphaNumeric(val) || val.isEmpty
                                   ? 'You must enter a valid username'
                                   : null),
                               onSaved: (val) => _name = val,
@@ -109,7 +109,7 @@ class _SignUpPageState extends State<SignupPage> {
                             ),
                             new InformationField(
                               labelText: 'Surname',
-                              validator: (val) => !isAlpha(val) || val.isEmpty
+                              validator: (val) => !isAlphaNumeric(val) || val.isEmpty
                                   ? 'You must insert a valid surname'
                                   : null,
                               controller: surnameController,

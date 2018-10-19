@@ -8,7 +8,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:validator/validator.dart';
 
 import '../theme.dart';
 import '../party.dart';
@@ -255,10 +254,11 @@ bool isNumericAndPositive(String s) {
   if (s == null) {
     return false;
   }
-  if (!isInt(s)) {
-    return false;
-  } else {
+  try {
     parsedInt = int.parse(s);
+  } catch (FormatException) {
+    return false;
   }
+
   return parsedInt > 0;
 }

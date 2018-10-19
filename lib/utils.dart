@@ -4,6 +4,7 @@
 // External libraries imports
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:validate/validate.dart';
 
 // Internal imports
 import 'user.dart';
@@ -62,4 +63,20 @@ class UserInitialWidget extends StatelessWidget {
       ),
     );
   }
+}
+
+isEmail(String val) {
+  try { Validate.isEmail(val); } catch (ArgumentError) {
+    return false;
+  }
+
+  return true;
+}
+
+isAlphaNumeric(String val) {
+  try { Validate.isAlphaNumeric(val); } catch (ArgumentError) {
+    return false;
+  }
+
+  return true;
 }

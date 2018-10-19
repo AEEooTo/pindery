@@ -5,11 +5,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:validator/validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../theme.dart';
 import '../user.dart';
+import '../utils.dart';
 
 TextEditingController usernameController = new TextEditingController();
 TextEditingController passwordController = new TextEditingController();
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                                             const EdgeInsets.only(bottom: 16.0),
                                         child: new EmailField(
                                           labelText: 'E-mail',
-                                          validator: (val) => !isEmail(val)
+                                          validator: (val) => isEmail(val)
                                               ? 'You must insert a valid email'
                                               : null,
                                           helperText: 'Insert your e-mail',
