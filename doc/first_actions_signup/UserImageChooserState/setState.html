@@ -114,7 +114,7 @@ the increment is wrapped in the <code>setState</code>:</p>
   });
   Directory directory = await getApplicationDocumentsDirectory();
   final String dirName = directory.path;
-  await new File('$dir/counter.txt').writeAsString('$_counter');
+  await File('$dir/counter.txt').writeAsString('$_counter');
   return null;
 }
 </code></pre>
@@ -130,7 +130,7 @@ void setState(VoidCallback fn) {
   assert(fn != null);
   assert(() {
     if (_debugLifecycleState == _StateLifecycle.defunct) {
-      throw new FlutterError(
+      throw FlutterError(
         &#39;setState() called after dispose(): $this\n&#39;
         &#39;This error happens if you call setState() on a State object for a widget that &#39;
         &#39;no longer appears in the widget tree (e.g., whose parent widget no longer &#39;
@@ -147,7 +147,7 @@ void setState(VoidCallback fn) {
       );
     }
     if (_debugLifecycleState == _StateLifecycle.created &amp;&amp; !mounted) {
-      throw new FlutterError(
+      throw FlutterError(
         &#39;setState() called in constructor: $this\n&#39;
         &#39;This happens when you call setState() on a State object for a widget that &#39;
         &#39;hasn\&#39;t been inserted into the widget tree yet. It is not necessary to call &#39;
@@ -160,7 +160,7 @@ void setState(VoidCallback fn) {
   final dynamic result = fn() as dynamic;
   assert(() {
     if (result is Future) {
-      throw new FlutterError(
+      throw FlutterError(
         &#39;setState() callback argument returned a Future.\n&#39;
         &#39;The setState() method on $this was called with a closure or method that &#39;
         &#39;returned a Future. Maybe it is marked as &quot;async&quot;.\n&#39;

@@ -85,10 +85,11 @@
       <h2><span>Implementation</span> </h2>
       <pre class="language-dart"><code class="language-dart">void starsMethod(num number) {
   int i = 0;
-  for (i; i &lt; 5 &amp;&amp; i &lt; number; i++) {
+  for (; i &lt; 5 &amp;&amp; i &lt; number; i++) {
     active[i] = true;
   }
-  for (i + 1; i &lt; 5; i++) {
+
+  for (; i &lt; 5; i++) {
     active[i] = false;
   }
 }</code></pre>

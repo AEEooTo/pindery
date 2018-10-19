@@ -41,6 +41,7 @@
     
     
     
+    
       <li class="section-title"><a href="main/main-library.html#functions">Functions</a></li>
       <li><a href="main/main.html">main</a></li>
     
@@ -50,7 +51,7 @@
   </div><!--/.sidebar-offcanvas-left-->
 
   <div class="col-xs-12 col-sm-9 col-md-8 main-content">
-    <h1>main function</h1>
+    <h1>main function </h1>
 
     <section class="multi-line-signature">
         <span class="returntype">void</span>
@@ -61,10 +62,6 @@
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span> </h2>
       <pre class="language-dart"><code class="language-dart">void main() async {
-  &#47;&#47; Overriding https:&#47;&#47;github.com&#47;flutter&#47;flutter&#47;issues&#47;13736 for better
-  &#47;&#47; visual effect at the cost of performance.
-  MaterialPageRoute.debugEnableFadingRoutes =
-      true; &#47;&#47; ignore: deprecated_member_use
   User user = new User();
   user = await User.userDownloader(user: user);
   runApp(new Pindery(user));

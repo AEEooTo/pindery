@@ -97,13 +97,13 @@ in the output.</p>
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span> </h2>
       <pre class="language-dart"><code class="language-dart">String toStringShallow({
-  String joiner: &#39;, &#39;,
-  DiagnosticLevel minLevel: DiagnosticLevel.debug,
+  String joiner = &#39;, &#39;,
+  DiagnosticLevel minLevel = DiagnosticLevel.debug,
 }) {
-  final StringBuffer result = new StringBuffer();
+  final StringBuffer result = StringBuffer();
   result.write(toString());
   result.write(joiner);
-  final DiagnosticPropertiesBuilder builder = new DiagnosticPropertiesBuilder();
+  final DiagnosticPropertiesBuilder builder = DiagnosticPropertiesBuilder();
   debugFillProperties(builder);
   result.write(
     builder.properties.where((DiagnosticsNode n) =&gt; !n.isFiltered(minLevel)).join(joiner),

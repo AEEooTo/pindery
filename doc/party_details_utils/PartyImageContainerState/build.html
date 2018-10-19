@@ -108,8 +108,8 @@ provides the set of inherited widgets for this location in the tree. The
 this <code>State</code> object and will remain the same for the lifetime of this
 object. The <code>BuildContext</code> argument is provided redundantly here so that
 this method matches the signature for a <code>WidgetBuilder</code>.</p>
-<h2>Design discussion</h2>
-<h3>Why is the <a href="party_details_utils/PartyImageContainerState/build.html">build</a> method on <code>State</code>, and not <code>StatefulWidget</code>?</h3>
+<h2 id="design-discussion">Design discussion</h2>
+<h3 id="why-is-the-build-method-on-state-and-not-statefulwidget">Why is the <a href="party_details_utils/PartyImageContainerState/build.html">build</a> method on <code>State</code>, and not <code>StatefulWidget</code>?</h3>
 <p>Putting a <code>Widget build(BuildContext context)</code> method on <code>State</code> rather
 putting a <code>Widget build(BuildContext context, State state)</code> method on
 <code>StatefulWidget</code> gives developers more flexibility when subclassing

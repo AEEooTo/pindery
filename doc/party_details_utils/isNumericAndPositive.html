@@ -47,6 +47,7 @@
     
     
     
+    
       <li class="section-title"><a href="party_details_utils/party_details_utils-library.html#functions">Functions</a></li>
       <li><a href="party_details_utils/dateTimeParser.html">dateTimeParser</a></li>
       <li><a href="party_details_utils/isNumericAndPositive.html">isNumericAndPositive</a></li>
@@ -57,7 +58,7 @@
   </div><!--/.sidebar-offcanvas-left-->
 
   <div class="col-xs-12 col-sm-9 col-md-8 main-content">
-    <h1>isNumericAndPositive function</h1>
+    <h1>isNumericAndPositive function </h1>
 
     <section class="multi-line-signature">
         <span class="returntype">bool</span>
@@ -72,11 +73,12 @@
   if (s == null) {
     return false;
   }
-  if (!isInt(s)) {
-    return false;
-  } else {
+  try {
     parsedInt = int.parse(s);
+  } catch (FormatException) {
+    return false;
   }
+
   return parsedInt &gt; 0;
 }</code></pre>
     </section>

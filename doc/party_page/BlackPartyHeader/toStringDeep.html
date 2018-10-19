@@ -101,9 +101,9 @@ children.</li></ul>
     <section class="summary source-code" id="source">
       <h2><span>Implementation</span> </h2>
       <pre class="language-dart"><code class="language-dart">String toStringDeep({
-  String prefixLineOne: &#39;&#39;,
+  String prefixLineOne = &#39;&#39;,
   String prefixOtherLines,
-  DiagnosticLevel minLevel: DiagnosticLevel.debug,
+  DiagnosticLevel minLevel = DiagnosticLevel.debug,
 }) {
   return toDiagnosticsNode().toStringDeep(prefixLineOne: prefixLineOne, prefixOtherLines: prefixOtherLines, minLevel: minLevel);
 }</code></pre>
